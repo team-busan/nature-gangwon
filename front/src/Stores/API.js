@@ -1,6 +1,6 @@
 import axios from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
-import { exeample } from "./mockData.js";
+import { example } from "./mockData.js";
 
 const BASE_URL = "http://localhost:8000/api";
 
@@ -19,7 +19,7 @@ const axiosMock = new AxiosMockAdapter(axiosInstance, {
 });
 
 axiosMock.onGet(API_URL.HOME).reply(() => {
-  return [200, exeample];
+  return [200, example];
 });
 
 export { axiosInstance, API_URL };
