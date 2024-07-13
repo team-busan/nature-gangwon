@@ -4,6 +4,7 @@
   box-sizing: border-box;
 }
 
+
 @tailwind base;
 @layer base {
   h1 {
