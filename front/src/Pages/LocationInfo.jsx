@@ -5,6 +5,7 @@ import LocationSelector from "../Components/LocationInfo/LocationSelector";
 import SortButtons from "../Components/LocationInfo/SortButtons";
 import SearchBar from "../Components/LocationInfo/SearchBar";
 import LocationList from "../Components/LocationInfo/LocationList";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 
 export default function LocationInfo() {
   const [selectedLocation, setSelectedLocation] = useState("all");
@@ -12,7 +13,7 @@ export default function LocationInfo() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
-  const [size] = useState(12);
+  const [size] = useState(16);
   const [totalPages, setTotalPages] = useState(1);
 
   const handleLocationClick = (location) => {
@@ -35,6 +36,22 @@ export default function LocationInfo() {
       });
   }, [page, size, selectedLocation]);
 
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(
+        <button
+          key={i}
+          onClick={() => setPage(i)}
+          className={`px-2 py-1 mx-1 ${i === page ? 'bg-gray-300' : 'bg-gray-100'}`}
+        >
+          {i}
+        </button>
+      );
+    }
+    return pageNumbers;
+  };
+
   return (
     <div className="w-full overflow-x-hidden">
       <MainImage />
@@ -46,21 +63,19 @@ export default function LocationInfo() {
       <SearchBar />
       <LocationList data={data} loading={loading} error={error} />
       <div className="flex justify-center mt-4">
-        <button
+        <span 
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
           disabled={page === 1}
-          className="px-4 py-2 mx-1 border rounded"
         >
-          Previous
-        </button>
-        <span className="px-4 py-2 mx-1">{page} / {totalPages}</span>
-        <button
+          <FaAngleLeft />
+        </span>
+        {renderPageNumbers()}
+        <span
           onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
           disabled={page === totalPages}
-          className="px-4 py-2 mx-1 border rounded"
         >
-          Next
-        </button>
+          <FaAngleRight />
+        </span>
       </div>
     </div>
   );

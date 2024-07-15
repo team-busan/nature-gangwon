@@ -1,5 +1,5 @@
 import React from 'react';
-import mainImg from '../../img/LocationMain.jpg';
+import mainImg from '../../img/LocationMain2.jpg';
 
 const MainImage = () => (
   <section className="w-screen h-104">
