@@ -11,7 +11,7 @@ const axiosInstance = axios.create({
 
 const API_URL = {
   HOME: "/",
-  LocationInfo : "/locationinfo"
+  LocationInfo: "/locationinfo",
 };
 
 const axiosMock = new AxiosMockAdapter(axiosInstance, {
@@ -19,9 +19,21 @@ const axiosMock = new AxiosMockAdapter(axiosInstance, {
   onNoMatch: "throwException",
 });
 
-axiosMock.onGet(API_URL.LocationInfo).reply(() => {
-  return [200, destinations];
-})
+axiosMock.onGet(API_URL.LocationInfo).reply((config) => {
+  const params = config.params || {};
+  const { page = 1, size = 16, region = "all" } = params;
+
+  const filteredData = region === "all" ? destinations : destinations.filter(item => item.region === region);
+  const paginatedData = filteredData.slice((page - 1) * size, page * size); /* 시작 인덱스 ~ 끝 인덱스 */
+
+  return [200, {
+    data: paginatedData,
+    totalItems: filteredData.length,
+    currentPage: parseInt(page),
+    itemsPerPage: parseInt(size),
+    totalPages: Math.ceil(filteredData.length / size),
+  }];
+});
 
 axiosMock.onGet(API_URL.HOME).reply(() => {
   return [200, example];
