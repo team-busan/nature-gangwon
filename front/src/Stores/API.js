@@ -21,7 +21,7 @@ const axiosMock = new AxiosMockAdapter(axiosInstance, {
 
 axiosMock.onGet(API_URL.LocationInfo).reply((config) => {
   const params = config.params || {};
-  const { page, size, region} = params;
+  const { page = 1, size = 16, region = "all" } = params;
 
   const filteredData = region === "all" ? destinations : destinations.filter(item => item.region === region);
   const paginatedData = filteredData.slice((page - 1) * size, page * size); /* 시작 인덱스 ~ 끝 인덱스 */
