@@ -24,10 +24,10 @@ const locations = [
 
 const LocationSelector = ({ selectedLocation, onLocationClick }) => (
   <section className="w-1420 mx-auto mb-5">
-    <h2 className="text-xl font-semibold mb-4 p-2">
-      강원도 지역을 선택해보세요!
+    <h2 className="text-xl mb-4 p-2">
+      <span className = "font-semibold">강원도</span> 지역을 선택해보세요!
     </h2>
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-4">
       {locations.map((location, index) => (
         <button
           key={index}

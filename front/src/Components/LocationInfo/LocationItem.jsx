@@ -15,7 +15,7 @@ const LocationItem = ({ item }) => (
         <div className="flex justify-between">
           <p className = "text-gray-400">{item.region}</p>
           <div className = "flex">
-            <span className = "text-gray-400">comment</span>
+            <span className = "text-softGreen">comment</span>
             <span className = "w-10 bg-green rounded-md ml-2">
               <p className = "text-center text-white ">{item.comments}</p>
             </span>
