@@ -20,4 +20,5 @@ public class PlanCommentEntity {
     private String userNickname;
     private String userProfile;
     private String planContent;
+    private String planUploadDate;
 }

@@ -21,4 +21,5 @@ public class FestivalCommentEntity {
     private String userProfile;
     private String festivalContent;
     private int score;
+    private String festivalUploadDate;
 }

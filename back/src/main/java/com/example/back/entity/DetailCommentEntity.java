@@ -21,4 +21,5 @@ public class DetailCommentEntity {
     private String userProfil;
     private String detailContent;
     private int score;
+    private String detaiUploadDate;
 }
