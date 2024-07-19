@@ -27,7 +27,7 @@ const LocationSelector = ({ selectedLocation, onLocationClick }) => (
     <h2 className="text-xl mb-4 p-2">
       <span className = "font-semibold">강원도</span> 지역을 선택해보세요!
     </h2>
-    <div className="flex flex-wrap gap-4">
+    <div className="flex flex-wrap gap-5">
       {locations.map((location, index) => (
         <button
           key={index}

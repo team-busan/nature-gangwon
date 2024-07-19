@@ -50,7 +50,6 @@ export default function LocationInfo() {
         setError(error);
         setLoading(false);
       });
-      console.log(page, size, selectedLocation);
   }, [page, size, selectedLocation]);
 
   const handlePageClick = (event) => {
@@ -73,7 +72,11 @@ export default function LocationInfo() {
         searchQuery={searchQuery}
         onSearchChange={(e) => setSearchQuery(e.target.value)}
       />
-      <LocationList data={data} loading={loading} error={error} />
+      <LocationList 
+        data={data}
+        loading={loading}
+        error={error}
+      />
       <div className="flex justify-center mt-4">
         <ReactPaginate
           previousLabel={<FaAngleLeft />}
