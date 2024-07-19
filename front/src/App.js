@@ -5,6 +5,7 @@ import Root from "./Root.jsx";
 import Home from "./Pages/Home.jsx";
 import NotFound from "./Pages/NotFound.jsx";
 import LocationInfo from "./Pages/LocationInfo.jsx";
+import LocationDetail from "./Pages/LocationDetail.jsx";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
       {
         path : "/LocationInfo",
         element : <LocationInfo/>
+      },
+      {
+        path : "/LocationDetail/:id",
+        element : <LocationDetail/>
       }
     ],
     errorElement: <NotFound />,
