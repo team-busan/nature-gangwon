@@ -17,6 +17,7 @@ public class FestivalEntity {
     @Id
     private int festivalId;
     private String festivalTitle;
+    private String festivalContentid;
     private String festivalAddress;
     private String festivalTel;
     private String festivalStartDate;
@@ -27,5 +28,5 @@ public class FestivalEntity {
     private String festivalMapy;
     private String festivalFirstimage;
     private String festivalFirstimage2;
-    private int festivalSigungucode;
+    private String festivalSigungucode;
 }

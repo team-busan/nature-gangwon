@@ -18,4 +18,6 @@ public class PlanEntity {
     private String userEmail;
     private String startDate;
     private String endDate;
+    private String planUploadDate;
+    private String planTitle;
 }

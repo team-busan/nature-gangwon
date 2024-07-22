@@ -17,6 +17,7 @@ public class DetailEntity {
     @Id
     private int detailId;
     private String detailTitle;
+    private String detailContentid;
     private String detailAddress;
     private String detailTel;
     private BigDecimal detalTotalScore;
@@ -25,5 +26,5 @@ public class DetailEntity {
     private String detailMapy;
     private String detailFirstimage;
     private String detailFristimage2;
-    private int detailSigungucode;
+    private String detailSigungucode;
 }

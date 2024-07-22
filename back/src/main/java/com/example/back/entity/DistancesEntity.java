@@ -10,14 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Entity(name = "places")
-@Table(name = "places")
-public class PlacesEntity {
+@Entity(name = "distances")
+@Table(name = "distances")
+public class DistancesEntity {
     @Id
-    private int placesId;
-    private int daysId;
-    private int locationBasedId;
-    private String note;
-    private String sigunguCode;
-    private String title;
+    private int distancesId;
+    private int placesId1;
+    private int placesId2;
+    private int distancesValue;
 }
