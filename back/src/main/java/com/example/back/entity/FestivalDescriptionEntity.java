@@ -10,14 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Entity(name = "places")
-@Table(name = "places")
-public class PlacesEntity {
+@Entity(name = "festival_description")
+@Table(name = "festival_description")
+public class FestivalDescriptionEntity {
     @Id
-    private int placesId;
-    private int daysId;
-    private int locationBasedId;
-    private String note;
-    private String sigunguCode;
-    private String title;
+    private int festivalDescriptionId;
+    private int festivalId;
+    private String festivalHomepage;
+    private String festivalOverview;
 }
