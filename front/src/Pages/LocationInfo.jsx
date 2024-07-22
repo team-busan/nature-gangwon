@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { API_URL, axiosInstance } from "../Stores/API";
 import MainImage from "../Components/LocationInfo/MainImage";
 import LocationSelector from "../Components/LocationInfo/LocationSelector";
@@ -8,12 +8,10 @@ import SearchBar from "../Components/LocationInfo/SearchBar";
 import LocationList from "../Components/LocationInfo/LocationList";
 import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
+import { useQuery } from "@tanstack/react-query";
 
 export default function LocationInfo() {
   const [selectedLocation, setSelectedLocation] = useState("all");
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [size] = useState(16);
   const [totalPages, setTotalPages] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
@@ -35,22 +33,24 @@ export default function LocationInfo() {
     setSearchParams({ page: 1, region: newRegion });
   };
 
-  useEffect(() => {
-    setLoading(true);
-    axiosInstance
-      .get(API_URL.LocationInfo, {
+  const fetchLocationInfo = async ({ queryKey }) => {
+    const [_key, page, selectedLocation] = queryKey;
+    try {
+      const response = await axiosInstance.get(API_URL.LocationInfo, {
         params: { page, size, region: selectedLocation },
-      })
-      .then((response) => {
-        setData(response.data.data);
-        setTotalPages(response.data.totalPages);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(error);
-        setLoading(false);
       });
-  }, [page, size, selectedLocation]);
+      setTotalPages(response.data.totalPages);
+      return response.data.data;
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["locationInfo", page, selectedLocation],
+    queryFn: fetchLocationInfo,
+    keepPreviousData: true, // 페이지 전환 시 이전 데이터 유지하면서 새로운 데이터 페칭
+  });
 
   const handlePageClick = (event) => {
     const selectedPage = event.selected + 1;
@@ -62,9 +62,7 @@ export default function LocationInfo() {
     <div className="w-full overflow-x-hidden">
       <MainImage />
       <LocationSelector
-        selectedLocation={
-          selectedLocation === "all" ? "전체" : selectedLocation
-        }
+        selectedLocation={selectedLocation === "all" ? "전체" : selectedLocation}
         onLocationClick={handleLocationClick}
       />
       <SortButtons />
@@ -72,11 +70,7 @@ export default function LocationInfo() {
         searchQuery={searchQuery}
         onSearchChange={(e) => setSearchQuery(e.target.value)}
       />
-      <LocationList 
-        data={data}
-        loading={loading}
-        error={error}
-      />
+      <LocationList data={data} loading={isLoading} error={error} />
       <div className="flex justify-center mt-4">
         <ReactPaginate
           previousLabel={<FaAngleLeft />}

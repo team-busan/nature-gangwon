@@ -1,37 +1,51 @@
-import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { axiosInstance, API_URL } from '../Stores/API';
-import LocationImage from '../Components/LocationDetail/LocationImage';
+import { useQuery } from '@tanstack/react-query';
+import DetailSlider from '../Components/LocationDetail/DetailSlider';
+import { FaStar } from "react-icons/fa";
+import DetailHeader from '../Components/LocationDetail/DetailHeader';
+import DetailDescription from '../Components/LocationDetail/DetailDescription';
 
 export default function LocationDetail() {
   const { id } = useParams();
-  const [detail, setDetail] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    axiosInstance.get(`${API_URL.LocationDetail}/${id}`)
-      .then(response => {
-        setDetail(response.data);
-        setLoading(false);
-      })
-      .catch(error => {
-        setError(error);
-        setLoading(false);
-      });
-  }, [id]);
+  const fetchLocationDetail = async ({queryKey}) => {
+    const [_key, id] = queryKey;
+    const response = await axiosInstance.get(`${API_URL.LocationDetail}/${id}`);
+    return response.data;
+  }
 
-  if (loading) return <p>Loading...</p>;
+  const {data : detail, error, isLoading} = useQuery({
+    queryKey : ["locationDetail", id],
+    queryFn : fetchLocationDetail
+  })
+
+  if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error loading details</p>;
 
+  const images = [
+    detail.detail_firstimage,
+    detail.detail_firstimage2,
+    detail.detail_firstimage3,
+    detail.detail_firstimage4,
+  ]
+
+  const detailHeader = {
+    title : detail.detail_title,
+    score : detail.detail_total_score,
+    views : detail.detail_views,
+    comments : detail.detail_totalComments,
+  }
+
+  const description = {
+    description : detail.detail_description
+  }
+  
   return (
-    <div className = "w-full">
-      <LocationImage image = {detail.detail_firstimage}/>
-{/*       <h1>{detail.detail_title}</h1>
-      <p>{detail.detail_address}</p>
-      <p>{detail.detail_total_score}</p>
-      <img src={detail.detail_firstimage2} alt={detail.detail_title} />
-      <p>{detail.detail_totalComments} comments</p> */}
-    </div>
+    <>
+      <DetailHeader header = {detailHeader}/>
+      <DetailSlider images = {images}/>
+      <DetailDescription description = {description}/>
+    </>
   );
 }
