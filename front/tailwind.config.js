@@ -13,7 +13,8 @@ export default {
         deepGreen : "#1E3932"
       },
       width : {
-        '1420' : '1420px'
+        '1420' : '1420px',
+        '1410' : '1400px'
       },
       height : {
         '104': '26rem',
