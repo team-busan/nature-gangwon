@@ -5,6 +5,7 @@ import DetailSlider from '../Components/LocationDetail/DetailSlider';
 import { FaStar } from "react-icons/fa";
 import DetailHeader from '../Components/LocationDetail/DetailHeader';
 import DetailDescription from '../Components/LocationDetail/DetailDescription';
+import DetailInformation from '../Components/LocationDetail/DetailInformation';
 
 export default function LocationDetail() {
   const { id } = useParams();
@@ -46,6 +47,7 @@ export default function LocationDetail() {
       <DetailHeader header = {detailHeader}/>
       <DetailSlider images = {images}/>
       <DetailDescription description = {description}/>
+      <DetailInformation/>
     </>
   );
 }
