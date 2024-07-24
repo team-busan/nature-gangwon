@@ -962,6 +962,7 @@ export const destination_detail = [
     detail_id: 1,
     detail_title: "관광지 명 1",
     detail_address: "강원도",
+    detail_homepage : "https://www.naver.com/",
     detail_tel: "051-1111-1234",
     detail_total_score: "4.5",
     detail_views: "55",
@@ -977,17 +978,50 @@ export const destination_detail = [
   },
 ]
 
-/* {
-  detail_id: 1,
-  detail_title: "관광지 명 1",
-  detail_address: "강원도",
-  detail_tel: "051-1111-1234",
-  detail_total_score: "4.5",
-  detail_views: "55",
-  detail_mapx: "121.122.1234",
-  detail_mapy: "122.323.2343",
-  detail_firstimage: "https://i.namu.wiki/i/ZN5h34E3Smq8p0pi_w86yk890V91mbslvrBjxBrBZET95vy50_Jf0Ffj-MYiooox5a1hcatv62oMUtAX3t2MfA.webp",
-  detail_firstimage2: "https://i.namu.wiki/i/ZN5h34E3Smq8p0pi_w86yk890V91mbslvrBjxBrBZET95vy50_Jf0Ffj-MYiooox5a1hcatv62oMUtAX3t2MfA.webp",
-  detail_sigungucode: "??",
-  detail_totalComments: 20
-}, */
+export const destination_comment = [
+  {
+    detail_comment_id : 1,
+    detail_id : 1,
+    user_email : "ftko6252",
+    user_profile : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMzaeuyf4ROSRfqraT7ixOD7_r5ZtlZhASzg&s",
+    detail_content : "처음 가봤는데 정말 좋았어요 !",
+    score : 4.5,
+    detail_upload_date : "2024-07-24", 
+  },
+  {
+    detail_comment_id : 2,
+    detail_id : 1,
+    user_email : "ftko6252",
+    user_profile : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKTUQvBMONHDCveloXEJDu47HKZ2mOvPsV7A&s",
+    detail_content : "처음 가봤는데 정말 좋았어요 !",
+    score : 4.5,
+    detail_upload_date : "2024-07-24", 
+  },
+  {
+    detail_comment_id : 3,
+    detail_id : 1,
+    user_email : "ftko6252",
+    user_profile : "https://img.hankyung.com/photo/202004/BF.22468531.3.jpg",
+    detail_content : "처음 가봤는데 정말 좋았어요 !",
+    score : 4.5,
+    detail_upload_date : "2024-07-24", 
+  },
+  {
+    detail_comment_id : 4,
+    detail_id : 1,
+    user_email : "ftko6252",
+    user_profile : "https://img.hankyung.com/photo/202004/BF.22468531.3.jpg",
+    detail_content : "처음 가봤는데 정말 좋았어요 !",
+    score : 4.5,
+    detail_upload_date : "2024-07-24", 
+  },
+  {
+    detail_comment_id : 5,
+    detail_id : 2,
+    user_email : "nature",
+    user_profile : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMzaeuyf4ROSRfqraT7ixOD7_r5ZtlZhASzg&s",
+    detail_content : "처음 가봤는데 정말 좋았어요 !",
+    score : 4.5,
+    detail_upload_date : "2024-07-24", 
+  },
+]

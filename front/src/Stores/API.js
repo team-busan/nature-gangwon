@@ -1,6 +1,6 @@
 import axios from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
-import { example, destination_info, destination_detail } from "./mockData.js";
+import { example, destination_info, destination_detail, destination_comment } from "./mockData.js";
 
 const BASE_URL = "http://localhost:8000/api";
 
@@ -39,13 +39,15 @@ axiosMock.onGet(API_URL.LocationInfo).reply((config) => {
 axiosMock.onGet(new RegExp(`${API_URL.LocationDetail}/\\d+`)).reply(config => {
   const id = parseInt(config.url.split('/').pop());
   const detail = destination_detail.find(item => item.detail_id === id);
+  const comments = destination_comment.filter(item => item.detail_id === id);
 
   if (detail) {
-    return [200, detail];
+    return [200, { detail, comments }];
   } else {
     return [404, { message: "Not Found" }];
   }
 });
+
 
 
 axiosMock.onGet(API_URL.HOME).reply(() => {

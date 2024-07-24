@@ -4,7 +4,7 @@ const NaverMap = ({ lat, lng }) => {
   const mapRef = useRef(null);
 
   useEffect(() => {
-    const clientId = process.env.REACT_APP_CLIENT_ID; // .env 파일에서 가져옴
+    const clientId = process.env.REACT_APP_CLIENT_ID;
 
     const script = document.createElement('script');
     script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${clientId}`;
@@ -28,10 +28,9 @@ const NaverMap = ({ lat, lng }) => {
     };
     document.head.appendChild(script);
 
-    console.log('Naver Client ID:', clientId); // 환경 변수 출력 확인
   }, [lat, lng]);
 
-  return <div ref={mapRef} style={{ width: "500px", height: "500px" }}></div>;
+  return <div ref={mapRef} style={{ width: "1400px", height: "500px" }}></div>;
 };
 
 export default NaverMap;
