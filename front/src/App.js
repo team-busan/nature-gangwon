@@ -6,6 +6,8 @@ import Home from "./Pages/Home.jsx";
 import NotFound from "./Pages/NotFound.jsx";
 import LocationInfo from "./Pages/LocationInfo.jsx";
 import LocationDetail from "./Pages/LocationDetail.jsx";
+import MyPage from "./Pages/MyPage.jsx";
+import SearchResult from "./Pages/SearchResult.jsx";
 
 const router = createBrowserRouter([
   {
@@ -17,13 +19,21 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path : "/LocationInfo",
-        element : <LocationInfo/>
+        path: "/search",
+        element: <SearchResult />,
       },
       {
-        path : "/LocationDetail/:id",
-        element : <LocationDetail/>
-      }
+        path: "/LocationInfo",
+        element: <LocationInfo />,
+      },
+      {
+        path: "/LocationDetail/:id",
+        element: <LocationDetail />,
+      },
+      {
+        path: "/myPage/:id",
+        element: <MyPage />,
+      },
     ],
     errorElement: <NotFound />,
   },
