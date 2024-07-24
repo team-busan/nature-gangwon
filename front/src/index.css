@@ -4,6 +4,12 @@
   box-sizing: border-box;
 }
 
+@font-face {
+  font-family: 'BMJUA';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMJUA.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
 
 @tailwind base;
 @layer base {
@@ -29,6 +35,8 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  font-family: "Noto Sans KR", sans-serif;
+
+/* src/index.css */
+body, * {
+  font-family: 'BMJUA', sans-serif;
 }
