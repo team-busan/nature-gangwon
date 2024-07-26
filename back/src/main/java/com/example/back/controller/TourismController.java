@@ -28,8 +28,27 @@ public class TourismController {
             @RequestParam String arrange,
             @RequestParam int areaCode,
             @RequestParam int contentTypeId) {
-
+        
         locationService.fetchAndSaveLocations(baseUrl, serviceKey, pageNo, numOfRows, MobileApp, MobileOS, arrange, areaCode, contentTypeId);
         return "Data fetched and saved successfully!";
     }
+
+    @GetMapping("/api/festival")
+    public String getFestivalData(
+        @RequestParam String baseUrl,
+        @RequestParam String serviceKey,
+        @RequestParam int pageNo,
+        @RequestParam int numOfRows,
+        @RequestParam String MobileApp,
+        @RequestParam String MobileOS,
+        @RequestParam String arrange,
+        @RequestParam String listYN,
+        @RequestParam String eventStartDate,
+        @RequestParam String eventEndDate,
+        @RequestParam int areaCode) {
+            
+            locationService.fetchAndSaveLocationsFastival(baseUrl, serviceKey, pageNo, numOfRows, MobileApp, MobileOS, arrange, listYN, eventStartDate ,eventEndDate, areaCode);
+            return "Data fetched and saved successfully!";
+        }
+
 }
