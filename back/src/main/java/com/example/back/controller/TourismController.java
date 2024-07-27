@@ -17,7 +17,7 @@ public class TourismController {
         this.locationService = locationService;
     }
 
-    @GetMapping("/api/location")
+    @GetMapping("/api")
     public String getTourismData(
             @RequestParam String baseUrl,
             @RequestParam String serviceKey,
@@ -30,40 +30,6 @@ public class TourismController {
             @RequestParam int contentTypeId) {
         
         locationService.fetchAndSaveLocations(baseUrl, serviceKey, pageNo, numOfRows, MobileApp, MobileOS, arrange, areaCode, contentTypeId);
-        return "Data fetched and saved successfully!";
-    }
-
-    @GetMapping("/api/locaion-festival")
-    public String getLocationFestivalData(
-        @RequestParam String baseUrl,
-        @RequestParam String serviceKey,
-        @RequestParam int pageNo,
-        @RequestParam int numOfRows,
-        @RequestParam String MobileApp,
-        @RequestParam String MobileOS,
-        @RequestParam String arrange,
-        @RequestParam String listYN,
-        @RequestParam String eventStartDate,
-        @RequestParam String eventEndDate,
-        @RequestParam int areaCode) {
-            
-            locationService.fetchAndSaveLocationsFastival(baseUrl, serviceKey, pageNo, numOfRows, MobileApp, MobileOS, arrange, listYN, eventStartDate ,eventEndDate, areaCode);
-            return "Data fetched and saved successfully!";
-        }
-        
-    @GetMapping("/api/detail")
-    public String getDetailData(
-        @RequestParam String baseUrl,
-        @RequestParam String serviceKey,
-        @RequestParam int pageNo,
-        @RequestParam int numOfRows,
-        @RequestParam String MobileApp,
-        @RequestParam String MobileOS,
-        @RequestParam String arrange,
-        @RequestParam int areaCode,
-        @RequestParam int contentTypeId) {
-        
-        locationService.fetchAndSaveDetail(baseUrl, serviceKey, pageNo, numOfRows, MobileApp, MobileOS, arrange, areaCode, contentTypeId);
         return "Data fetched and saved successfully!";
     }
 
@@ -81,7 +47,8 @@ public class TourismController {
         @RequestParam String eventEndDate,
         @RequestParam int areaCode) {
             
-            locationService.fetchAndSaveFestival(baseUrl, serviceKey, pageNo, numOfRows, MobileApp, MobileOS, arrange, listYN, eventStartDate ,eventEndDate, areaCode);
+            locationService.fetchAndSaveLocationsFastival(baseUrl, serviceKey, pageNo, numOfRows, MobileApp, MobileOS, arrange, listYN, eventStartDate ,eventEndDate, areaCode);
             return "Data fetched and saved successfully!";
         }
+
 }
