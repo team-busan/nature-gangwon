@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class ApiFestivalDescriptionResponseDto {
+public class ApiDescriptionResponseDto {
     private Response response;
 
     @Data
@@ -39,9 +39,9 @@ public class ApiFestivalDescriptionResponseDto {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Item {
         @JsonProperty("homepage")
-        private String festivalHomepage;
+        private String homepage;
 
         @JsonProperty("overview")
-        private String festivalOverview;
+        private String overview;
     }
 }

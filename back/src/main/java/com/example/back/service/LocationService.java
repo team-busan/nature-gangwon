@@ -1,16 +1,20 @@
 package com.example.back.service;
 
 import com.example.back.dto.response.tourismApi.ApiDetailResponseDto;
-import com.example.back.dto.response.tourismApi.ApiFestivalDescriptionResponseDto;
-import com.example.back.dto.response.tourismApi.ApiFestivalImageResponseDto;
+import com.example.back.dto.response.tourismApi.ApiDescriptionResponseDto;
+import com.example.back.dto.response.tourismApi.ApiImageResponseDto;
 import com.example.back.dto.response.tourismApi.ApiFestivalResponseDto;
 import com.example.back.dto.response.tourismApi.LocationFestivalResponseDto;
 import com.example.back.dto.response.tourismApi.LocationTourismResponseDto;
+import com.example.back.entity.DetailDescriptionEntity;
 import com.example.back.entity.DetailEntity;
+import com.example.back.entity.DetailImageEntity;
 import com.example.back.entity.FestivalDescriptionEntity;
 import com.example.back.entity.FestivalEntity;
 import com.example.back.entity.FestivalImageEntity;
 import com.example.back.entity.LocationBasedEntity;
+import com.example.back.repository.DetailDescriptionRepository;
+import com.example.back.repository.DetailImageRepository;
 import com.example.back.repository.DetailRepository;
 import com.example.back.repository.FestivalDescriptionRepository;
 import com.example.back.repository.FestivalImageRepository;
@@ -46,6 +50,8 @@ public class LocationService {
     private final FestivalRepository festivalRepository;
     private final FestivalImageRepository festivalImageRepository;
     private final FestivalDescriptionRepository festivalDescriptionRepository;
+    private final DetailImageRepository detailImageRepository;
+    private final DetailDescriptionRepository detailDescriptionRepository;
 
     @Autowired
     public LocationService(RestTemplate restTemplate, 
@@ -53,13 +59,17 @@ public class LocationService {
                             DetailRepository detailRepository, 
                             FestivalRepository festivalRepository,
                             FestivalImageRepository festivalImageRepository,
-                            FestivalDescriptionRepository festivalDescriptionRepository) {
+                            FestivalDescriptionRepository festivalDescriptionRepository,
+                            DetailImageRepository detailImageRepository,
+                            DetailDescriptionRepository detailDescriptionRepository) {
         this.restTemplate = restTemplate;
         this.tourismApiRepository = tourismApiRepository;
         this.detailRepository = detailRepository;
         this.festivalRepository = festivalRepository;
         this.festivalImageRepository = festivalImageRepository;
         this.festivalDescriptionRepository = festivalDescriptionRepository;
+        this.detailImageRepository = detailImageRepository;
+        this.detailDescriptionRepository = detailDescriptionRepository;
     }
 
     //? locationEntity에 담길 api 관광지, 숙박, 음식점 데이터 강원도 기준 관광지(12), 숙박(32), 음식점(39) 파라미터 값을 조절해 요청.
@@ -374,7 +384,7 @@ public class LocationService {
                 System.out.println("Response Body: " + response.getBody());
 
                 ObjectMapper objectMapper = new ObjectMapper();
-                ApiFestivalImageResponseDto responseDto = objectMapper.readValue(response.getBody(), ApiFestivalImageResponseDto.class);
+                ApiImageResponseDto responseDto = objectMapper.readValue(response.getBody(), ApiImageResponseDto.class);
 
                 if (responseDto != null) {
                     saveFestivalImages(festivalId, responseDto);
@@ -396,9 +406,9 @@ public class LocationService {
     }
 
     //^ 위의 메서드를 통해 축제 이미지를 FestivalImageEntity에 저장
-    private void saveFestivalImages(Integer festivalId, ApiFestivalImageResponseDto response) {
+    private void saveFestivalImages(Integer festivalId, ApiImageResponseDto response) {
         List<String> imageUrls = response.getResponse().getBody().getItems().getItem().stream()
-                .map(ApiFestivalImageResponseDto.Item::getOriginImageUrl)
+                .map(ApiImageResponseDto.Item::getOriginImageUrl)
                 .collect(Collectors.toList());
 
         FestivalImageEntity entity = new FestivalImageEntity();
@@ -443,7 +453,7 @@ public class LocationService {
                 System.out.println("Response Body: " + response.getBody());
 
                 ObjectMapper objectMapper = new ObjectMapper();
-                ApiFestivalDescriptionResponseDto responseDto = objectMapper.readValue(response.getBody(), ApiFestivalDescriptionResponseDto.class);
+                ApiDescriptionResponseDto responseDto = objectMapper.readValue(response.getBody(), ApiDescriptionResponseDto.class);
 
                 if (responseDto != null) {
                     saveFestivalDescription(festivalId, responseDto);
@@ -457,16 +467,140 @@ public class LocationService {
         }
     }
 
-    //^ 위의 메서드를 통해 축제 설명을 FestivalDescription에 저장
-    private void saveFestivalDescription(Integer festivalId, ApiFestivalDescriptionResponseDto response) {
-        ApiFestivalDescriptionResponseDto.Item item = response.getResponse().getBody().getItems().getItem().get(0);
+    //^ 위의 메서드를 통해 축제 설명을 FestivalDescriptionEntity에 저장
+    private void saveFestivalDescription(Integer festivalId, ApiDescriptionResponseDto response) {
+        ApiDescriptionResponseDto.Item item = response.getResponse().getBody().getItems().getItem().get(0);
 
         FestivalDescriptionEntity entity = new FestivalDescriptionEntity();
         entity.setFestivalId(festivalId);
-        entity.setFestivalHomepage(item.getFestivalHomepage());
-        entity.setFestivalOverview(item.getFestivalOverview());
+        entity.setFestivalHomepage(item.getHomepage());
+        entity.setFestivalOverview(item.getOverview());
 
         festivalDescriptionRepository.save(entity);
     }
 
+    //? DetailImage에 담길 api 이미지 데이터
+    @Transactional
+    public void fetchAndSaveDetailImages(List<Integer> detailIds, String baseUrl, String serviceKey) {
+        for (Integer detailId : detailIds) {
+            String contentId = getContentIdByDetailId(detailId);
+            String encodedServiceKey;
+            try {
+                encodedServiceKey = URLEncoder.encode(serviceKey.trim(), StandardCharsets.UTF_8.toString());
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException("Error encoding service key", e);
+            }
+            String url = String.format(
+                "%s?serviceKey=%s&numOfRows=5&pageNo=1&MobileOS=ETC&MobileApp=AppTest&contentId=%s&imageYN=Y&subImageYN=Y&_type=json",
+                baseUrl, encodedServiceKey, contentId);
+
+            System.out.println("Constructed URL: " + url);
+            
+            try {
+                URI uri = new URI(url);
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+                HttpEntity<String> entity = new HttpEntity<>(headers);
+
+                ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
+
+                System.out.println("Response Status Code: " + response.getStatusCode());
+                System.out.println("Response Body: " + response.getBody());
+
+                ObjectMapper objectMapper = new ObjectMapper();
+                ApiImageResponseDto responseDto = objectMapper.readValue(response.getBody(), ApiImageResponseDto.class);
+
+                if (responseDto != null) {
+                    saveDetailImages(detailId, responseDto);
+                } else {
+                    System.out.println("No data received from API for contentId: " + contentId);
+                }
+            } catch (Exception e) {
+                System.err.println("Failed to fetch data for contentId: " + contentId);
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //! DetailId값 가져오기
+    private String getContentIdByDetailId(Integer detailId) {
+        DetailEntity detailEntity = detailRepository.findById(detailId)
+                .orElseThrow(() -> new RuntimeException("Festival not found for id: " + detailId));
+        return detailEntity.getDetailContentid();
+    }
+
+    //^ 위의 메서드를 통해 관광지 이미지를 DetailImageEntity에 저장
+    private void saveDetailImages(Integer detailId, ApiImageResponseDto response) {
+        List<String> imageUrls = response.getResponse().getBody().getItems().getItem().stream()
+                .map(ApiImageResponseDto.Item::getOriginImageUrl)
+                .collect(Collectors.toList());
+
+        DetailImageEntity entity = new DetailImageEntity();
+        entity.setDetailId(detailId);
+        entity.setDetailContentid(response.getResponse().getBody().getItems().getItem().get(0).getContentid());
+        entity.setDetailImage1(imageUrls.size() > 0 ? imageUrls.get(0) : null);
+        entity.setDetailImage2(imageUrls.size() > 1 ? imageUrls.get(1) : null);
+        entity.setDetailImage3(imageUrls.size() > 2 ? imageUrls.get(2) : null);
+        entity.setDetailImage4(imageUrls.size() > 3 ? imageUrls.get(3) : null);
+        entity.setDetailImage5(imageUrls.size() > 4 ? imageUrls.get(4) : null);
+
+        detailImageRepository.save(entity);
+    }
+
+    //? DetailDscription에 담길 api 정보 데이터
+    @Transactional
+    public void fetchAndSaveDetailDescription(List<Integer> detailIds, String baseUrl, String serviceKey) {
+        for (Integer detailId : detailIds) {
+            String contentId = getContentIdByDetailId(detailId);
+            String encodedServiceKey;
+            try {
+                encodedServiceKey = URLEncoder.encode(serviceKey.trim(), StandardCharsets.UTF_8.toString());
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException("Error encoding service key", e);
+            }
+            String url = String.format(
+                "%s?serviceKey=%s&contentId=%s&defaultYN=Y&overviewYN=Y&MobileOS=ETC&MobileApp=AppTest&_type=json",
+                baseUrl, encodedServiceKey, contentId);
+
+            System.out.println("Constructed URL: " + url);
+            
+            try {
+                URI uri = new URI(url);
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+                HttpEntity<String> entity = new HttpEntity<>(headers);
+
+                ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
+
+                System.out.println("Response Status Code: " + response.getStatusCode());
+                System.out.println("Response Body: " + response.getBody());
+
+                ObjectMapper objectMapper = new ObjectMapper();
+                ApiDescriptionResponseDto responseDto = objectMapper.readValue(response.getBody(), ApiDescriptionResponseDto.class);
+
+                if (responseDto != null) {
+                    saveDetailDescription(detailId, responseDto);
+                } else {
+                    System.out.println("No data received from API for contentId: " + contentId);
+                }
+            } catch (Exception e) {
+                System.err.println("Failed to fetch data for contentId: " + contentId);
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //^ 위의 메서드를 통해 관광지 설명을 DetailDescriptionEntity에 저장
+    private void saveDetailDescription(Integer detailId, ApiDescriptionResponseDto response) {
+        ApiDescriptionResponseDto.Item item = response.getResponse().getBody().getItems().getItem().get(0);
+
+        DetailDescriptionEntity entity = new DetailDescriptionEntity();
+        entity.setDetailId(detailId);
+        entity.setDetailHomepage(item.getHomepage());
+        entity.setDetailOverview(item.getOverview());
+
+        detailDescriptionRepository.save(entity);
+    }
 }

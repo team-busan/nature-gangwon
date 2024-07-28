@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class ApiFestivalImageResponseDto {
+public class ApiImageResponseDto {
     private Response response;
 
     @Data

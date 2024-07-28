@@ -90,12 +90,12 @@ public class TourismController {
         }
     
     @GetMapping("/api/festival-images")    
-    public String fetchFestivalImages(
+    public String getFestivalImages(
         @RequestParam String baseUrl,
         @RequestParam String serviceKey) {
             List<Integer> festivalIds = getFestivalIds();
             locationService.fetchAndSaveFestivalImages(festivalIds, baseUrl, serviceKey);
-            return "Festival images fetched and saved successfully!";
+            return "Data fetched and saved successfully!";
         }
 
         private List<Integer> getFestivalIds() {
@@ -105,12 +105,12 @@ public class TourismController {
     }
 
     @GetMapping("/api/festival-description")    
-    public String fetchFestivalDescription(
+    public String getFestivalDescription(
         @RequestParam String baseUrl,
         @RequestParam String serviceKey) {
             List<Integer> festivalIds = getFestivalIds2();
             locationService.fetchAndSaveFestivalDescription(festivalIds, baseUrl, serviceKey);
-            return "Festival images fetched and saved successfully!";
+            return "Data fetched and saved successfully!";
         }
 
         private List<Integer> getFestivalIds2() {
@@ -118,5 +118,34 @@ public class TourismController {
                         .boxed()
                         .collect(Collectors.toList());
     }
-        
+    
+    @GetMapping("/api/detail-images")    
+    public String fetchDedtailImages(
+        @RequestParam String baseUrl,
+        @RequestParam String serviceKey) {
+            List<Integer> detailIds = getDetailIds();
+            locationService.fetchAndSaveDetailImages(detailIds, baseUrl, serviceKey);
+        return "Data fetched and saved successfully!";
+        }
+
+        private List<Integer> getDetailIds() {
+        return IntStream.rangeClosed(1, 700) //* 월요일 실행 화요일날 701 ~ 1427번까지 
+                        .boxed()
+                        .collect(Collectors.toList());
+    }
+
+    @GetMapping("/api/detail-description")    
+    public String getDetailDescription(
+        @RequestParam String baseUrl,
+        @RequestParam String serviceKey) {
+            List<Integer> detailIds = getDetailIds2();
+            locationService.fetchAndSaveDetailDescription(detailIds, baseUrl, serviceKey);
+            return "Data fetched and saved successfully!";
+        }
+
+        private List<Integer> getDetailIds2() {
+        return IntStream.rangeClosed(701, 1427) //* 월요일날 실행
+                        .boxed()
+                        .collect(Collectors.toList());
+    }
 }
