@@ -1,13 +1,19 @@
 package com.example.back.service;
 
 import com.example.back.dto.response.tourismApi.ApiDetailResponseDto;
+import com.example.back.dto.response.tourismApi.ApiFestivalDescriptionResponseDto;
+import com.example.back.dto.response.tourismApi.ApiFestivalImageResponseDto;
 import com.example.back.dto.response.tourismApi.ApiFestivalResponseDto;
 import com.example.back.dto.response.tourismApi.LocationFestivalResponseDto;
 import com.example.back.dto.response.tourismApi.LocationTourismResponseDto;
 import com.example.back.entity.DetailEntity;
+import com.example.back.entity.FestivalDescriptionEntity;
 import com.example.back.entity.FestivalEntity;
+import com.example.back.entity.FestivalImageEntity;
 import com.example.back.entity.LocationBasedEntity;
 import com.example.back.repository.DetailRepository;
+import com.example.back.repository.FestivalDescriptionRepository;
+import com.example.back.repository.FestivalImageRepository;
 import com.example.back.repository.FestivalRepository;
 import com.example.back.repository.TourismApiRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,11 +29,13 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LocationService {
@@ -36,13 +44,22 @@ public class LocationService {
     private final TourismApiRepository tourismApiRepository;
     private final DetailRepository detailRepository;
     private final FestivalRepository festivalRepository;
+    private final FestivalImageRepository festivalImageRepository;
+    private final FestivalDescriptionRepository festivalDescriptionRepository;
 
     @Autowired
-    public LocationService(RestTemplate restTemplate, TourismApiRepository tourismApiRepository, DetailRepository detailRepository, FestivalRepository festivalRepository) {
+    public LocationService(RestTemplate restTemplate, 
+                            TourismApiRepository tourismApiRepository, 
+                            DetailRepository detailRepository, 
+                            FestivalRepository festivalRepository,
+                            FestivalImageRepository festivalImageRepository,
+                            FestivalDescriptionRepository festivalDescriptionRepository) {
         this.restTemplate = restTemplate;
         this.tourismApiRepository = tourismApiRepository;
         this.detailRepository = detailRepository;
         this.festivalRepository = festivalRepository;
+        this.festivalImageRepository = festivalImageRepository;
+        this.festivalDescriptionRepository = festivalDescriptionRepository;
     }
 
     //? locationEntity에 담길 api 관광지, 숙박, 음식점 데이터 강원도 기준 관광지(12), 숙박(32), 음식점(39) 파라미터 값을 조절해 요청.
@@ -85,7 +102,7 @@ public class LocationService {
         }
     }
 
-    //^ 위의 메서드를 통해 받아 db에 저장
+    //^ 위의 메서드를 통해 관광지, 숙박, 음식점 정보를 LocationEntity에 저장
     @Transactional
     public void fetchAndSaveLocations(String baseUrl, String serviceKey, int pageNo, int numOfRows, String mobileApp, String mobileOS, String arrange, int areaCode, int contentTypeId) {
         LocationTourismResponseDto responseDto = getLocationTourismData(baseUrl, serviceKey, pageNo, numOfRows, mobileApp, mobileOS, arrange, areaCode, contentTypeId);
@@ -155,7 +172,7 @@ public class LocationService {
         }
     }
 
-    //^ 위의 메서드를 통해 받아 db에 저장
+    //^ 위의 메서드를 통해 축제 정보를 LocationEntity에 저장
     @Transactional
     public void fetchAndSaveLocationsFastival(String baseUrl, String serviceKey, int pageNo, int numOfRows, String mobileApp, String mobileOS, String arrange, String listYN, String eventStartDate, String eventEndDate, int areaCode) {
             LocationFestivalResponseDto responseDto = getLocationFestivalData(baseUrl, serviceKey, pageNo, numOfRows, mobileApp, mobileOS, arrange, listYN, eventStartDate, eventEndDate, areaCode);
@@ -225,7 +242,7 @@ public class LocationService {
         }
     }
 
-    //^ 위의 메서드를 통해 받아 db에 저장
+    //^ 위의 메서드를 통해 관광지 정보를 detailEntity에 저장
     @Transactional
     public void fetchAndSaveDetail(String baseUrl, String serviceKey, int pageNo, int numOfRows, String mobileApp, String mobileOS, String arrange, int areaCode, int contentTypeId) {
         ApiDetailResponseDto responseDto = getDetailData(baseUrl, serviceKey, pageNo, numOfRows, mobileApp, mobileOS, arrange, areaCode, contentTypeId);
@@ -296,7 +313,7 @@ public class LocationService {
         }
     }
 
-    //^ 위의 메서드를 통해 받아 db에 저장
+    //^ 위의 메서드를 통해 축제 정보를 FestivalEntity에 저장
     @Transactional
     public void fetchAndSaveFestival(String baseUrl, String serviceKey, int pageNo, int numOfRows, String mobileApp, String mobileOS, String arrange, String listYN, String eventStartDate, String eventEndDate, int areaCode) {
         ApiFestivalResponseDto responseDto = getFestivalData(baseUrl, serviceKey, pageNo, numOfRows, mobileApp, mobileOS, arrange, listYN, eventStartDate, eventEndDate, areaCode);
@@ -326,4 +343,130 @@ public class LocationService {
             throw new RuntimeException("No data received from API");
         }
     }
+
+    //? fsetivalImage에 담길 api 이미지 데이터
+    @Transactional
+    public void fetchAndSaveFestivalImages(List<Integer> festivalIds, String baseUrl, String serviceKey) {
+        for (Integer festivalId : festivalIds) {
+            String contentId = getContentIdByFestivalId(festivalId);
+            String encodedServiceKey;
+            try {
+                encodedServiceKey = URLEncoder.encode(serviceKey.trim(), StandardCharsets.UTF_8.toString());
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException("Error encoding service key", e);
+            }
+            String url = String.format(
+                "%s?serviceKey=%s&numOfRows=5&pageNo=1&MobileOS=ETC&MobileApp=AppTest&contentId=%s&imageYN=Y&subImageYN=Y&_type=json",
+                baseUrl, encodedServiceKey, contentId);
+
+            System.out.println("Constructed URL: " + url);
+            
+            try {
+                URI uri = new URI(url);
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+                HttpEntity<String> entity = new HttpEntity<>(headers);
+
+                ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
+
+                System.out.println("Response Status Code: " + response.getStatusCode());
+                System.out.println("Response Body: " + response.getBody());
+
+                ObjectMapper objectMapper = new ObjectMapper();
+                ApiFestivalImageResponseDto responseDto = objectMapper.readValue(response.getBody(), ApiFestivalImageResponseDto.class);
+
+                if (responseDto != null) {
+                    saveFestivalImages(festivalId, responseDto);
+                } else {
+                    System.out.println("No data received from API for contentId: " + contentId);
+                }
+            } catch (Exception e) {
+                System.err.println("Failed to fetch data for contentId: " + contentId);
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //! festivalId값 가져오기
+    private String getContentIdByFestivalId(Integer festivalId) {
+        FestivalEntity festivalEntity = festivalRepository.findById(festivalId)
+                .orElseThrow(() -> new RuntimeException("Festival not found for id: " + festivalId));
+        return festivalEntity.getFestivalContentid();
+    }
+
+    //^ 위의 메서드를 통해 축제 이미지를 FestivalImageEntity에 저장
+    private void saveFestivalImages(Integer festivalId, ApiFestivalImageResponseDto response) {
+        List<String> imageUrls = response.getResponse().getBody().getItems().getItem().stream()
+                .map(ApiFestivalImageResponseDto.Item::getOriginImageUrl)
+                .collect(Collectors.toList());
+
+        FestivalImageEntity entity = new FestivalImageEntity();
+        entity.setFestivalId(festivalId);
+        entity.setFestivalContentid(response.getResponse().getBody().getItems().getItem().get(0).getContentid());
+        entity.setFestivalImage1(imageUrls.size() > 0 ? imageUrls.get(0) : null);
+        entity.setFestivalImage2(imageUrls.size() > 1 ? imageUrls.get(1) : null);
+        entity.setFestivalImage3(imageUrls.size() > 2 ? imageUrls.get(2) : null);
+        entity.setFestivalImage4(imageUrls.size() > 3 ? imageUrls.get(3) : null);
+        entity.setFestivalImage5(imageUrls.size() > 4 ? imageUrls.get(4) : null);
+
+        festivalImageRepository.save(entity);
+    }
+
+    //? fsetivalDescription에 담길 api 설명 데이터
+    @Transactional
+    public void fetchAndSaveFestivalDescription(List<Integer> festivalIds, String baseUrl, String serviceKey) {
+        for (Integer festivalId : festivalIds) {
+            String contentId = getContentIdByFestivalId(festivalId);
+            String encodedServiceKey;
+            try {
+                encodedServiceKey = URLEncoder.encode(serviceKey.trim(), StandardCharsets.UTF_8.toString());
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException("Error encoding service key", e);
+            }
+            String url = String.format(
+                "%s?serviceKey=%s&contentId=%s&defaultYN=Y&overviewYN=Y&MobileOS=ETC&MobileApp=AppTest&_type=json",
+                baseUrl, encodedServiceKey, contentId);
+
+            System.out.println("Constructed URL: " + url);
+            
+            try {
+                URI uri = new URI(url);
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+                HttpEntity<String> entity = new HttpEntity<>(headers);
+
+                ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
+
+                System.out.println("Response Status Code: " + response.getStatusCode());
+                System.out.println("Response Body: " + response.getBody());
+
+                ObjectMapper objectMapper = new ObjectMapper();
+                ApiFestivalDescriptionResponseDto responseDto = objectMapper.readValue(response.getBody(), ApiFestivalDescriptionResponseDto.class);
+
+                if (responseDto != null) {
+                    saveFestivalDescription(festivalId, responseDto);
+                } else {
+                    System.out.println("No data received from API for contentId: " + contentId);
+                }
+            } catch (Exception e) {
+                System.err.println("Failed to fetch data for contentId: " + contentId);
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //^ 위의 메서드를 통해 축제 설명을 FestivalDescription에 저장
+    private void saveFestivalDescription(Integer festivalId, ApiFestivalDescriptionResponseDto response) {
+        ApiFestivalDescriptionResponseDto.Item item = response.getResponse().getBody().getItems().getItem().get(0);
+
+        FestivalDescriptionEntity entity = new FestivalDescriptionEntity();
+        entity.setFestivalId(festivalId);
+        entity.setFestivalHomepage(item.getFestivalHomepage());
+        entity.setFestivalOverview(item.getFestivalOverview());
+
+        festivalDescriptionRepository.save(entity);
+    }
+
 }
