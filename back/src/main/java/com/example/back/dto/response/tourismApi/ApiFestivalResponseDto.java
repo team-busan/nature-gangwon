@@ -7,8 +7,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class LocationFestivalResponseDeto {
-
+public class ApiFestivalResponseDto {
     private Response response;
 
     @Data
@@ -39,32 +38,37 @@ public class LocationFestivalResponseDeto {
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Item {
-        @JsonProperty("addr1")
-        private String locationAddr1;
+        @JsonProperty("title")
+        private String festivalTitle;
 
         @JsonProperty("contentid")
-        private String locationContentid;
+        private String festivalContentid;
 
-        @JsonProperty("contenttypeid")
-        private String locationContenttypeid;
+        @JsonProperty("addr1")
+        private String festivalAddress;
 
-        @JsonProperty("firstimage")
-        private String locationFirstimage;
+        @JsonProperty("tel")
+        private String festivalTel;
 
-        @JsonProperty("firstimage2")
-        private String locationFirstimage2;
+        @JsonProperty("eventstartdate")
+        private String festivalStartDate;
+
+        @JsonProperty("eventenddate")
+        private String festivalEndDate;
 
         @JsonProperty("mapx")
-        private String locationMapx;
+        private String festivalMapx;
 
         @JsonProperty("mapy")
-        private String locationMapy;
+        private String festivalMapy;
+
+        @JsonProperty("firstimage")
+        private String festivalFirstimage;
+
+        @JsonProperty("firstimage2")
+        private String festivalFirstimage2;
 
         @JsonProperty("sigungucode")
-        private String locationSigungucode;
-
-        @JsonProperty("title")
-        private String locationTitle;
+        private String festivalSigungucode;
     }
 }
-
