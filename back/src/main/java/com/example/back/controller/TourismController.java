@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.back.service.LocationService;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 @RestController
 public class TourismController {
 
@@ -84,4 +88,35 @@ public class TourismController {
             locationService.fetchAndSaveFestival(baseUrl, serviceKey, pageNo, numOfRows, MobileApp, MobileOS, arrange, listYN, eventStartDate ,eventEndDate, areaCode);
             return "Data fetched and saved successfully!";
         }
+    
+    @GetMapping("/api/festival-images")    
+    public String fetchFestivalImages(
+        @RequestParam String baseUrl,
+        @RequestParam String serviceKey) {
+            List<Integer> festivalIds = getFestivalIds();
+            locationService.fetchAndSaveFestivalImages(festivalIds, baseUrl, serviceKey);
+            return "Festival images fetched and saved successfully!";
+        }
+
+        private List<Integer> getFestivalIds() {
+        return IntStream.rangeClosed(1, 71)
+                        .boxed()
+                        .collect(Collectors.toList());
+    }
+
+    @GetMapping("/api/festival-description")    
+    public String fetchFestivalDescription(
+        @RequestParam String baseUrl,
+        @RequestParam String serviceKey) {
+            List<Integer> festivalIds = getFestivalIds2();
+            locationService.fetchAndSaveFestivalDescription(festivalIds, baseUrl, serviceKey);
+            return "Festival images fetched and saved successfully!";
+        }
+
+        private List<Integer> getFestivalIds2() {
+        return IntStream.rangeClosed(1, 71)
+                        .boxed()
+                        .collect(Collectors.toList());
+    }
+        
 }
