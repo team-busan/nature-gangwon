@@ -49,6 +49,7 @@ export default function LocationDetail() {
 
   const detailHeader = {
     title: detail_title,
+    address : detail_address,
     score: detail_total_score,
     views: detail_views,
     comments: detail_totalComments,

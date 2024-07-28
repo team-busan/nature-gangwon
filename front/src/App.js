@@ -8,6 +8,8 @@ import LocationInfo from "./Pages/LocationInfo.jsx";
 import LocationDetail from "./Pages/LocationDetail.jsx";
 import MyPage from "./Pages/MyPage.jsx";
 import SearchResult from "./Pages/SearchResult.jsx";
+import Login from "./Pages/Login.jsx";
+import Signup from "./Pages/SignUp.jsx";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +36,14 @@ const router = createBrowserRouter([
         path: "/myPage/:id",
         element: <MyPage />,
       },
+      {
+        path : "/Login",
+        element : <Login/>,
+      },
+      {
+        path : "/SignUp",
+        element : <Signup/>,
+      }
     ],
     errorElement: <NotFound />,
   },
