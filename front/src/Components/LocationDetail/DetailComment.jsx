@@ -1,21 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import Comments from "../Comments";
 
 export default function DetailComment({comments}) {
-  console.log(comments);
+  const [isCommentFilter, setIsCommentFilter] = useState(true);
   return (
     <section className="w-1420 p-3">
       <div>
         <div className="flex items-center justify-between mb-3">
-          <div className="flex w-80 justify-between items-center">
+          <div className="flex gap-10 items-center">
             <h3 className = "text-green">관광지 후기</h3>
-            <span className="flex">
+            <span className="flex items-center">
               <span className="text-yellow-400">
                 <FaStar />
               </span>
               <p>4.0</p>
-              <p>(4)댓글개수</p>
+              <p>({comments.length})</p>
             </span>
           </div>
           <div>
@@ -28,7 +28,7 @@ export default function DetailComment({comments}) {
           <li className="mr-5">
             최신순
           </li>
-          <li>후기순</li>
+          <li>추천순</li>
         </ul>
       </div>
       <Comments comments = {comments}/>
