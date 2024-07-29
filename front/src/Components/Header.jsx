@@ -5,20 +5,22 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
-    <header className="w-full mb-1 flex justify-center">
-      <div className="w-1420 flex bg-gray-100 h-20 p-3 items-center shadow-md">
-        <div className="text-black w-3/12">
-          <h1>Nature</h1>
+    <header className="w-full mb-1 flex justify-center bg-gray-100 shadow-md">
+      <div className="w-1420 flex h-20 p-3 items-center">
+        <div className="text-green w-3/12">
+          <Link to = "/">
+            <h1>Nature</h1>
+          </Link>
         </div>
         <nav className="w-4/12">
           <ul className="flex justify-between">
-            <li>
+            <li className = "hover:text-green">
               <Link to="/locationInfo">여행계획</Link>
             </li>
-            <li>
+            <li className = "hover:text-green">
               <Link to="/">축제정보</Link>
             </li>
-            <li>
+            <li className = "hover:text-green">
               <Link to="/">장소추천</Link>
             </li>
           </ul>
