@@ -10,6 +10,7 @@ import MyPage from "./Pages/MyPage.jsx";
 import SearchResult from "./Pages/SearchResult.jsx";
 import Login from "./Pages/Login.jsx";
 import Signup from "./Pages/SignUp.jsx";
+import Plan from "./Pages/Plan.jsx";
 
 const router = createBrowserRouter([
   {
@@ -37,13 +38,17 @@ const router = createBrowserRouter([
         element: <MyPage />,
       },
       {
-        path : "/Login",
-        element : <Login/>,
+        path: "/Login",
+        element: <Login />,
       },
       {
-        path : "/SignUp",
-        element : <Signup/>,
-      }
+        path: "/SignUp",
+        element: <Signup />,
+      },
+      {
+        path: "/plan",
+        element: <Plan />,
+      },
     ],
     errorElement: <NotFound />,
   },
