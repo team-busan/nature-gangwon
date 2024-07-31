@@ -18,6 +18,7 @@ public class UserController {
 
     private final UserService userService; 
 
+    //? 유저정보 가져오기
     @GetMapping("")
     public ResponseEntity<? super GetUserResponseDto> getUser(@AuthenticationPrincipal String userEmail) {
         ResponseEntity<? super GetUserResponseDto> response = userService.getUser(userEmail);

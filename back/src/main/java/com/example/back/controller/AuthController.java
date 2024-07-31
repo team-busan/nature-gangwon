@@ -29,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
     private final AuthService authService;
     
+    //? 회원가입
     @PostMapping("/sign-up")
     public ResponseEntity<? super SignUpResponseDto> signUp (
         @RequestBody @Valid SignUpRequestDto requestBody
@@ -37,6 +38,7 @@ public class AuthController {
         return response;
     }
 
+    //? 로그인
     @PostMapping("/sign-in")
     public ResponseEntity<? super SignInResponseDto> signIn (
         @RequestBody @Valid SignInRequestDto requestBody
@@ -45,6 +47,7 @@ public class AuthController {
         return response;
     }
 
+    //? 닉네임 중복체크
     @PostMapping("/nickname-check")
     public ResponseEntity<? super ValidateNicknameResponseDto> nicknameCheck(
         @RequestBody @Valid ValidateNicknameRequestDto requestBody
@@ -53,6 +56,7 @@ public class AuthController {
         return response;
     }
 
+    //? 이메일 중복체크
     @PostMapping("/email-check")
     public ResponseEntity<? super EmailCheckResponseDto> emailCheck (
         @RequestBody @Valid EmailCheckRequestDto requestBody
@@ -61,6 +65,7 @@ public class AuthController {
         return response;
     }
 
+    //? 인증메일 체크
     @PostMapping("/certification-check")
     public ResponseEntity<? super CheckCertificationResponseDto> checkCertification(
         @RequestBody @Valid CheckCertificationRequestDto requestBody
@@ -69,6 +74,7 @@ public class AuthController {
         return response;
     }
 
+    //? 메일 보내기
     @PostMapping("/email-send-certification")
     public ResponseEntity<? super EmailCertificationResponseDto> emailCertification(
         @RequestBody @Valid EmailCertificationRequestDto requestBody
