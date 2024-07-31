@@ -6,7 +6,7 @@ export const destination_info = [
     detail_total_score: "4.5",
     detail_firstimage2:
       "https://i.namu.wiki/i/ZN5h34E3Smq8p0pi_w86yk890V91mbslvrBjxBrBZET95vy50_Jf0Ffj-MYiooox5a1hcatv62oMUtAX3t2MfA.webp",
-    detail_sigungucode: "??",
+    detail_sigungucode: "강릉시",
     detail_totalComments: 20,
   },
   {
@@ -16,7 +16,7 @@ export const destination_info = [
     detail_total_score: "0",
     detail_firstimage2:
       "https://i.namu.wiki/i/ZN5h34E3Smq8p0pi_w86yk890V91mbslvrBjxBrBZET95vy50_Jf0Ffj-MYiooox5a1hcatv62oMUtAX3t2MfA.webp",
-    detail_sigungucode: "??",
+    detail_sigungucode: "고성군",
     detail_totalComments: 0,
   },
   {
@@ -26,7 +26,7 @@ export const destination_info = [
     detail_total_score: "3.8",
     detail_firstimage2:
       "https://i.namu.wiki/i/ZN5h34E3Smq8p0pi_w86yk890V91mbslvrBjxBrBZET95vy50_Jf0Ffj-MYiooox5a1hcatv62oMUtAX3t2MfA.webp",
-    detail_sigungucode: "??",
+    detail_sigungucode: "동해시",
     detail_totalComments: 15,
   },
   {
@@ -36,7 +36,7 @@ export const destination_info = [
     detail_total_score: "4.2",
     detail_firstimage2:
       "https://i.namu.wiki/i/ZN5h34E3Smq8p0pi_w86yk890V91mbslvrBjxBrBZET95vy50_Jf0Ffj-MYiooox5a1hcatv62oMUtAX3t2MfA.webp",
-    detail_sigungucode: "??",
+    detail_sigungucode: "동해시",
     detail_totalComments: 8,
   },
   {
@@ -46,7 +46,7 @@ export const destination_info = [
     detail_total_score: "4.0",
     detail_firstimage2:
       "https://i.namu.wiki/i/ZN5h34E3Smq8p0pi_w86yk890V91mbslvrBjxBrBZET95vy50_Jf0Ffj-MYiooox5a1hcatv62oMUtAX3t2MfA.webp",
-    detail_sigungucode: "??",
+    detail_sigungucode: "동해시",
     detail_totalComments: 5,
   },
   {
@@ -56,7 +56,7 @@ export const destination_info = [
     detail_total_score: "3.9",
     detail_firstimage2:
       "https://i.namu.wiki/i/ZN5h34E3Smq8p0pi_w86yk890V91mbslvrBjxBrBZET95vy50_Jf0Ffj-MYiooox5a1hcatv62oMUtAX3t2MfA.webp",
-    detail_sigungucode: "??",
+    detail_sigungucode: "인제군",
     detail_totalComments: 12,
   },
   {
@@ -66,7 +66,7 @@ export const destination_info = [
     detail_total_score: "4.3",
     detail_firstimage2:
       "https://i.namu.wiki/i/ZN5h34E3Smq8p0pi_w86yk890V91mbslvrBjxBrBZET95vy50_Jf0Ffj-MYiooox5a1hcatv62oMUtAX3t2MfA.webp",
-    detail_sigungucode: "??",
+    detail_sigungucode: "정선군",
     detail_totalComments: 7,
   },
   {
@@ -76,7 +76,7 @@ export const destination_info = [
     detail_total_score: "4.6",
     detail_firstimage2:
       "https://i.namu.wiki/i/ZN5h34E3Smq8p0pi_w86yk890V91mbslvrBjxBrBZET95vy50_Jf0Ffj-MYiooox5a1hcatv62oMUtAX3t2MfA.webp",
-    detail_sigungucode: "??",
+    detail_sigungucode: "정선군",
     detail_totalComments: 22,
   },
   {
@@ -86,7 +86,7 @@ export const destination_info = [
     detail_total_score: "4.1",
     detail_firstimage2:
       "https://i.namu.wiki/i/ZN5h34E3Smq8p0pi_w86yk890V91mbslvrBjxBrBZET95vy50_Jf0Ffj-MYiooox5a1hcatv62oMUtAX3t2MfA.webp",
-    detail_sigungucode: "??",
+    detail_sigungucode: "태백시",
     detail_totalComments: 9,
   },
   {
@@ -96,7 +96,7 @@ export const destination_info = [
     detail_total_score: "4.0",
     detail_firstimage2:
       "https://i.namu.wiki/i/ZN5h34E3Smq8p0pi_w86yk890V91mbslvrBjxBrBZET95vy50_Jf0Ffj-MYiooox5a1hcatv62oMUtAX3t2MfA.webp",
-    detail_sigungucode: "??",
+    detail_sigungucode: "평창군",
     detail_totalComments: 11,
   },
   {
@@ -106,7 +106,7 @@ export const destination_info = [
     detail_total_score: "4.4",
     detail_firstimage2:
       "https://i.namu.wiki/i/ZN5h34E3Smq8p0pi_w86yk890V91mbslvrBjxBrBZET95vy50_Jf0Ffj-MYiooox5a1hcatv62oMUtAX3t2MfA.webp",
-    detail_sigungucode: "??",
+    detail_sigungucode: "평창군",
     detail_totalComments: 13,
   },
   {
@@ -116,7 +116,7 @@ export const destination_info = [
     detail_total_score: "3.7",
     detail_firstimage2:
       "https://i.namu.wiki/i/ZN5h34E3Smq8p0pi_w86yk890V91mbslvrBjxBrBZET95vy50_Jf0Ffj-MYiooox5a1hcatv62oMUtAX3t2MfA.webp",
-    detail_sigungucode: "??",
+    detail_sigungucode: "평창군",
     detail_totalComments: 6,
   },
   {
@@ -126,7 +126,7 @@ export const destination_info = [
     detail_total_score: "4.2",
     detail_firstimage2:
       "https://i.namu.wiki/i/ZN5h34E3Smq8p0pi_w86yk890V91mbslvrBjxBrBZET95vy50_Jf0Ffj-MYiooox5a1hcatv62oMUtAX3t2MfA.webp",
-    detail_sigungucode: "??",
+    detail_sigungucode: "평창군",
     detail_totalComments: 14,
   },
   {
@@ -136,7 +136,7 @@ export const destination_info = [
     detail_total_score: "4.5",
     detail_firstimage2:
       "https://i.namu.wiki/i/ZN5h34E3Smq8p0pi_w86yk890V91mbslvrBjxBrBZET95vy50_Jf0Ffj-MYiooox5a1hcatv62oMUtAX3t2MfA.webp",
-    detail_sigungucode: "??",
+    detail_sigungucode: "평창군",
     detail_totalComments: 19,
   },
   {
