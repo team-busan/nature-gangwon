@@ -17,6 +17,7 @@ public class UserServiceImplemet implements UserService{
 
     private final UserRepository userRepository;
 
+    //? 유저 정보 갖고오기
     @Override
     public ResponseEntity<? super GetUserResponseDto> getUser(String userEmail) {
         try {

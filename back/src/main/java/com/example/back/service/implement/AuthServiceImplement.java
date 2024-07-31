@@ -39,6 +39,7 @@ public class AuthServiceImplement implements AuthService {
 
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     
+    //? 회원가입
     @Override
     public ResponseEntity<? super SignUpResponseDto> signUp(SignUpRequestDto dto) {
         try {
@@ -73,6 +74,7 @@ public class AuthServiceImplement implements AuthService {
         return SignUpResponseDto.success();
     }
 
+    //? 로그인
     @Override
     public ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto) {
         String token = null;
@@ -94,6 +96,7 @@ public class AuthServiceImplement implements AuthService {
         return SignInResponseDto.success(token);
     }
 
+    //? 이메일 중복체크
     @Override
     public ResponseEntity<? super EmailCheckResponseDto> emailCheck(EmailCheckRequestDto dto) {
         try {
@@ -107,6 +110,7 @@ public class AuthServiceImplement implements AuthService {
         return EmailCheckResponseDto.success();
     }
 
+    //? 인증메일
     @Override
     public ResponseEntity<? super EmailCertificationResponseDto> emailCertification(EmailCertificationRequestDto dto) {
         try {
@@ -129,6 +133,7 @@ public class AuthServiceImplement implements AuthService {
         return EmailCertificationResponseDto.success();
     }
 
+    //? 닉네임 중복체크
     @Override
     public ResponseEntity<? super ValidateNicknameResponseDto> nicknameCheck(ValidateNicknameRequestDto dto) {
         try {
@@ -142,6 +147,7 @@ public class AuthServiceImplement implements AuthService {
         return ValidateNicknameResponseDto.success();
     }
 
+    //? 인증메일 확인
     @Override
     public ResponseEntity<? super CheckCertificationResponseDto> checkCertification(CheckCertificationRequestDto dto) {
         try {

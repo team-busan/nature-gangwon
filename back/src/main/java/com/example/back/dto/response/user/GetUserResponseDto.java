@@ -8,6 +8,9 @@ import com.example.back.common.ResponseMessage;
 import com.example.back.dto.ResponseDto;
 import com.example.back.entity.UserEntity;
 
+import lombok.Getter;
+
+@Getter
 public class GetUserResponseDto extends ResponseDto {
     private String userEmail;
     private String userNickname;

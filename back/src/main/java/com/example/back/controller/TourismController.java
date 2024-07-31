@@ -21,6 +21,7 @@ public class TourismController {
         this.locationService = locationService;
     }
 
+    //? location에 담길 관광지, 숙박, 음식점 데이터 가져오기
     @GetMapping("/api/location")
     public String getTourismData(
             @RequestParam String baseUrl,
@@ -37,6 +38,7 @@ public class TourismController {
         return "Data fetched and saved successfully!";
     }
 
+    //? location에 담길 축제 데이터 가져오기
     @GetMapping("/api/locaion-festival")
     public String getLocationFestivalData(
         @RequestParam String baseUrl,
@@ -55,6 +57,7 @@ public class TourismController {
             return "Data fetched and saved successfully!";
         }
     
+    //? detail에 담길 관광지 데이터 가져오기    
     @GetMapping("/api/detail")
     public String getDetailData(
         @RequestParam String baseUrl,
@@ -71,6 +74,7 @@ public class TourismController {
         return "Data fetched and saved successfully!";
     }
     
+    //? fsetival에 담길 축제 데이터 가져오기
     @GetMapping("/api/festival")
     public String getFestivalData(
         @RequestParam String baseUrl,
@@ -89,6 +93,7 @@ public class TourismController {
             return "Data fetched and saved successfully!";
         }
     
+    //? 축제 이미지 데이터 가져오기
     @GetMapping("/api/festival-images")    
     public String getFestivalImages(
         @RequestParam String baseUrl,
@@ -104,6 +109,7 @@ public class TourismController {
                         .collect(Collectors.toList());
     }
 
+    //? 축제 상세 설명 데이터 가져오기
     @GetMapping("/api/festival-description")    
     public String getFestivalDescription(
         @RequestParam String baseUrl,
@@ -119,6 +125,7 @@ public class TourismController {
                         .collect(Collectors.toList());
     }
     
+    //? 관광지 이미지 데이터 가져오기
     @GetMapping("/api/detail-images")    
     public String fetchDedtailImages(
         @RequestParam String baseUrl,
@@ -134,6 +141,7 @@ public class TourismController {
                         .collect(Collectors.toList());
     }
 
+    //? 관광지 상세 설명 데이터 가져오기
     @GetMapping("/api/detail-description")    
     public String getDetailDescription(
         @RequestParam String baseUrl,
