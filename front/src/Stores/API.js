@@ -23,7 +23,6 @@ const axiosMock = new AxiosMockAdapter(axiosInstance, {
 });
 
 axiosMock.onGet(API_URL.SEARCH).reply((config) => {
-  console.log(config.url);
   return [200, destination_info];
 });
 
@@ -34,7 +33,7 @@ axiosMock.onGet(API_URL.LocationInfo).reply((config) => {
   const filteredData =
     region === "all"
       ? destination_info
-      : destination_info.filter((item) => item.region === region);
+      : destination_info.filter((item) => item.detail_sigungucode === region);
   const paginatedData = filteredData.slice(
     (page - 1) * size,
     page * size
