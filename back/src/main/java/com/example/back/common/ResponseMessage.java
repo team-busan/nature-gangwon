@@ -4,9 +4,13 @@ public interface ResponseMessage {
     String SUCCESS = "Success.";
 
     String VALIDATION_FAIL = "Validation Failed.";
-    String DUPLICATE_ID = "Duplicate Id.";
+    String DUPLICATE_EMAIL = "Duplicate Email.";
+
+    String DUPLICATE_NICKNAME = "Duplicate Nickname.";
 
     String SIGN_IN_FAIL = "Login Information Mismatch.";
+
+    String CERTIFICATION_FAIL = "Certification Fail.";
 
     String DATABASE_ERROR = "Database Error.";
 
@@ -14,5 +18,7 @@ public interface ResponseMessage {
     
     String NOT_EXIST_POST = "Not Exist Post.";
     String NOT_EXIST_USER = "Not Exist User.";
-    String NOT_EXIST_COMMENT = "Not Exist Comment";
+    String NOT_EXIST_COMMENT = "Not Exist Comment.";
+
+    String MAIL_FAIL = "Mail Send Fail.";
 }

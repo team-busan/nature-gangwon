@@ -129,7 +129,7 @@ public class TourismController {
         }
 
         private List<Integer> getDetailIds() {
-        return IntStream.rangeClosed(1, 700) //* 월요일 실행 화요일날 701 ~ 1427번까지 
+        return IntStream.rangeClosed(701, 1427) //* 완 
                         .boxed()
                         .collect(Collectors.toList());
     }
@@ -144,7 +144,7 @@ public class TourismController {
         }
 
         private List<Integer> getDetailIds2() {
-        return IntStream.rangeClosed(701, 1427) //* 월요일날 실행
+        return IntStream.rangeClosed(701, 1427) //* 완
                         .boxed()
                         .collect(Collectors.toList());
     }

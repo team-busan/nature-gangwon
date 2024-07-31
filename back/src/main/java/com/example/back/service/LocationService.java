@@ -366,7 +366,7 @@ public class LocationService {
                 throw new RuntimeException("Error encoding service key", e);
             }
             String url = String.format(
-                "%s?serviceKey=%s&numOfRows=5&pageNo=1&MobileOS=ETC&MobileApp=AppTest&contentId=%s&imageYN=Y&subImageYN=Y&_type=json",
+                "%sserviceKey=%s&numOfRows=5&pageNo=1&MobileOS=ETC&MobileApp=AppTest&contentId=%s&imageYN=Y&subImageYN=Y&_type=json",
                 baseUrl, encodedServiceKey, contentId);
 
             System.out.println("Constructed URL: " + url);
@@ -435,7 +435,7 @@ public class LocationService {
                 throw new RuntimeException("Error encoding service key", e);
             }
             String url = String.format(
-                "%s?serviceKey=%s&contentId=%s&defaultYN=Y&overviewYN=Y&MobileOS=ETC&MobileApp=AppTest&_type=json",
+                "%sserviceKey=%s&contentId=%s&defaultYN=Y&overviewYN=Y&MobileOS=ETC&MobileApp=AppTest&_type=json",
                 baseUrl, encodedServiceKey, contentId);
 
             System.out.println("Constructed URL: " + url);
@@ -491,7 +491,7 @@ public class LocationService {
                 throw new RuntimeException("Error encoding service key", e);
             }
             String url = String.format(
-                "%s?serviceKey=%s&numOfRows=5&pageNo=1&MobileOS=ETC&MobileApp=AppTest&contentId=%s&imageYN=Y&subImageYN=Y&_type=json",
+                "%sserviceKey=%s&numOfRows=5&pageNo=1&MobileOS=ETC&MobileApp=AppTest&contentId=%s&imageYN=Y&subImageYN=Y&_type=json",
                 baseUrl, encodedServiceKey, contentId);
 
             System.out.println("Constructed URL: " + url);
@@ -560,7 +560,7 @@ public class LocationService {
                 throw new RuntimeException("Error encoding service key", e);
             }
             String url = String.format(
-                "%s?serviceKey=%s&contentId=%s&defaultYN=Y&overviewYN=Y&MobileOS=ETC&MobileApp=AppTest&_type=json",
+                "%sserviceKey=%s&contentId=%s&defaultYN=Y&overviewYN=Y&MobileOS=ETC&MobileApp=AppTest&_type=json",
                 baseUrl, encodedServiceKey, contentId);
 
             System.out.println("Constructed URL: " + url);
