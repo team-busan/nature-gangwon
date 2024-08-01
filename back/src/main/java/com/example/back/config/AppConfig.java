@@ -26,8 +26,10 @@ public class AppConfig {
                     .filename(".env")
                     .load();
             String apiKey = dotenv.get("TOURISM_API_KEY");
-            if (apiKey != null) {
+            String mailKey = dotenv.get("GMAIL_PASSWORD");
+            if (apiKey != null || mailKey != null) {
                 System.setProperty("TOURISM_API_KEY", apiKey);
+                System.setProperty("GMAIL_PASSWORD", mailKey);
             } else {
                 throw new RuntimeException("API key not found in .env file");
             }

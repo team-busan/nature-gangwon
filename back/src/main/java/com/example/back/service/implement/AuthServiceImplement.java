@@ -89,6 +89,7 @@ public class AuthServiceImplement implements AuthService {
             if(!isMatched) return SignInResponseDto.singInFail();
 
             token = jwtProvider.create(userEmail);
+            certificationRepository.deleteByUserEmail(userEmail);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.databaseError();
@@ -115,8 +116,8 @@ public class AuthServiceImplement implements AuthService {
     public ResponseEntity<? super EmailCertificationResponseDto> emailCertification(EmailCertificationRequestDto dto) {
         try {
             String userEmail = dto.getUserEmail();
-            boolean isExistId = userRepository.existsByUserEmail(userEmail);
-            if(isExistId) return EmailCertificationResponseDto.duplicateEmail();
+            // boolean isExistId = userRepository.existsByUserEmail(userEmail);
+            // if(isExistId) return EmailCertificationResponseDto.duplicateEmail();
 
             String certificationNumber = CertificationCode.getCertificationNumber();
 
