@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { FaEyeSlash } from "react-icons/fa6";
-import { FaCircle } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import PasswordInput from "./PasswordInput";
+import ConfirmPasswordInput from "./ConfirmPasswordInput";
+import NicknameInput from "./NicknameInput";
 
-export default function Signup2({ email }) {
-  const [passwordValid, setPasswordValid] = useState(false);
+export default function Signup2({ email, certificationCode }) {
+  const [passwordValid1, setPasswordValid1] = useState(false);
+  const [passwordValid2, setPasswordValid2] = useState(false);
+  const [samePassword, setSamePassword] = useState(false);
+  const [nicknameValid, setNicknameValid] = useState(false);
+  const [nicknameChecked, setNicknameChecked] = useState(false);
   const [formData, setFormData] = useState({
     password: "",
     confirmPassword: "",
@@ -16,15 +21,26 @@ export default function Signup2({ email }) {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
+    const { name, value } = e.target;
+
+    setFormData((prevData) => {
+      const newFormData = { ...prevData, [name]: value };
+
+      const passwordPattern1 = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,19}$/;
+      setPasswordValid1(passwordPattern1.test(newFormData.password));
+
+      const passwordPattern2 = /[a-zA-Z0-9]+/;
+      setPasswordValid2(passwordPattern2.test(newFormData.password));
+
+      setSamePassword(newFormData.password === newFormData.confirmPassword);
+
+      if (name === "nickname") {
+        setNicknameValid(value.length >= 2);
+        setNicknameChecked(false);
+      }
+
+      return newFormData;
     });
-
-    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,19}$/;
-    setPasswordValid(passwordPattern.test(formData.password));
-
-
   };
 
   const validateForm = () => {
@@ -37,7 +53,7 @@ export default function Signup2({ email }) {
   };
 
   const mutation = useMutation({
-    mutationFn: (data) => axios.post("http://localhost:8000/auth/signup", data),
+    mutationFn: (data) => axios.post("http://localhost:8000/auth/sign-up", data),
     onSuccess: () => {
       alert("회원가입이 완료되었습니다!");
       navigate("/login");
@@ -47,24 +63,44 @@ export default function Signup2({ email }) {
     },
   });
 
+  const nicknameCheckMutation = useMutation({
+    mutationFn: (nickname) =>
+      axios.post("http://localhost:8000/auth/nickname-check", {
+        userNickname: nickname,
+      }),
+    onSuccess: (response) => {
+      console.log("Nickname check response:", response.data);
+      if (response.data.code === "SU") {
+        setNicknameValid(true);
+        setNicknameChecked(true);
+      } else {
+        setNicknameValid(false);
+        setNicknameChecked(false);
+      }
+    },
+    onError: (error) => {
+      console.error("Nickname check error:", error);
+      setNicknameValid(false);
+      setNicknameChecked(false);
+    },
+  });
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validateForm()) return;
     mutation.mutate({
-      email,
-      password: formData.password,
-      nickname: formData.nickname,
+      userEmail: email,
+      userPassword: formData.password,
+      userNickname: formData.nickname,
+      certificationCode: certificationCode,
     });
   };
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className = "mb-2">
         <div className="form-group mb-4">
-          <label
-            htmlFor="email"
-            className="block text-gray-700 font-semibold mb-2"
-          >
+          <label htmlFor="email" className="block text-gray-700 font-semibold mb-2">
             이메일
           </label>
           <input
@@ -77,88 +113,37 @@ export default function Signup2({ email }) {
           />
         </div>
 
-        <div className="form-group mb-4">
-          <label
-            htmlFor="password"
-            className="block text-gray-700 font-semibold mb-2"
-          >
-            비밀번호
-          </label>
-          <span className="relative">
-            <input
-              type="password"
-              id="password"
-              name="password"
-              placeholder="비밀번호"
-              className="border border-gray-300 p-2 rounded-md w-full"
-              required
-              value={formData.password}
-              onChange={handleChange}
-            />
-            <span className="absolute top-0 right-5 text-lg">
-              <FaEyeSlash />
-            </span>
-          </span>
-          <div className = "flex items-center mt-1">
-            <FaCircle className={passwordValid ? "text-green mr-1 text-xs" : "text-red-600 mr-1 text-xs"} />
-            <p>{passwordValid ? "8자 이상 20자 미만입니다." : "8자 이상 20자 미만으로 입력해주세요"}</p>
-          </div>
-          <div className = "flex items-center mt-1">
-            <FaCircle className={passwordValid ? "text-green mr-1 text-xs" : "text-red-600 mr-1 text-xs"} />
-            <p>{passwordValid ? "숫자 또는 문자가 하나 이상입니다" : "숫자 또는 문자 하나 이상 입력해주세요"}</p>
-          </div>
-        </div>
+        <PasswordInput
+          password={formData.password}
+          onChange={handleChange}
+          passwordValid1={passwordValid1}
+          passwordValid2={passwordValid2}
+        />
 
-        <div className="form-group mb-4">
-          <label
-            htmlFor="confirmPassword"
-            className="block text-gray-700 font-semibold mb-2"
-          >
-            비밀번호 확인
-          </label>
-          <span className="relative">
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              placeholder="비밀번호 확인"
-              className="border border-gray-300 p-2 rounded-md w-full"
-              required
-              value={formData.confirmPassword}
-              onChange={handleChange}
-            />
-            <span className="absolute top-0 right-5 text-lg">
-              <FaEyeSlash />
-            </span>
-          </span>
-        </div>
+        <ConfirmPasswordInput
+          confirmPassword={formData.confirmPassword}
+          onChange={handleChange}
+          samePassword={samePassword}
+        />
 
-        <div className="form-group mb-6">
-          <label
-            htmlFor="nickname"
-            className="block text-gray-700 font-semibold mb-2"
-          >
-            닉네임
-          </label>
-          <input
-            type="text"
-            id="nickname"
-            name="nickname"
-            placeholder="닉네임"
-            className="border border-gray-300 p-2 rounded-md w-full"
-            required
-            value={formData.nickname}
-            onChange={handleChange}
-          />
-        </div>
+        <NicknameInput
+          nickname={formData.nickname}
+          onChange={handleChange}
+          nicknameValid={nicknameValid}
+          nicknameChecked={nicknameChecked}
+          checkNickname={() => nicknameCheckMutation.mutate(formData.nickname)}
+        />
 
-        <button
-          type="submit"
-          className="w-full bg-gray-400 text-white p-3 rounded-md font-semibold hover:bg-green transition duration-300"
-        >
+        <button type="submit" className="w-full bg-gray-400 text-white p-3 rounded-full font-semibold hover:bg-softGreen transition duration-300">
           회원가입
         </button>
       </form>
+      <div classname = "">
+        <span className = "flex">
+          <p className = "text-gray-400 mr-2">이미 계정이 있으신가요?</p>
+          <p className = "border-b-2 border-black"><Link to="/Login">여기에서 로그인하기</Link></p>
+        </span>
+      </div>
     </div>
   );
 }
