@@ -15,14 +15,20 @@ import lombok.Getter;
 @Getter
 public class GetLocationBasedListResponseDto extends ResponseDto {
     private List<GetLocationBasedListItemDto> locationList;
+    private long totalData;
+    private int totalPage;
+    private int currentPage;
 
-    private GetLocationBasedListResponseDto(List<GetLocationBasedListItemDto> locationList) {
+    public GetLocationBasedListResponseDto(List<GetLocationBasedListItemDto> locationList, long totalData, int totalPage, int currentPage) {
         super();
         this.locationList = locationList;
+        this.totalData = totalData;
+        this.totalPage = totalPage;
+        this.currentPage = currentPage;
     }
 
-    public static ResponseEntity<GetLocationBasedListResponseDto> success(List<GetLocationBasedListItemDto> locationList) {
-        GetLocationBasedListResponseDto responseBody = new GetLocationBasedListResponseDto(locationList);
+    public static ResponseEntity<GetLocationBasedListResponseDto> success(List<GetLocationBasedListItemDto> locationList , long totalData, int totalPage, int currentPage) {
+        GetLocationBasedListResponseDto responseBody = new GetLocationBasedListResponseDto(locationList , totalData, totalPage, currentPage);
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 

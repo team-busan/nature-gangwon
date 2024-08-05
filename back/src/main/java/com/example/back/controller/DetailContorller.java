@@ -11,6 +11,7 @@ import com.example.back.service.DetailService;
 
 import lombok.RequiredArgsConstructor;
 
+
 @RestController
 @RequestMapping("/detail")
 @RequiredArgsConstructor
@@ -18,6 +19,7 @@ public class DetailContorller {
     
     private final DetailService detailService;
 
+    //? 시군구 코드가 없으면 전체 리스트
     @GetMapping("/list")
     public ResponseEntity<? super GetDetailListResponseDto> getDetailList(
         @RequestParam(required = false) String detailSigungucode,
@@ -27,4 +29,5 @@ public class DetailContorller {
         ResponseEntity<? super GetDetailListResponseDto> response = detailService.getDetailList(detailSigungucode, page, size);
         return response;
     } 
+
 }
