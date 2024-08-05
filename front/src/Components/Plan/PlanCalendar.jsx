@@ -94,7 +94,7 @@ const CaledarBody = ({ curMon, dates, onDateClick, rangeState }) => {
   );
 };
 
-const PlanCalendar = ({ setPlanStage, dates, setDates }) => {
+const PlanCalendar = ({ setPlanStage, dates, setDates, setFoldStage }) => {
   const [curMon, setCurMon] = useState(new Date());
   const prevMon = () => setCurMon(subMonths(curMon, 1));
   const nextMon = () => setCurMon(addMonths(curMon, 1));
@@ -131,7 +131,10 @@ const PlanCalendar = ({ setPlanStage, dates, setDates }) => {
           <div>여행 마지막 날 : {format(dates[1], "yyyy M dd")}</div>
         </div>
         <button
-          onClick={() => setPlanStage(1)}
+          onClick={() => {
+            setPlanStage(1);
+            setFoldStage(1);
+          }}
           className="bg-darkGreen text-white py-2 px-4 rounded-lg h-min"
         >
           다음으로
