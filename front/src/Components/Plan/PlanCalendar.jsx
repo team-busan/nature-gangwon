@@ -1,7 +1,15 @@
 import { useState } from "react";
-import { format, addMonths, subMonths, set } from "date-fns";
-import { startOfMonth, endOfMonth, startOfWeek, endOfWeek } from "date-fns";
-import { isSameMonth, isSameDay, addDays, parse } from "date-fns";
+import {
+  format,
+  addMonths,
+  subMonths,
+  startOfMonth,
+  endOfMonth,
+  startOfWeek,
+  endOfWeek,
+  isSameDay,
+  addDays,
+} from "date-fns";
 import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
 import { motion } from "framer-motion";
 
@@ -94,11 +102,12 @@ const CaledarBody = ({ curMon, dates, onDateClick, rangeState }) => {
   );
 };
 
-const PlanCalendar = ({ setPlanStage, dates, setDates }) => {
+const PlanCalendar = ({ setPlanStage, dates, setDates, setFoldStage }) => {
   const [curMon, setCurMon] = useState(new Date());
   const prevMon = () => setCurMon(subMonths(curMon, 1));
   const nextMon = () => setCurMon(addMonths(curMon, 1));
   const [rangeState, setRangeState] = useState(false);
+
   const onDateClick = (date) => {
     if (rangeState == false) {
       setDates([date, date]);
@@ -131,7 +140,10 @@ const PlanCalendar = ({ setPlanStage, dates, setDates }) => {
           <div>여행 마지막 날 : {format(dates[1], "yyyy M dd")}</div>
         </div>
         <button
-          onClick={() => setPlanStage(1)}
+          onClick={() => {
+            setPlanStage(1);
+            setFoldStage(1);
+          }}
           className="bg-darkGreen text-white py-2 px-4 rounded-lg h-min"
         >
           다음으로

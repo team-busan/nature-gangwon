@@ -1,6 +1,11 @@
 import axios from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
-import { destination_info, destination_detail, user_info, destination_comment } from "./mockData.js";
+import {
+  destination_info,
+  destination_detail,
+  user_info,
+  destination_comment,
+} from "./mockData.js";
 
 const BASE_URL = "http://localhost:8000/api";
 
@@ -15,6 +20,7 @@ const API_URL = {
   LocationInfo: "/locationinfo",
   LocationDetail: "/locationdetail",
   MyPage: "/myPage",
+  Plan: "/plan",
 };
 
 const axiosMock = new AxiosMockAdapter(axiosInstance, {
@@ -51,16 +57,24 @@ axiosMock.onGet(API_URL.LocationInfo).reply((config) => {
   ];
 });
 
-axiosMock.onGet(new RegExp(`${API_URL.LocationDetail}/\\d+`)).reply(config => {
-  const id = parseInt(config.url.split('/').pop());
-  const detail = destination_detail.find(item => item.detail_id === id);
-  const comments = destination_comment.filter(item => item.detail_id === id);
+axiosMock
+  .onGet(new RegExp(`${API_URL.LocationDetail}/\\d+`))
+  .reply((config) => {
+    const id = parseInt(config.url.split("/").pop());
+    const detail = destination_detail.find((item) => item.detail_id === id);
+    const comments = destination_comment.filter(
+      (item) => item.detail_id === id
+    );
 
-  if (detail) {
-    return [200, { detail, comments }];
-  } else {
-    return [404, { message: "Not Found" }];
-  }
+    if (detail) {
+      return [200, { detail, comments }];
+    } else {
+      return [404, { message: "Not Found" }];
+    }
+  });
+
+axiosMock.onGet(API_URL.Plan).reply((config) => {
+  return [200, destination_info];
 });
 
 // const user_info_url = new RegExp(`${API_URL.MyPage}/*`);

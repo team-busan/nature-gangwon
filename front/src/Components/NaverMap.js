@@ -1,12 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from "react";
 
-const NaverMap = ({ lat, lng }) => {
+const NaverMap = ({ lat, lng, width, height }) => {
   const mapRef = useRef(null);
 
   useEffect(() => {
     const clientId = process.env.REACT_APP_CLIENT_ID;
 
-    const script = document.createElement('script');
+    const script = document.createElement("script");
     script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${clientId}`;
     script.async = true;
     script.onload = () => {
@@ -24,13 +24,12 @@ const NaverMap = ({ lat, lng }) => {
       }
     };
     script.onerror = () => {
-      console.error('Naver Map script could not be loaded.');
+      console.error("Naver Map script could not be loaded.");
     };
     document.head.appendChild(script);
-
   }, [lat, lng]);
 
-  return <div ref={mapRef} style={{ width: "1400px", height: "500px" }}></div>;
+  return <div ref={mapRef} style={{ width: width, height: height }}></div>;
 };
 
 export default NaverMap;

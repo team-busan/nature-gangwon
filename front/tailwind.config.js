@@ -37,6 +37,7 @@ export default {
       },
       boxShadow: {
         content: "rgba(0, 0, 0, 0.15) 0px 5px 15px 0px",
+        lightGreen: "rgba(199, 247, 198, 0.5) 0px 5px 15px 0px",
       },
     },
   },
