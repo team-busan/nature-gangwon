@@ -1,0 +1,3 @@
+const PLAN_STATUSBAR_WIDTH = 120;
+
+export { PLAN_STATUSBAR_WIDTH };

@@ -1,7 +1,15 @@
 import { useState } from "react";
-import { format, addMonths, subMonths, set } from "date-fns";
-import { startOfMonth, endOfMonth, startOfWeek, endOfWeek } from "date-fns";
-import { isSameMonth, isSameDay, addDays, parse } from "date-fns";
+import {
+  format,
+  addMonths,
+  subMonths,
+  startOfMonth,
+  endOfMonth,
+  startOfWeek,
+  endOfWeek,
+  isSameDay,
+  addDays,
+} from "date-fns";
 import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
 import { motion } from "framer-motion";
 
@@ -99,6 +107,7 @@ const PlanCalendar = ({ setPlanStage, dates, setDates, setFoldStage }) => {
   const prevMon = () => setCurMon(subMonths(curMon, 1));
   const nextMon = () => setCurMon(addMonths(curMon, 1));
   const [rangeState, setRangeState] = useState(false);
+
   const onDateClick = (date) => {
     if (rangeState == false) {
       setDates([date, date]);

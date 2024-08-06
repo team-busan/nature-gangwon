@@ -1,7 +1,11 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { format } from "date-fns";
 
 import { MdOutlineSearch, MdOutlineAddCircle } from "react-icons/md";
+
+import { useRecoilState } from "recoil";
+import { planList } from "../../atoms";
 
 const SearchBar = ({ searchValue, setSearchValue }) => {
   return (
@@ -27,10 +31,32 @@ const SearchBar = ({ searchValue, setSearchValue }) => {
 };
 
 const SearchList = ({ data }) => {
+  const [plans, setPlans] = useRecoilState(planList);
+
+  const handleClick = (item) => {
+    // let plansCopy = [...plans];
+    // for (let i = 0; i < plans.length; i++) {
+    //   if (plansCopy[i].length === 5) {
+    //     continue;
+    //   } else {
+    //     let plansInnerCopy = [...plansCopy[i]];
+    //     plansInnerCopy[i].push(item);
+    //     setPlans(plansCopy);
+    //     return;
+    //   }
+    // }
+  };
+
   return (
     <ul className="overflow-y-scroll h-full flex flex-col gap-4">
       {data.map((item) => (
-        <li key={item.detail_id} className="flex gap-4">
+        <motion.li
+          initial={{ backgroundColor: "#ffffff" }}
+          whileHover={{ backgroundColor: "#C7F7C6" }}
+          key={item.detail_id}
+          onClick={() => handleClick(item)}
+          className="flex gap-4 cursor-pointer p-2 mr-2 rounded-lg"
+        >
           <div>
             <img
               src={item.detail_firstimage2}
@@ -43,7 +69,7 @@ const SearchList = ({ data }) => {
             <p className="line-clamp-1">{item.detail_address}</p>
             <p className="line-clamp-1">⭐{item.detail_total_score}</p>
           </div>
-        </li>
+        </motion.li>
       ))}
     </ul>
   );
@@ -56,7 +82,7 @@ const PlanSearch = ({ foldStage, dates, data }) => {
     <div
       className={`w-full ${
         foldStage === 0 ? "hidden" : "block"
-      } overflow-y-hidden`}
+      } overflow-hidden bg-white`}
     >
       <p>장소선택</p>
       <p>
