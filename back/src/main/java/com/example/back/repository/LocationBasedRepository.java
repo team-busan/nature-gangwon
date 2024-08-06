@@ -1,13 +1,15 @@
 package com.example.back.repository;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.back.entity.LocationBasedEntity;
 
+import java.util.List;
+
 public interface LocationBasedRepository extends JpaRepository<LocationBasedEntity, Integer>{
-    List<LocationBasedEntity> findByLocationContenttypeid(String locationContenttypeid);
-    List<LocationBasedEntity> findByLocationSigungucode(String locationSigungucode);
-    List<LocationBasedEntity> findByLocationContenttypeidAndLocationSigungucode(String locationContenttypeid, String locationSigungucode);
+    Page<LocationBasedEntity> findByLocationContenttypeid(String locationContenttypeid, Pageable pageable);
+    Page<LocationBasedEntity> findByLocationSigungucode(String locationSigungucode, Pageable pageable);
+    Page<LocationBasedEntity> findByLocationContenttypeidAndLocationSigungucode(String locationContenttypeid, String locationSigungucode, Pageable pageable);
 }

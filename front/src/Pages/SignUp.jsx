@@ -6,7 +6,7 @@ import Signup2 from '../Components/SignUp/SignUp2';
 export default function Signup() {
   const [currentStep, setCurrentStep] = useState(1);
   const [email, setEmail] = useState("");
-  const [isVerified, setIsVerified] = useState(false);
+  const [certificationCode, setCertificationCode] = useState(""); // 인증코드 저장
   const navigate = useNavigate();
 
   const handleNextStep = () => {
@@ -17,9 +17,9 @@ export default function Signup() {
     setEmail(email);
   };
 
-  const handleVerificationSuccess = () => {
-    setIsVerified(true);
-    handleNextStep();
+  const handleVerificationSuccess = (code) => {
+    setCertificationCode(code); // 인증코드 저장
+    handleNextStep(); // 다음 페이지 이동
   };
 
   return (
@@ -29,12 +29,12 @@ export default function Signup() {
         {currentStep === 1 && (
           <Signup1
             email={email}
-            setEmail={handleEmailChange}
-            onVerificationSuccess={handleVerificationSuccess}
+            setEmail={handleEmailChange} // 이메일 저장
+            onVerificationSuccess={handleVerificationSuccess} // 인증코드 받아옴
           />
         )}
         {currentStep === 2 && (
-          <Signup2 email={email} />
+          <Signup2 email={email} certificationCode={certificationCode} /> // 받아온 이메일, 인증코드 보냄
         )}
       </div>
     </div>
