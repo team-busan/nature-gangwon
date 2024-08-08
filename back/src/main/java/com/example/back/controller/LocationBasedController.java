@@ -25,10 +25,10 @@ public class LocationBasedController {
     //? 추후 인기(조회순)과 평점순(별점) 까지 추가 해야함
     @GetMapping("/list")
     public ResponseEntity<? super GetLocationBasedListResponseDto> getLocationBasedList(
-        @RequestParam(required = false) String locationContenttypeid,
-        @RequestParam(required = false) String locationSigungucode,
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "50") int size
+        @RequestParam(name = "locationContenttypeid", required = false) String locationContenttypeid,
+        @RequestParam(name = "locationSigungucode", required = false) String locationSigungucode,
+        @RequestParam(name = "page", defaultValue = "0") int page,
+        @RequestParam(name = "size", defaultValue = "50") int size
         ) {
         
         ResponseEntity<? super GetLocationBasedListResponseDto> response = locationBasedService.getLocationList(locationContenttypeid, locationSigungucode, page, size);
