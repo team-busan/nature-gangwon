@@ -22,9 +22,9 @@ public class DetailContorller {
     //? 시군구 코드가 없으면 전체 리스트
     @GetMapping("/list")
     public ResponseEntity<? super GetDetailListResponseDto> getDetailList(
-        @RequestParam(required = false) String detailSigungucode,
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "16") int size
+        @RequestParam(name = "detailSigungucode", required = false) String detailSigungucode,
+        @RequestParam(name = "page", defaultValue = "0") int page,
+        @RequestParam(name = "size", defaultValue = "16") int size
     ) {
         ResponseEntity<? super GetDetailListResponseDto> response = detailService.getDetailList(detailSigungucode, page, size);
         return response;
