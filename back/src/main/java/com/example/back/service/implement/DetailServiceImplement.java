@@ -55,11 +55,13 @@ public class DetailServiceImplement implements DetailService{
             int zeroBasedPage = page - 1;
             Pageable pageable = PageRequest.of(zeroBasedPage, size);
             Page<DetailEntity> detailPageList;
-            if(detailSigungucode == null || detailSigungucode.isEmpty()) {
+            if ("all".equals(detailSigungucode)) {
                 detailPageList = detailRepository.findAll(pageable);
-            } else {
+            } else if (detailSigungucode != null) {
                 String mappedCode = mapSigungucode(detailSigungucode);
                 detailPageList = detailRepository.findByDetailSigungucode(mappedCode, pageable);
+            } else {
+                detailPageList = Page.empty(pageable);
             }
             
             List<GetDetailListItemDto> responseList = GetDetailListItemDto.copyList(detailPageList.getContent());
