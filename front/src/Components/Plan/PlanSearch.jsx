@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { format } from "date-fns";
 
+import PlanItem from "./PlanItem.jsx";
 import { MdOutlineSearch, MdOutlineAddCircle } from "react-icons/md";
 
 import { useRecoilState } from "recoil";
@@ -30,52 +30,54 @@ const SearchBar = ({ searchValue, setSearchValue }) => {
   );
 };
 
-const SearchList = ({ data }) => {
+const SearchList = ({ data, setFoldStage }) => {
   const [plans, setPlans] = useRecoilState(planList);
 
+  const deepCopy = (obj) => {
+    // 배열 타입인 경우
+    if (Array.isArray(obj)) {
+      const result = [];
+      for (let item of obj) {
+        result.push(deepCopy(item));
+      }
+      return result;
+    } // 객체 타입인 경우
+    else if (typeof obj === "object") {
+      const result = {};
+      for (let key in obj) {
+        result[key] = deepCopy(obj[key]);
+      }
+      return result;
+    }
+    return obj;
+  };
+
   const handleClick = (item) => {
-    // let plansCopy = [...plans];
-    // for (let i = 0; i < plans.length; i++) {
-    //   if (plansCopy[i].length === 5) {
-    //     continue;
-    //   } else {
-    //     let plansInnerCopy = [...plansCopy[i]];
-    //     plansInnerCopy[i].push(item);
-    //     setPlans(plansCopy);
-    //     return;
-    //   }
-    // }
+    let plansCopy = deepCopy(plans);
+    for (let i = 0; i < plansCopy.length; i++) {
+      if (plansCopy[i].length === 5) {
+        continue;
+      } else {
+        let plansDayCopy = [...plansCopy[i]];
+        plansDayCopy.push(item);
+        plansCopy.splice(i, 1, plansDayCopy);
+        setPlans(plansCopy);
+        setFoldStage(2);
+        return;
+      }
+    }
   };
 
   return (
     <ul className="overflow-y-scroll h-full flex flex-col gap-4">
-      {data.map((item) => (
-        <motion.li
-          initial={{ backgroundColor: "#ffffff" }}
-          whileHover={{ backgroundColor: "#C7F7C6" }}
-          key={item.detail_id}
-          onClick={() => handleClick(item)}
-          className="flex gap-4 cursor-pointer p-2 mr-2 rounded-lg"
-        >
-          <div>
-            <img
-              src={item.detail_firstimage2}
-              alt={item.detail_title}
-              className="object-cover w-28 h-28 rounded-lg"
-            />
-          </div>
-          <div className="flex flex-col justify-between">
-            <p className="line-clamp-1">{item.detail_title}</p>
-            <p className="line-clamp-1">{item.detail_address}</p>
-            <p className="line-clamp-1">⭐{item.detail_total_score}</p>
-          </div>
-        </motion.li>
+      {data.map((item, idx) => (
+        <PlanItem key={idx} item={item} handleClick={handleClick} />
       ))}
     </ul>
   );
 };
 
-const PlanSearch = ({ foldStage, dates, data }) => {
+const PlanSearch = ({ foldStage, setFoldStage, dates, data }) => {
   const [searchValue, setSearchValue] = useState("");
 
   return (
@@ -89,7 +91,7 @@ const PlanSearch = ({ foldStage, dates, data }) => {
         {format(dates[0], "yyyy M dd")} ~ {format(dates[1], "yyyy M dd")}
       </p>
       <SearchBar searchValue={searchValue} setSearchValue={setSearchValue} />
-      <SearchList data={data} />
+      <SearchList data={data} setFoldStage={setFoldStage} />
     </div>
   );
 };

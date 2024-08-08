@@ -106,6 +106,7 @@ const Plan = () => {
       ) : planStage === 1 ? (
         <PlanBuild
           foldStage={foldStage}
+          setFoldStage={setFoldStage}
           foldControl={foldControl}
           dates={dates}
           data={data}
