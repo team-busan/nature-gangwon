@@ -7,7 +7,7 @@ import {
   destination_comment,
 } from "./mockData.js";
 
-const BASE_URL = "http://localhost:8000/api";
+const BASE_URL = "http://localhost:8000";
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -17,7 +17,7 @@ const axiosInstance = axios.create({
 const API_URL = {
   HOME: "/",
   SEARCH: "/search",
-  LocationInfo: "/locationinfo",
+  LocationInfo: "/detail/list",
   LocationDetail: "/locationdetail",
   MyPage: "/myPage",
   Plan: "/plan",
@@ -91,5 +91,4 @@ axiosMock.onGet(API_URL.Plan).reply((config) => {
 //     return [404, { message: "Not Found" }];
 //   }
 // });
-
 export { axiosInstance, API_URL };

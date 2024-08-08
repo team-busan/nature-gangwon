@@ -12,13 +12,14 @@ const LocationList = ({ data, loading, error }) => {
   return (
     <section className="w-full">
       {loading && <p>Loading...</p>}
-      {!loading && !error && (
+      {error && <p>Error loading data: {error.message}</p>}
+      {!loading && !error && data && (
         <div className="w-1420 mx-auto p-2 flex flex-wrap">
           {data.map((item) => (
             <div
-              key={item.detail_id}
+              key={item.detailId}
               className="p-2 cursor-pointer"
-              onClick={() => handleItemClick(item.detail_id)}
+              onClick={() => handleItemClick(item.detailId)}
               style={{ width: "calc(25% - 16px)", margin: "8px" }}
             >
               <LocationItem item={item} />
