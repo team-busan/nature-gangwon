@@ -21,4 +21,6 @@ public interface ResponseCode {
     String NOT_EXIST_COMMENT = "NEC";
 
     String MAIL_FAIL = "MF";
+
+    String INVALID = "I";
 }

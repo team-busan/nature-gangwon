@@ -21,4 +21,6 @@ public interface ResponseMessage {
     String NOT_EXIST_COMMENT = "Not Exist Comment.";
 
     String MAIL_FAIL = "Mail Send Fail.";
+
+    String INVALID = "Invalid.";
 }

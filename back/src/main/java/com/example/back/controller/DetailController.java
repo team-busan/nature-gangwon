@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/detail")
 @RequiredArgsConstructor
-public class DetailContorller {
+public class DetailController {
     
     private final DetailService detailService;
 
