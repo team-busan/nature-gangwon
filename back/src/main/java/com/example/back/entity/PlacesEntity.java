@@ -18,10 +18,11 @@ public class PlacesEntity {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int placesId;
-    private int daysId;
+    private int planId;
     private int locationBasedId;
+    private int dayNumber;
     private String note;
     private String note2;
-    private String sigunguCode;
+    private String placeAdd1;
     private String title;
 }
