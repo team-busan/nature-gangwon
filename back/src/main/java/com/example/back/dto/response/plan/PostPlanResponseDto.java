@@ -30,7 +30,7 @@ public class PostPlanResponseDto extends ResponseDto{
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
     }
 
-    public static ResponseEntity<ResponseDto> invalidDayOrBasedId() {
+    public static ResponseEntity<ResponseDto> invalidBasedId() {
         ResponseDto responseBody = new ResponseDto(ResponseCode.INVALID, ResponseMessage.INVALID);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
     }

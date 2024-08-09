@@ -14,14 +14,18 @@ import lombok.NoArgsConstructor;
 public class PostPlanRequestDto {
     @NotBlank
     private String userEmail;
+
     @NotBlank
     private String startDate;
+
     @NotBlank
     private String endDate;
+
     @NotBlank
     private String planTitle;
+
     @NotEmpty
-    private List<PostPlanPlaceRequestDto> schedules;
+    private List<PostPlanPlaceRequestDto> postPlanList;
 
     @NoArgsConstructor
     @AllArgsConstructor
@@ -29,13 +33,13 @@ public class PostPlanRequestDto {
     public static class PostPlanPlaceRequestDto {
         @NotBlank
         private int locationBasedId;
+
+        @NotBlank
+        private int dayNumber;
+
         private String note;
+
         private String note2;
-        @NotBlank
-        private String sigunguCode;
-        @NotBlank
-        private String title;
-        @NotBlank
-        private int day;
+
     }
 }
