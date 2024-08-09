@@ -26,7 +26,7 @@ const Header = () => {
         <nav className="w-3/12">
           <ul className="flex justify-between">
             <li className="hover:text-green">
-              <Link to="/detail">여행계획</Link>
+              <Link to="/detail/list">여행계획</Link>
             </li>
             <li className="hover:text-green">
               <Link to="/">축제정보</Link>

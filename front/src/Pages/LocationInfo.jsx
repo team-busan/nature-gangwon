@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { API_URL, axiosInstance } from "../Stores/API";
 import MainImage from "../Components/LocationInfo/MainImage";
 import LocationSelector from "../Components/LocationInfo/LocationSelector";
@@ -11,39 +11,46 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { useQuery } from "@tanstack/react-query";
 
 export default function LocationInfo() {
-  const [selectedLocation, setSelectedLocation] = useState("all");
-  const [size] = useState(16);
-  const [totalPages, setTotalPages] = useState(1);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [page, setPage] = useState(1);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [selectedLocation, setSelectedLocation] = useState("all"); // 현재 선택 된 지역
+  const [size] = useState(16); // 데이터 받아오는 사이즈 수
+  const [totalPages, setTotalPages] = useState(1); // 총 페이지 수
+  const [searchQuery, setSearchQuery] = useState(""); // 검색 쿼리
+  const [page, setPage] = useState(1); // 현재 페이지 번호
+  const [searchParams, setSearchParams] = useSearchParams(); // url 검색 파라미터 가져옴
+  const navigate = useNavigate();
 
-  const currentPage = parseInt(searchParams.get("page")) || 1;
-  const region = searchParams.get("region") || "all";
+  const currentPage = parseInt(searchParams.get("page")) || 1; // 기본 값 1
+  const region = searchParams.get("detailSigungucode") || "all"; // 기본 값 "all"
 
   useEffect(() => {
     setSelectedLocation(region);
     setPage(currentPage);
   }, [currentPage, region]);
 
+  useEffect(() => {
+    const params = new URLSearchParams({
+      detailSigungucode: selectedLocation,
+      page: page,
+      size: size,
+    });
+    navigate(`/detail/list?${params.toString()}`);
+  }, [selectedLocation, page, size, navigate]);
+
   const handleLocationClick = (location) => {
     const newRegion = location === "전체" ? "all" : location;
-    setSelectedLocation(newRegion);
-    setPage(1); // 지역 선택 시 첫 페이지로 이동
-    setSearchParams({ page: 1, region: newRegion });
+    if (newRegion !== selectedLocation) {
+      setSelectedLocation(newRegion);
+      setPage(1); // 지역 선택 시 첫 페이지로 이동
+      setSearchParams({ page: 1, detailSigungucode: newRegion, size: size });
+    }
   };
 
   const fetchLocationInfo = async ({ queryKey }) => {
     const [_key, page, selectedLocation] = queryKey;
     try {
-      const params = { page, size };
-      if (selectedLocation !== "all") {
-        params.detailSigungucode = selectedLocation;
-      }
+      const params = { page, size, detailSigungucode: selectedLocation };
       const url = `${axiosInstance.defaults.baseURL}${API_URL.LocationInfo}`;
       const response = await axiosInstance.get(url, { params });
-      console.log("Request URL:", url, params); // 요청 URL 출력
-      console.log("Response Data:", response.data); // 응답 데이터 출력
       setTotalPages(response.data.totalPage);
       return response.data.detailPageList;
     } catch (error) {
@@ -60,7 +67,7 @@ export default function LocationInfo() {
   const handlePageClick = (event) => {
     const selectedPage = event.selected + 1;
     setPage(selectedPage);
-    setSearchParams({ page: selectedPage, region: selectedLocation });
+    setSearchParams({ page: selectedPage, detailSigungucode: selectedLocation, size: size });
   };
 
   return (
