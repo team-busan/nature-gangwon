@@ -26,11 +26,11 @@ const router = createBrowserRouter([
         element: <SearchResult />,
       },
       {
-        path: "/detail",
+        path: "/detail/list",
         element: <LocationInfo />,
       },
       {
-        path: "/LocationDetail/:id",
+        path: "/detail/:id",
         element: <LocationDetail />,
       },
       {
