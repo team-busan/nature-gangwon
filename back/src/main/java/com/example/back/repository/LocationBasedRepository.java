@@ -9,6 +9,7 @@ import com.example.back.entity.LocationBasedEntity;
 import java.util.List;
 
 public interface LocationBasedRepository extends JpaRepository<LocationBasedEntity, Integer>{
+    LocationBasedEntity findByLocationBasedId(int locationBasedId);
     Page<LocationBasedEntity> findByLocationContenttypeid(String locationContenttypeid, Pageable pageable);
     Page<LocationBasedEntity> findByLocationSigungucode(String locationSigungucode, Pageable pageable);
     Page<LocationBasedEntity> findByLocationContenttypeidAndLocationSigungucode(String locationContenttypeid, String locationSigungucode, Pageable pageable);

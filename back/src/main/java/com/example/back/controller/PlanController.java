@@ -2,12 +2,15 @@ package com.example.back.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.back.dto.request.plan.PostPlanRequestDto;
+import com.example.back.dto.response.plan.GetPlanResponseDto;
 import com.example.back.dto.response.plan.PostPlanResponseDto;
 import com.example.back.service.PlanService;
 
@@ -27,5 +30,10 @@ public class PlanController {
     ) {
         ResponseEntity<? super PostPlanResponseDto> response = planService.postPlan(userEmail, postPlanRequestDto);
         return response;
+    }
+
+    @GetMapping("/{planId}")
+    public ResponseEntity<? super GetPlanResponseDto> getPlan(@PathVariable int planId) {
+        return planService.getPlan(planId);
     }
 }

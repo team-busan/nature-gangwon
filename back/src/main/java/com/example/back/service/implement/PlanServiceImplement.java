@@ -3,9 +3,12 @@ package com.example.back.service.implement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.example.back.dto.ResponseDto;
 import com.example.back.dto.request.plan.PostPlanRequestDto;
 import com.example.back.dto.request.plan.PostPlanRequestDto.PostPlanPlaceRequestDto;
+import com.example.back.dto.response.plan.GetPlanResponseDto;
 import com.example.back.dto.response.plan.PostPlanResponseDto;
+import com.example.back.dto.response.plan.planfiled.GetPlaceListItemDto;
 import com.example.back.entity.LocationBasedEntity;
 import com.example.back.entity.PlacesEntity;
 import com.example.back.entity.PlanEntity;
@@ -17,6 +20,7 @@ import com.example.back.repository.UserRepository;
 import com.example.back.service.PlanService;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +32,7 @@ public class PlanServiceImplement implements PlanService{
     private final PlacesRepository placesRepository;
     private final LocationBasedRepository locationBasedRepository;
 
+    //? 계획 작성하기 
     @Override
     public ResponseEntity<? super PostPlanResponseDto> postPlan(String userEmail, PostPlanRequestDto dto) {
         try{
@@ -60,6 +65,42 @@ public class PlanServiceImplement implements PlanService{
             return PostPlanResponseDto.databaseError();
         }
         return PostPlanResponseDto.success();
+    }
+
+    //? 특정 계획 가져오기
+    @Override
+    public ResponseEntity<? super GetPlanResponseDto> getPlan(int planId) {
+        try {
+            PlanEntity planEntity = planRepository.findByPlanId(planId);
+            if(planEntity == null){
+                return GetPlanResponseDto.existPlan();
+            } 
+
+            List<PlacesEntity> placesEntity = placesRepository.findByPlanId(planId);
+            List<GetPlaceListItemDto> getPlaceListItemDtos = new ArrayList<>();
+
+            for(PlacesEntity place : placesEntity) {
+                LocationBasedEntity location = locationBasedRepository.findByLocationBasedId(place.getLocationBasedId());
+                GetPlaceListItemDto placeDto = new GetPlaceListItemDto(
+                    place.getPlanId(),
+                    place.getLocationBasedId(),
+                    place.getDayNumber(),
+                    place.getNote(),
+                    place.getNote2(),
+                    place.getPlaceAdd1(),
+                    place.getTitle(),
+                    location != null ? location.getLocationMapx() : null,
+                    location != null ? location.getLocationMapy() : null
+                );
+                getPlaceListItemDtos.add(placeDto);
+            }
+            planEntity.increasePlanCount();
+            return GetPlanResponseDto.success(planEntity, getPlaceListItemDtos);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseDto.databaseError();
+        }
+        return null;
     }
     
 }
