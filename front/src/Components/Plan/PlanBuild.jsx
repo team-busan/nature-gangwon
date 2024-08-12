@@ -4,9 +4,16 @@ import NaverMap from "../NaverMap.js";
 import PlanSearch from "./PlanSearch";
 import PlanMySelect from "./PlanMySelect";
 import { MdArrowBackIos } from "react-icons/md";
-import { PLAN_STATUSBAR_WIDTH } from "../../Constants/constants.js";
+import { useEffect } from "react";
 
-const PlanBuild = ({ foldStage, foldControl, dates, data, handleFold }) => {
+const PlanBuild = ({
+  foldStage,
+  setFoldStage,
+  foldControl,
+  dates,
+  data,
+  handleFold,
+}) => {
   const lat = "37.5665";
   const lng = "126.9780";
 
@@ -22,6 +29,10 @@ const PlanBuild = ({ foldStage, foldControl, dates, data, handleFold }) => {
     openWide: { rotate: 180 },
   };
 
+  useEffect(() => {
+    setFoldStage(1);
+  }, []);
+
   return (
     <div className={`h-lvh w-full relative`}>
       <motion.div
@@ -29,14 +40,23 @@ const PlanBuild = ({ foldStage, foldControl, dates, data, handleFold }) => {
         animate={foldControl}
         className={`absolute left-[121px] top-0 z-50 flex justify-between bg-white rounded-r-xl w-[400px] h-lvh py-4 pl-4 pr-8 shadow-lightGreen`}
       >
-        <PlanSearch foldStage={foldStage} dates={dates} data={data} />
+        <PlanSearch
+          foldStage={foldStage}
+          setFoldStage={setFoldStage}
+          dates={dates}
+          data={data}
+        />
         {foldStage === 2 ? <PlanMySelect /> : null}
         <div className="relative">
           <motion.div
             variants={arrowVariants}
             animate={foldControl}
             className={`absolute ${
-              foldStage === 0 ? "-right-6" : "-right-6"
+              foldStage === 0
+                ? "-right-6"
+                : foldStage === 1
+                ? "-right-6"
+                : "-right-8"
             } top-1/2`}
           >
             <MdArrowBackIos
@@ -46,7 +66,7 @@ const PlanBuild = ({ foldStage, foldControl, dates, data, handleFold }) => {
           </motion.div>
         </div>
       </motion.div>
-      <div className={`absolute top-0 left-[${PLAN_STATUSBAR_WIDTH}px]`}>
+      <div className={`absolute top-0 left-[120px]`}>
         <NaverMap
           lat={lat}
           lng={lng}
