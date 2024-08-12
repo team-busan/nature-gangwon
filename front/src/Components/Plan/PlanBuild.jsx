@@ -52,7 +52,11 @@ const PlanBuild = ({
             variants={arrowVariants}
             animate={foldControl}
             className={`absolute ${
-              foldStage === 0 ? "-right-6" : "-right-6"
+              foldStage === 0
+                ? "-right-6"
+                : foldStage === 1
+                ? "-right-6"
+                : "-right-8"
             } top-1/2`}
           >
             <MdArrowBackIos

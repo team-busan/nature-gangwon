@@ -82,7 +82,7 @@ const PlanSearch = ({ foldStage, setFoldStage, dates, data }) => {
 
   return (
     <div
-      className={`w-full ${
+      className={`w-[372px] ${
         foldStage === 0 ? "hidden" : "block"
       } overflow-hidden bg-white`}
     >

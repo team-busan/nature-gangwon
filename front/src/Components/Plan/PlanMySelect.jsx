@@ -8,7 +8,7 @@ const PlanMySelect = () => {
   let pushIdx = 0;
 
   return (
-    <div className="w-5/6 overflow-y-scroll">
+    <div className="w-[372px] overflow-y-scroll">
       <h3 className="w-full text-center">내가 선택한 장소</h3>
       <div className="p-4">
         {plans.map((day, idx) => (
