@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class PlanController {
     private final PlanService planService;
 
+    //? 여행계획작성
     @PostMapping("/post")
     public ResponseEntity<? super PostPlanResponseDto> postPlan(
         @AuthenticationPrincipal String userEmail,
@@ -32,8 +33,11 @@ public class PlanController {
         return response;
     }
 
+    //? 특정여행계획 상세 가져오기
     @GetMapping("/{planId}")
-    public ResponseEntity<? super GetPlanResponseDto> getPlan(@PathVariable int planId) {
+    public ResponseEntity<? super GetPlanResponseDto> getPlan(
+        @PathVariable(name = "planId") int planId
+        ) {
         return planService.getPlan(planId);
     }
 }

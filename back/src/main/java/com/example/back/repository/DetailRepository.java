@@ -6,9 +6,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.example.back.entity.DetailEntity;
 
-import java.util.Optional;
-
 public interface DetailRepository extends JpaRepository<DetailEntity, Integer>{
-    Optional<DetailEntity> findByDetailId(Integer detailId);
+    DetailEntity findByDetailId(int detailId);
     Page<DetailEntity> findByDetailSigungucode(String detailSigungucode, Pageable pageable);
 } 
