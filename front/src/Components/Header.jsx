@@ -18,7 +18,7 @@ const Header = () => {
   return (
     <header className="w-full mb-1 flex justify-center bg-white shadow-md">
       <div className="w-1420 flex h-20 p-3 items-center">
-        <div className="text-green w-2/12">
+        <div className="text-black w-2/12">
           <Link to="/">
             <h1>Nature</h1>
           </Link>
@@ -26,10 +26,10 @@ const Header = () => {
         <nav className="w-3/12">
           <ul className="flex justify-between">
             <li className="hover:text-green">
-              <Link to="/detail/list">여행계획</Link>
+              <Link to="/destination/list">여행계획</Link>
             </li>
             <li className="hover:text-green">
-              <Link to="/">축제정보</Link>
+              <Link to="/festival/list">축제정보</Link>
             </li>
             <li className="hover:text-green">
               <Link to="/">장소추천</Link>
@@ -41,7 +41,7 @@ const Header = () => {
             <input
               type="text"
               placeholder="찾으시는 여행지가 있으신가요?"
-              className="w-120 p-2"
+              className="w-120 p-2 border-2 border-gray-400 rounded-lg"
             />
             <IoIosSearch className="text-2xl cursor-pointer absolute right-1 top-2" />
           </div>

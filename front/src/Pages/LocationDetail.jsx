@@ -1,71 +1,118 @@
 import { useParams } from 'react-router-dom';
-import { axiosInstance, API_URL } from '../Stores/API';
 import { useQuery } from '@tanstack/react-query';
 import DetailSlider from '../Components/LocationDetail/DetailSlider';
-import { FaStar } from "react-icons/fa";
 import DetailHeader from '../Components/LocationDetail/DetailHeader';
 import DetailDescription from '../Components/LocationDetail/DetailDescription';
 import DetailInformation from '../Components/LocationDetail/DetailInformation';
 import DetailComment from '../Components/LocationDetail/DetailComment';
+import { API_URL, axiosInstance } from '../Stores/API';
+import { destination_detail, destination_detail_images, destination_comment } from '../Stores/mockData';
 
 export default function LocationDetail() {
   const { id } = useParams();
+  const detailId = Number(id);
 
-  const fetchLocationDetail = async ({ queryKey }) => {
-    const [_key, id] = queryKey;
-    const response = await axiosInstance.get(`${API_URL.LocationDetail}/${id}`);
-    return response.data;
-  }
+  const useMockData = true;
 
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["locationDetail", id],
-    queryFn: fetchLocationDetail
-  });
+  const fetchLocationDetail = async () => {
+    if (useMockData) {
+      return {
+        detail: destination_detail[0]
+      };
+    } else {
+      const url = API_URL.LocationDetail.replace(':id', detailId);
+      const response = await axiosInstance.get(url);
+      return { detail: response.data, comments: [] };
+    }
+  };
+  
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error loading details</p>;
-
-  const {
-    detail_title,
-    detail_firstimage,
-    detail_firstimage2,
-    detail_firstimage3,
-    detail_firstimage4,
-    detail_total_score,
-    detail_views,
-    detail_totalComments,
-    detail_description,
-    detail_tel,
-    detail_homepage,
-    detail_address,
-  } = data.detail;
-
-  const images = [
-    detail_firstimage,
-    detail_firstimage2,
-    detail_firstimage3,
-    detail_firstimage4,
-  ];
-
-  const detailHeader = {
-    title: detail_title,
-    address : detail_address,
-    score: detail_total_score,
-    views: detail_views,
-    comments: detail_totalComments,
+  const fetchLocationImages = async () => {
+    if (useMockData) {
+      const detail = destination_detail[0]; // 목 데이터에서 첫 번째 항목 가져오기
+      const imagesWithFirstImages = {
+        first_image1: detail.detail_firstimage,
+        first_image2: detail.detail_firstimage2,
+        ...destination_detail_images[0] // 기존 images 객체의 나머지 이미지 추가
+      };
+      return Object.values(imagesWithFirstImages); // 객체 값을 배열로 변환하여 반환
+    } else {
+      const url = `${API_URL.LocationDetail.replace(':id', detailId)}/images`;
+      const response = await axiosInstance.get(url);
+      const imageWithFirstImages = {
+        first_image1 : response.detail_firstimage,
+        first_image2 : response.detail_firstimage2,
+        ...response.images[0],
+      }
+      return imageWithFirstImages;
+    }
   };
 
+  const fetchLocationComments = async () => {
+    if (useMockData) {
+      const comments = destination_comment.filter(comment => comment.detail_id === detailId);
+      return comments;
+    } else {
+      const url = `${API_URL.LocationDetail.replace(':id', detailId)}/comments`;
+      const response = await axiosInstance.get(url);
+      return response;
+    }
+  }
+
+  const fetchLocationOverView = async () => {
+    const url = `${API_URL.LocationDetail.replace(':id', detailId)}/overview`
+    const response = await axiosInstance.get(url);
+    return response;
+  }
+
+  const detailQuery = useQuery({
+    queryKey: ["locationDetail", detailId],
+    queryFn: fetchLocationDetail,
+    enabled: !!detailId,
+  });
+
+  const imagesQuery = useQuery({
+    queryKey: ["locationImages", detailId],
+    queryFn: fetchLocationImages,
+    enabled: !!detailId,
+  });
+
+  const commentQuery = useQuery({
+    queryKey : ["locationComments", detailId],
+    queryFn : fetchLocationComments
+  })
+
+  const overViewQuery = useQuery({
+    queryKey : ["locationOverView", detailId],
+    queryFn : fetchLocationOverView,
+  })
+
+  if (detailQuery.isLoading || imagesQuery.isLoading) return <p>Loading...</p>;
+  if (detailQuery.error || imagesQuery.error) return <p>Error loading details</p>;
+
+  const detailData = detailQuery.data.detail;
+  const images = imagesQuery.data || [];
+
+  const detailHeader = {
+    title: detailData.detailTitle,
+    address: detailData.detailAddress,
+    score: detailData.detailTotalScore,
+    views: detailData.detailViews,
+    comments: 0,
+  };
+  
+
   const description = {
-    description: detail_description
+    description: "Description not available in data",
   };
 
   const information = {
-    tel: detail_tel,
-    homepage: detail_homepage,
-    address: detail_address,
+    tel: detailData.detailTel,
+    homepage: "Homepage not available",
+    address: detailData.detailAddress,
   };
 
-  const comments = data.comments; // 댓글 데이터
+  const comments = detailQuery.data.comments || [];
 
   return (
     <>

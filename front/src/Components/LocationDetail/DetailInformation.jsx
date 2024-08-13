@@ -13,7 +13,7 @@ export default function DetailInformation({information}) {
   return (
     <section className = "w-1410">
       <div className = "">
-        <NaverMap lat = {lat} lng = {lng}/>
+        <NaverMap lat = {lat} lng = {lng} width = {1400} height = {500}/>
       </div>
       <div className = "p-3 border-2 border-gray-300 w-full mt-3">
         <span className = "flex items-center">

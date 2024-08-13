@@ -16,4 +16,5 @@ const API_URL = {
   Plan: "/plan",
 };
 
+
 export { axiosInstance, API_URL };
