@@ -95,11 +95,11 @@ public class DetailServiceImplement implements DetailService{
             }
 
             DetailImageEntity detailImageEntity = detailImageRepository.findByDetailId(detailId);
-            if (detailImageEntity == null) {
-                return GetDetailResponseDto.getDetailFail();
-            }
 
-            GetDetailImageDto detailImageDto = new GetDetailImageDto(detailEntity, detailImageEntity);
+            GetDetailImageDto detailImageDto = null;
+            if (detailImageEntity != null) {
+                detailImageDto = new GetDetailImageDto(detailEntity, detailImageEntity);
+            }
 
             DetailDescriptionEntity detailDescriptionEntity = detailDescriptionRepository.findByDetailId(detailId);
             if (detailDescriptionEntity == null) {
