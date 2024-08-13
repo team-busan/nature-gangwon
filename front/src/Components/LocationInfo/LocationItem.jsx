@@ -3,7 +3,7 @@ import { FaStar } from "react-icons/fa";
 import { FaRegComment } from "react-icons/fa6";
 
 const LocationItem = ({ item }) => (
-  <div className="w-full h-full p-2">
+  <div className="w-full h-full">
     <ul className="bg-white rounded-lg shadow">
       <li className="w-full h-40">
         <img

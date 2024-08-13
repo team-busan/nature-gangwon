@@ -23,8 +23,8 @@ export default function DetailSlider({ images }) {
 
   return (
     <div className="flex flex-col items-center w-1420">
-      <div className="w-full p-3">
-        <img src={images[currentIndex]} alt="Main" className="w-full h-160 object-cover" />
+      <div className="w-1410 p-3 bg-gray-100">
+        <img src={images[currentIndex]} alt="Main" className="w-full h-160 object-contain" />
       </div>
       <div className="flex items-center justify-center mt-4 w-1410 h-44 bg-gray-100">
         <button className="text-4xl px-2 h-full text-white bg-green" onClick={handlePrevClick}>
