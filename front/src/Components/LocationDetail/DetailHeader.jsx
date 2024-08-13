@@ -11,7 +11,7 @@ export default function DetailHeader({ header }) {
       <div className="flex flex-row w-full justify-between items-center">
         <div className="flex justify-between w-full">
           <span>
-            <h1 className="flex text-green">{header.title}</h1>
+            <h1 className="flex text-darkGreen">{header.detailTitle}</h1>
           </span>
           <div className="flex gap-3">
             <button className="">
@@ -23,11 +23,11 @@ export default function DetailHeader({ header }) {
           </div>
         </div>
       </div>
-      <h4 className="text-softGreen">{header.address}</h4>
+      <h4 className="text-softGreen">{header.detailAddress}</h4>
       <div className="flex flex-row w-full justify-between items-center">
         <span className="flex items-center">
           <FaStar className="text-yellow-400 mr-1" />
-          <h3>{header.score}</h3>
+          <h3>{header.detailTotalScore}</h3>
         </span>
         <span className="flex items-center">
           <span
@@ -36,12 +36,12 @@ export default function DetailHeader({ header }) {
           >
             <PiEyesDuotone />
           </span>
-          <p className="mr-2">{header.views}</p>
+          <p className="mr-2">{header.detailViews}</p>
           <span className="mr-2 text-2xl" style={{ transform: "scaleX(-1)" }}>
             <FaRegComment />
           </span>
 
-          <p>{header.comments}</p>
+          <p>0</p>
         </span>
       </div>
       <div className="flex justify-center w-full">

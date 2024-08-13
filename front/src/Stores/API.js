@@ -10,8 +10,8 @@ const axiosInstance = axios.create({
 const API_URL = {
   HOME: "/",
   SEARCH: "/search",
-  LocationInfo: "/detail/list",
-  LocationDetail: "/detail/:id",
+  LocationInfo: "/destination/list",
+  LocationDetail: "/destination/:id",
   MyPage: "/myPage",
   Plan: "/plan",
 };
