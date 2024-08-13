@@ -11,9 +11,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.example.back.dto.ResponseDto;
 import com.example.back.dto.response.detail.GetDetailListResponseDto;
+import com.example.back.dto.response.detail.GetDetailResponseDto;
+import com.example.back.dto.response.detail.Detailfiled.GetDetailImageDto;
 import com.example.back.dto.response.detail.Detailfiled.GetDetailListItemDto;
+import com.example.back.entity.DetailDescriptionEntity;
 import com.example.back.entity.DetailEntity;
+import com.example.back.entity.DetailImageEntity;
+import com.example.back.repository.DetailDescriptionRepository;
+import com.example.back.repository.DetailImageRepository;
 import com.example.back.repository.DetailRepository;
 import com.example.back.service.DetailService;
 
@@ -24,6 +31,10 @@ import lombok.RequiredArgsConstructor;
 public class DetailServiceImplement implements DetailService{
 
     private final DetailRepository detailRepository;
+
+    private final DetailDescriptionRepository detailDescriptionRepository;
+
+    private final DetailImageRepository detailImageRepository;
 
     private String mapSigungucode(String sigunguName) {
         Map sigunguMap = new HashMap<>();
@@ -49,6 +60,7 @@ public class DetailServiceImplement implements DetailService{
         return (String) sigunguMap.getOrDefault(sigunguName, sigunguName); // 기본적으로 입력값 반환
     }
 
+    //? 관광지 리스트
     @Override
     public ResponseEntity<? super GetDetailListResponseDto> getDetailList(String detailSigungucode, int page, int size) {
         try {
@@ -70,6 +82,37 @@ public class DetailServiceImplement implements DetailService{
         } catch (Exception e) {
             e.printStackTrace();
             return GetDetailListResponseDto.getDetailListFail();
+        }
+    }
+
+    //? 관광지 상세
+    @Override
+    public ResponseEntity<? super GetDetailResponseDto> getDetail(int detailId) {
+        try {
+            DetailEntity detailEntity = detailRepository.findByDetailId(detailId);
+            if (detailEntity == null) {
+                return GetDetailResponseDto.getDetailFail();
+            }
+
+            DetailImageEntity detailImageEntity = detailImageRepository.findByDetailId(detailId);
+            if (detailImageEntity == null) {
+                return GetDetailResponseDto.getDetailFail();
+            }
+
+            GetDetailImageDto detailImageDto = new GetDetailImageDto(detailEntity, detailImageEntity);
+
+            DetailDescriptionEntity detailDescriptionEntity = detailDescriptionRepository.findByDetailId(detailId);
+            if (detailDescriptionEntity == null) {
+                return GetDetailResponseDto.getDetailFail();
+            }
+
+            GetDetailResponseDto responseDto = new GetDetailResponseDto(detailEntity, detailImageDto, detailDescriptionEntity);
+            
+            return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
         }
     }
 

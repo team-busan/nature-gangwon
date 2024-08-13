@@ -93,6 +93,7 @@ public class PlanServiceImplement implements PlanService{
                     location != null ? location.getLocationMapy() : null
                 );
                 getPlaceListItemDtos.add(placeDto);
+                planRepository.save(planEntity);
             }
             planEntity.increasePlanCount();
             return GetPlanResponseDto.success(planEntity, getPlaceListItemDtos);
