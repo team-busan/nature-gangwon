@@ -107,7 +107,8 @@ public class DetailServiceImplement implements DetailService{
             }
 
             GetDetailResponseDto responseDto = new GetDetailResponseDto(detailEntity, detailImageDto, detailDescriptionEntity);
-            
+            detailEntity.increaseViewCount();
+            detailRepository.save(detailEntity);
             return ResponseEntity.status(HttpStatus.OK).body(responseDto);
 
         } catch (Exception e) {
