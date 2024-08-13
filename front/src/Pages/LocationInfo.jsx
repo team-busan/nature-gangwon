@@ -16,32 +16,29 @@ export default function LocationInfo() {
   const [totalPages, setTotalPages] = useState(1); // 총 페이지 수
   const [searchQuery, setSearchQuery] = useState(""); // 검색 쿼리
   const [page, setPage] = useState(1); // 현재 페이지 번호
-  const [searchParams, setSearchParams] = useSearchParams(); // url 검색 파라미터 가져옴
+  const [searchParams] = useSearchParams(); // url 검색 파라미터 가져옴
   const navigate = useNavigate();
 
   const currentPage = parseInt(searchParams.get("page")) || 1; // 기본 값 1
   const region = searchParams.get("detailSigungucode") || "all"; // 기본 값 "all"
+  const mainImage = "http://tong.visitkorea.or.kr/cms/resource/84/3334184_image2_1.jpg";
 
   useEffect(() => {
-    setSelectedLocation(region);
-    setPage(currentPage);
+    // URL 파라미터에 따라 초기 상태 설정, url 상태가 일치하지 않으면 뒤로가기 할 때 버그 발생
+    if (region !== selectedLocation) {
+      setSelectedLocation(region);
+    }
+    if (currentPage !== page) {
+      setPage(currentPage);
+    }
   }, [currentPage, region]);
-
-  useEffect(() => {
-    const params = new URLSearchParams({
-      detailSigungucode: selectedLocation,
-      page: page,
-      size: size,
-    });
-    navigate(`/detail/list?${params.toString()}`);
-  }, [selectedLocation, page, size, navigate]);
 
   const handleLocationClick = (location) => {
     const newRegion = location === "전체" ? "all" : location;
-    if (newRegion !== selectedLocation) {
+    if (newRegion !== selectedLocation || page !== 1) {
       setSelectedLocation(newRegion);
       setPage(1); // 지역 선택 시 첫 페이지로 이동
-      setSearchParams({ page: 1, detailSigungucode: newRegion, size: size });
+      navigate(`/destination/list?detailSigungucode=${newRegion}&page=1&size=${size}`);
     }
   };
 
@@ -66,13 +63,15 @@ export default function LocationInfo() {
 
   const handlePageClick = (event) => {
     const selectedPage = event.selected + 1;
-    setPage(selectedPage);
-    setSearchParams({ page: selectedPage, detailSigungucode: selectedLocation, size: size });
+    if (selectedPage !== page) {
+      setPage(selectedPage);
+      navigate(`/destination/list?detailSigungucode=${selectedLocation}&page=${selectedPage}&size=${size}`);
+    }
   };
 
   return (
     <div className="w-full overflow-x-hidden">
-      <MainImage />
+      <MainImage image = {mainImage}/>
       <LocationSelector
         selectedLocation={
           selectedLocation === "all" ? "전체" : selectedLocation
@@ -102,6 +101,7 @@ export default function LocationInfo() {
           previousClassName={"previous"} // 이전 페이지 버튼의 클래스 이름
           nextClassName={"next"} // 다음 페이지 버튼의 클래스 이름
           disabledClassName={"disabled"} // 비활성화된 페이지 버튼의 클래스 이름
+          forcePage={page - 1} // 현재 페이지를 강제로 설정
         />
       </div>
     </div>

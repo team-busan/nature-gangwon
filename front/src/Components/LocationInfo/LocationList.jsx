@@ -6,7 +6,7 @@ const LocationList = ({ data, loading, error }) => {
   const navigate = useNavigate();
 
   const handleItemClick = (id) => {
-    navigate(`/detail/${id}`);
+    navigate(`/destination/${id}`);
   };
 
   return (
@@ -17,12 +17,12 @@ const LocationList = ({ data, loading, error }) => {
         <div className="w-1420 mx-auto p-2 flex flex-wrap">
           {data.map((item) => (
             <div
-              key={item.detailContentid}
+              key={item.detailId}
               className="p-2 cursor-pointer"
-              onClick={() => handleItemClick(item.detailContentid)}
+              onClick={() => handleItemClick(item.detailId)}
               style={{ width: "calc(25% - 16px)", margin: "8px" }}
             >
-              <LocationItem item={item} />
+              <LocationItem item={item}/>
             </div>
           ))}
         </div>

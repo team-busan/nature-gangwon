@@ -11,6 +11,7 @@ import SearchResult from "./Pages/SearchResult.jsx";
 import Login from "./Pages/Login.jsx";
 import Signup from "./Pages/SignUp.jsx";
 import Plan from "./Pages/Plan.jsx";
+import FestivalInfo from "./Pages/FestivalInfo.jsx";
 
 const router = createBrowserRouter([
   {
@@ -26,11 +27,15 @@ const router = createBrowserRouter([
         element: <SearchResult />,
       },
       {
-        path: "/detail/list",
+        path: "/destination/list",
         element: <LocationInfo />,
       },
       {
-        path: "/detail/:id",
+        path : "/festival/list",
+        element : <FestivalInfo/>,
+      },
+      {
+        path: "/destination/:id",
         element: <LocationDetail />,
       },
       {
