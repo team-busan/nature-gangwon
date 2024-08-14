@@ -1,15 +1,53 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import useDetectClose from "../../Hooks/useDetectClose.js";
 import { format } from "date-fns";
 
 import PlanItem from "./PlanItem.jsx";
 import { MdOutlineSearch, MdOutlineAddCircle } from "react-icons/md";
 
 import { useRecoilState } from "recoil";
-import { planList } from "../../atoms";
+import { planList } from "../../state/planState.js";
+import { alertState } from "../../state/alertState.js";
+import PlanSelect from "./PlanSelect.jsx";
 
 const SearchBar = ({ searchValue, setSearchValue }) => {
+  const [sigungu, setSigungu] = useState("");
+  const [contentTypeId, setContentTypeId] = useState("");
+
+  const sigunguRef = useRef();
+  const contentTypeIdRef = useRef();
+
+  const [sigunguOpen, setSigunguOpen] = useDetectClose(sigunguRef, false);
+  const [contentTypeIdOpen, setContentTypeIdOpen] = useDetectClose(
+    contentTypeIdRef,
+    false
+  );
+
+  const sigunguList = [
+    "",
+    "강릉시",
+    "고성군",
+    "동해시",
+    "삼척시",
+    "속초시",
+    "양구군",
+    "양양군",
+    "영월군",
+    "원주시",
+    "인제군",
+    "정선군",
+    "철원군",
+    "춘천시",
+    "태백시",
+    "평창군",
+    "홍천군",
+    "화천군",
+    "횡성군",
+  ];
+  const contentTypeIdList = ["", "관광지", "숙박", "음식점", "축제"];
+
   return (
-    <div className="my-4">
+    <div className="my-4 flex flex-col gap-4">
       <div className="flex gap-1 bg-white py-2 px-3 rounded-lg shadow">
         <MdOutlineSearch className="text-2xl" />
         <input
@@ -26,12 +64,31 @@ const SearchBar = ({ searchValue, setSearchValue }) => {
           />
         ) : null}
       </div>
+      <PlanSelect
+        label="시군구"
+        id="sigungu"
+        value={sigungu}
+        setValue={setSigungu}
+        open={sigunguOpen}
+        setOpen={setSigunguOpen}
+        list={sigunguList}
+      />
+      <PlanSelect
+        label="관광 타입"
+        id="contentTypeId"
+        value={contentTypeId}
+        setValue={setContentTypeId}
+        open={contentTypeIdOpen}
+        setOpen={setContentTypeIdOpen}
+        list={contentTypeIdList}
+      />
     </div>
   );
 };
 
 const SearchList = ({ data, setFoldStage }) => {
   const [plans, setPlans] = useRecoilState(planList);
+  const [message, setMessage] = useRecoilState(alertState);
 
   const deepCopy = (obj) => {
     // 배열 타입인 경우
@@ -56,7 +113,11 @@ const SearchList = ({ data, setFoldStage }) => {
     let plansCopy = deepCopy(plans);
     for (let i = 0; i < plansCopy.length; i++) {
       if (plansCopy[i].length === 5) {
-        continue;
+        if (i === plansCopy.length - 1) {
+          setMessage("더이상 장소를 선택할 수 없습니다. (하루에 5개까지)");
+        } else {
+          continue;
+        }
       } else {
         let plansDayCopy = [...plansCopy[i]];
         plansDayCopy.push(item);
@@ -69,8 +130,8 @@ const SearchList = ({ data, setFoldStage }) => {
   };
 
   return (
-    <ul className="overflow-y-scroll h-full flex flex-col gap-4">
-      {data.map((item, idx) => (
+    <ul className="overflow-y-scroll h-full flex flex-col gap-4 pr-4">
+      {data?.map((item, idx) => (
         <PlanItem key={idx} item={item} handleClick={handleClick} />
       ))}
     </ul>
@@ -82,8 +143,12 @@ const PlanSearch = ({ foldStage, setFoldStage, dates, data }) => {
 
   return (
     <div
-      className={`w-[372px] ${
-        foldStage === 0 ? "hidden" : "block"
+      className={`${
+        foldStage === 0
+          ? "hidden"
+          : foldStage === 1
+          ? "w-full block"
+          : "w-1/2 block"
       } overflow-hidden bg-white`}
     >
       <p>장소선택</p>

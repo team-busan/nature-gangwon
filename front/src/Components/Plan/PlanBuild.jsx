@@ -19,8 +19,8 @@ const PlanBuild = ({
 
   const foldVariants = {
     fold: { width: "0px", paddingLeft: 0 },
-    open: { width: "400px", paddingLeft: "1.5rem" },
-    openWide: { width: "800px", paddingLeft: "1.5rem" },
+    open: { width: "500px", paddingLeft: "1.5rem" },
+    openWide: { width: "1000px", paddingLeft: "1.5rem" },
   };
 
   const arrowVariants = {
@@ -38,7 +38,7 @@ const PlanBuild = ({
       <motion.div
         variants={foldVariants}
         animate={foldControl}
-        className={`absolute left-[121px] top-0 z-50 flex justify-between bg-white rounded-r-xl w-[400px] h-lvh py-4 pl-4 pr-8 shadow-lightGreen`}
+        className={`absolute left-[120px] top-0 z-50 flex justify-between bg-white rounded-r-xl w-[500px] h-lvh py-4 pl-4 pr-8 shadow-lightGreen`}
       >
         <PlanSearch
           foldStage={foldStage}
