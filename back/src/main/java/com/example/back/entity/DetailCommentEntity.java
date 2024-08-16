@@ -1,5 +1,10 @@
 package com.example.back.entity;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import com.example.back.dto.request.detail.PostDetailCommentRequsetDto;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -18,8 +23,23 @@ public class DetailCommentEntity {
     private int detailId;
     private String userEmail;
     private String userNickname;
-    private String userProfil;
+    private String userProfile;
     private String detailContent;
     private int score;
-    private String detaiUploadDate;
+    private String detailUploadDate;
+
+    public DetailCommentEntity(UserEntity userEntity, PostDetailCommentRequsetDto dto){
+        Date now = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        this.detailId = dto.getDetailId();
+        this.userEmail = userEntity.getUserEmail();
+        this.userNickname = userEntity.getUserNickname();
+        this.userProfile = userEntity.getUserProfile();
+        this.detailContent = dto.getDetailContent();
+        this.score = dto.getScore();
+        this.detailUploadDate = simpleDateFormat.format(now);
+    }
+
+
 }
