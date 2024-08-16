@@ -12,16 +12,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.back.dto.ResponseDto;
+import com.example.back.dto.request.detail.PostDetailCommentRequsetDto;
+import com.example.back.dto.response.detail.GetDetailCommentResponseDto;
 import com.example.back.dto.response.detail.GetDetailListResponseDto;
 import com.example.back.dto.response.detail.GetDetailResponseDto;
 import com.example.back.dto.response.detail.Detailfiled.GetDetailImageDto;
 import com.example.back.dto.response.detail.Detailfiled.GetDetailListItemDto;
+import com.example.back.entity.DetailCommentEntity;
 import com.example.back.entity.DetailDescriptionEntity;
 import com.example.back.entity.DetailEntity;
 import com.example.back.entity.DetailImageEntity;
+import com.example.back.entity.UserEntity;
+import com.example.back.repository.DetailCommentRepository;
 import com.example.back.repository.DetailDescriptionRepository;
 import com.example.back.repository.DetailImageRepository;
 import com.example.back.repository.DetailRepository;
+import com.example.back.repository.UserRepository;
 import com.example.back.service.DetailService;
 
 import lombok.RequiredArgsConstructor;
@@ -35,6 +41,10 @@ public class DetailServiceImplement implements DetailService{
     private final DetailDescriptionRepository detailDescriptionRepository;
 
     private final DetailImageRepository detailImageRepository;
+
+    private final DetailCommentRepository detailCommentRepository;
+
+    private final UserRepository userRepository;
 
     private String mapSigungucode(String sigunguName) {
         Map sigunguMap = new HashMap<>();
@@ -105,8 +115,10 @@ public class DetailServiceImplement implements DetailService{
             if (detailDescriptionEntity == null) {
                 return GetDetailResponseDto.getDetailFail();
             }
+            List<DetailCommentEntity> detailCommentList = detailCommentRepository.findByDetailId(detailId);
 
-            GetDetailResponseDto responseDto = new GetDetailResponseDto(detailEntity, detailImageDto, detailDescriptionEntity);
+
+            GetDetailResponseDto responseDto = new GetDetailResponseDto(detailEntity, detailImageDto, detailDescriptionEntity, detailCommentList );
             detailEntity.increaseViewCount();
             detailRepository.save(detailEntity);
             return ResponseEntity.status(HttpStatus.OK).body(responseDto);
@@ -116,5 +128,32 @@ public class DetailServiceImplement implements DetailService{
             return ResponseDto.databaseError();
         }
     }
+
+    //? 댓글요청&반환
+    @Override
+    public ResponseEntity<? super GetDetailCommentResponseDto> getComment (String userEmail, PostDetailCommentRequsetDto dto){
+        int detailId = dto.getDetailId();
+        try{
+            UserEntity userEntity = userRepository.findByUserEmail(userEmail);
+        if(userEntity == null){
+            return GetDetailCommentResponseDto.existUser();
+        }
+
+        DetailEntity detailEntity = detailRepository.findByDetailId(detailId);
+        if(detailEntity == null){
+            return GetDetailCommentResponseDto.postCommentFail();
+        }
+
+        DetailCommentEntity detailCommentEntity = new DetailCommentEntity(userEntity, dto);
+        detailCommentRepository.save(detailCommentEntity);
+
+        List<DetailCommentEntity> commetList = detailCommentRepository.findByDetailId(detailId);
+
+        return ResponseEntity.ok().body(GetDetailCommentResponseDto.success(detailEntity, commetList));
+       } catch (Exception exception){
+            exception.printStackTrace();
+            return GetDetailCommentResponseDto.postCommentFail();
+       }
+    } 
 
 }
