@@ -1,17 +1,43 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { IoIosSearch } from "react-icons/io";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { userState } from "../state/userState";
+import axios from "axios";
 
 const Header = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
-  const user = useRecoilValue(userState); // 사용자 정보를 Recoil 에서 가져옴
-  
+  const [user, setUser] = useRecoilState(userState);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (cookies.token && !user) { // 토큰이 있고 Recoil 상태에 사용자가 없는 경우에만 요청
+        try {
+          const response = await axios.get("http://localhost:8000/user", {
+            headers: {
+              Authorization: `Bearer ${cookies.token}`,
+            },
+          });
+          setUser({
+            userEmail: response.data.userEmail,
+            userNickname: response.data.userNickname,
+            userProfile: response.data.userProfile,
+          });
+        } catch (error) {
+          console.error("사용자 정보를 가져오는 데 실패했습니다.", error);
+          handleLogout();
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [cookies.token, setUser, user]);
+
   const handleLogout = () => {
     removeCookie("token", { path: "/" });
+    setUser(null); // Recoil 상태 초기화
     window.location.reload(); // 로그아웃 후 페이지를 새로고침하여 변경 사항 반영
   };
 
@@ -49,12 +75,15 @@ const Header = () => {
         <div className="w-4/12 flex justify-end items-center">
           {cookies.token ? (
             <>
-              {user && 
-                <Link to = "./Mypage">
+              {user && (
+                <Link to="./Mypage">
                   <p>{user.userNickname}님 환영합니다</p>
                 </Link>
-              }
-              <button onClick={handleLogout} className="ml-4 p-2 bg-red-500 text-white rounded-md">
+              )}
+              <button
+                onClick={handleLogout}
+                className="ml-4 p-2 bg-red-500 text-white rounded-md"
+              >
                 로그아웃
               </button>
             </>

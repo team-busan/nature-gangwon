@@ -6,10 +6,13 @@ import DetailDescription from '../Components/LocationDetail/DetailDescription';
 import DetailInformation from '../Components/LocationDetail/DetailInformation';
 import { API_URL, axiosInstance } from '../Stores/API';
 import DetailComment from './../Components/LocationDetail/DetailComment';
+import {destination_comment} from '../Stores/mockData';
 
 export default function LocationDetail() {
   const { id } = useParams();
   const detailId = Number(id);
+
+  const comments = destination_comment;
 
   const fetchLocationDetail = async () => {
       const url = API_URL.LocationDetail.replace(':id', detailId);
@@ -37,14 +40,16 @@ export default function LocationDetail() {
     homepage : destination.detailDescriptionEntity.detailHomepage,
   }
 
-  const images = [
-    destination.getDetailImageDto.detailImage1,
-    destination.getDetailImageDto.detailImage3,
-    destination.getDetailImageDto.detailImage4,
-    destination.getDetailImageDto.detailImage5,
-    destination.getDetailImageDto.detailImage6,
-    destination.getDetailImageDto.detailImage7,
-  ].filter(image => image);
+  const images = destination.getDetailImageDto
+  ? [
+      destination.getDetailImageDto.detailImage1,
+      destination.getDetailImageDto.detailImage3,
+      destination.getDetailImageDto.detailImage4,
+      destination.getDetailImageDto.detailImage5,
+      destination.getDetailImageDto.detailImage6,
+      destination.getDetailImageDto.detailImage7,
+    ].filter(image => image)
+  : [];
 
   return (
     <>
@@ -52,7 +57,7 @@ export default function LocationDetail() {
       <DetailSlider images={images} />
       <DetailDescription description={destination.detailDescriptionEntity} />
       <DetailInformation information={information} />
-{/*       <DetailComment /> */}
+      <DetailComment comments = {comments}/>
     </>
   );
 }
