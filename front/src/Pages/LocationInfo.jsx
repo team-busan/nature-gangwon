@@ -17,6 +17,7 @@ export default function LocationInfo() {
   const [searchQuery, setSearchQuery] = useState(""); // 검색 쿼리
   const [page, setPage] = useState(1); // 현재 페이지 번호
   const [searchParams] = useSearchParams(); // url 검색 파라미터 가져옴
+  const [sortOption, setSortOption] = useState("all"); // 전체순, 인기순(조회순?), 후기순(댓글순?) 나열 
   const navigate = useNavigate();
 
   const currentPage = parseInt(searchParams.get("page")) || 1; // 기본 값 1
@@ -78,7 +79,7 @@ export default function LocationInfo() {
         }
         onLocationClick={handleLocationClick}
       />
-      <SortButtons />
+      <SortButtons sortOption = {setSortOption}/>
       <SearchBar
         searchQuery={searchQuery}
         onSearchChange={(e) => setSearchQuery(e.target.value)}

@@ -39,7 +39,7 @@ export default function Login() {
             maxAge: data.expirationTime/* 쿠키 유효기간 설정 */
         });
         try {
-          const userData = await fetchUserData(data.token);
+          const userData = await fetchUserData(data.token); // 토큰 보내면 유저 정보 받아서 저장
           setUser({
             userEmail: userData.userEmail,
             userNickname: userData.userNickname,
