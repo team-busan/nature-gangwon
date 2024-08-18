@@ -6,8 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.back.entity.LocationBasedEntity;
 
-import java.util.List;
-
 public interface LocationBasedRepository extends JpaRepository<LocationBasedEntity, Integer>{
     LocationBasedEntity findByLocationBasedId(int locationBasedId);
     Page<LocationBasedEntity> findByLocationContenttypeid(String locationContenttypeid, Pageable pageable);

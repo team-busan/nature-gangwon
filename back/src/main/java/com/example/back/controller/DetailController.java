@@ -11,16 +11,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.back.dto.request.detail.PostDetailCommentRequsetDto;
-import com.example.back.dto.response.detail.GetDetailCommentResponseDto;
+import com.example.back.dto.response.detail.PostDetailCommentResponseDto;
 import com.example.back.dto.response.detail.GetDetailListResponseDto;
 import com.example.back.dto.response.detail.GetDetailResponseDto;
-import com.example.back.dto.response.tourismApi.ApiDescriptionResponseDto.Response;
-import com.example.back.entity.DetailCommentEntity;
 import com.example.back.service.DetailService;
 
 import jakarta.validation.Valid;
-
-import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 
@@ -52,12 +48,12 @@ public class DetailController {
         return detailService.getDetail(detailId);
     }
     //? 댓글 요청
-    @PostMapping("/detail-comment")
-    public ResponseEntity<? super GetDetailCommentResponseDto> postComment(
+    @PostMapping("/post-comment")
+    public ResponseEntity<? super PostDetailCommentResponseDto> postComment(
         @AuthenticationPrincipal String userEmail,
-        @RequestBody @Valid PostDetailCommentRequsetDto requestBody
+        @Valid @RequestBody PostDetailCommentRequsetDto postDetailCommentRequsetDto
     ){
-        ResponseEntity<? super GetDetailCommentResponseDto> response = detailService.getComment(userEmail, requestBody);
+        ResponseEntity<? super PostDetailCommentResponseDto> response = detailService.postComment(userEmail, postDetailCommentRequsetDto);
         return response;
 
     }

@@ -18,7 +18,7 @@ public interface ResponseMessage {
     
     String NOT_EXIST_PLAN = "Not Exist Plan.";
     String NOT_EXIST_USER = "Not Exist User.";
-    String NOT_EXIST_COMMENT = "Not Exist Comment.";
+    String NOT_EXIST_DETAIL = "Not Exist Detail.";
 
     String MAIL_FAIL = "Mail Send Fail.";
 

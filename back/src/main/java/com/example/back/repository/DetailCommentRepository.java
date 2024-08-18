@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface DetailCommentRepository extends JpaRepository<DetailCommentEntity, Integer> {
     List<DetailCommentEntity> findByDetailId(int detailId);
+    long countByDetailId(int detailId);
 }

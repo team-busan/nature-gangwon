@@ -8,6 +8,7 @@ import java.util.List;
 import java.math.BigDecimal;
 
 import com.example.back.entity.DetailEntity;
+import com.example.back.repository.DetailCommentRepository;
 
 @Getter
 public class GetDetailListItemDto {
@@ -19,8 +20,9 @@ public class GetDetailListItemDto {
     private int detailViews;
     private String detailFirstimage;
     private String detailSigungucode;
+    private long detailTotalComment;
 
-    public GetDetailListItemDto(DetailEntity detailEntity) {
+    public GetDetailListItemDto(DetailEntity detailEntity, long detailTotalComment) {
         this.detailId = detailEntity.getDetailId();
         this.detailTitle = detailEntity.getDetailTitle();
         this.detailContentid = detailEntity.getDetailContentid();
@@ -29,13 +31,15 @@ public class GetDetailListItemDto {
         this.detailViews = detailEntity.getDetailViews();
         this.detailFirstimage = detailEntity.getDetailFirstimage();
         this.detailSigungucode = detailEntity.getDetailSigungucode();
+        this.detailTotalComment = detailTotalComment;
     }
 
-    public static List<GetDetailListItemDto> copyList(List<DetailEntity> detailEntityList) {
+    public static List<GetDetailListItemDto> copyList(List<DetailEntity> detailEntityList, DetailCommentRepository detailCommentRepository) {
         List<GetDetailListItemDto> list = new ArrayList<>();
 
         for(DetailEntity detailEntity : detailEntityList) {
-            GetDetailListItemDto dto = new GetDetailListItemDto(detailEntity);
+            long detailTotalComment = detailCommentRepository.countByDetailId(detailEntity.getDetailId());
+            GetDetailListItemDto dto = new GetDetailListItemDto(detailEntity, detailTotalComment);
             list.add(dto);
         }
         return list;

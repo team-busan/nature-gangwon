@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.back.dto.ResponseDto;
 import com.example.back.dto.request.detail.PostDetailCommentRequsetDto;
-import com.example.back.dto.response.detail.GetDetailCommentResponseDto;
+import com.example.back.dto.response.detail.PostDetailCommentResponseDto;
 import com.example.back.dto.response.detail.GetDetailListResponseDto;
 import com.example.back.dto.response.detail.GetDetailResponseDto;
 import com.example.back.dto.response.detail.Detailfiled.GetDetailImageDto;
@@ -86,7 +90,7 @@ public class DetailServiceImplement implements DetailService{
                 detailPageList = Page.empty(pageable);
             }
             
-            List<GetDetailListItemDto> responseList = GetDetailListItemDto.copyList(detailPageList.getContent());
+            List<GetDetailListItemDto> responseList = GetDetailListItemDto.copyList(detailPageList.getContent(), detailCommentRepository);
             GetDetailListResponseDto responseBody = new GetDetailListResponseDto(responseList, detailPageList.getTotalElements(), detailPageList.getTotalPages(), page);
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
@@ -131,29 +135,43 @@ public class DetailServiceImplement implements DetailService{
 
     //? 댓글요청&반환
     @Override
-    public ResponseEntity<? super GetDetailCommentResponseDto> getComment (String userEmail, PostDetailCommentRequsetDto dto){
+    public ResponseEntity<? super PostDetailCommentResponseDto> postComment (String userEmail, PostDetailCommentRequsetDto dto){
         int detailId = dto.getDetailId();
         try{
             UserEntity userEntity = userRepository.findByUserEmail(userEmail);
-        if(userEntity == null){
-            return GetDetailCommentResponseDto.existUser();
-        }
+            if(userEntity == null){
+                return PostDetailCommentResponseDto.existUser();
+            }
+            
+            DetailEntity detailEntity = detailRepository.findByDetailId(detailId);
+            if(detailEntity == null){
+                return PostDetailCommentResponseDto.postCommentFail();
+            }
 
-        DetailEntity detailEntity = detailRepository.findByDetailId(detailId);
-        if(detailEntity == null){
-            return GetDetailCommentResponseDto.postCommentFail();
-        }
+            DetailCommentEntity detailCommentEntity = new DetailCommentEntity(userEntity, dto);
+            detailCommentRepository.save(detailCommentEntity);
 
-        DetailCommentEntity detailCommentEntity = new DetailCommentEntity(userEntity, dto);
-        detailCommentRepository.save(detailCommentEntity);
+            List<DetailCommentEntity> commentList = detailCommentRepository.findByDetailId(detailId);
 
-        List<DetailCommentEntity> commetList = detailCommentRepository.findByDetailId(detailId);
+            BigDecimal totalScore = commentList.stream()
+            .map(comment -> new BigDecimal(comment.getScore()))
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        return ResponseEntity.ok().body(GetDetailCommentResponseDto.success(detailEntity, commetList));
-       } catch (Exception exception){
-            exception.printStackTrace();
-            return GetDetailCommentResponseDto.postCommentFail();
+            //? 평균 점수
+            BigDecimal averageScore = BigDecimal.ZERO;
+            if (!commentList.isEmpty()) {
+                averageScore = totalScore.divide(new BigDecimal(commentList.size()), MathContext.DECIMAL64);
+                averageScore = averageScore.setScale(1, RoundingMode.HALF_UP);
+            }
+
+            detailEntity.setDetailTotalScore(averageScore);
+            detailRepository.save(detailEntity);
+
+       } catch (Exception e){
+            e.printStackTrace();
+            return PostDetailCommentResponseDto.databaseError();
        }
+       return PostDetailCommentResponseDto.success();
     } 
 
 }
