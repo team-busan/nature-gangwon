@@ -1,44 +1,55 @@
 import React, { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { useCookies } from "react-cookie";
-import axios from "axios";
 import { API_URL, axiosInstance } from "../Stores/API";
 import { useParams } from "react-router-dom";
-import { QueryClient, useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function CommentForm({ onSubmit }) {
   const [commentContent, setCommentContent] = useState("");
   const [rating, setRating] = useState(0);
-  const [cookies] = useCookies(["token"]); // 쿠키에서 token을 가져옴
+  const [cookies] = useCookies(["token"]);
   const { id } = useParams();
   const detailId = Number(id);
+  const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn : async (newComment) => {
-      const url = API_URL.LocationDetail.replace(':id', detailId);
-      const response = await axiosInstance.get(`${url}/comments`,{
-        comment : newComment.comment,
-        rating : newComment.rating,
-      });
-      return response.data;
+    mutationKey: ["commentSend", detailId],
+    mutationFn: async (newComment) => {
+      const response = await axiosInstance.post(
+        `${API_URL.LocationComment}/detail-comment`,
+        {
+          detailId: newComment.detailId,
+          detailContent: newComment.comment,
+          score: newComment.rating,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+      return response.data;  // 단순히 성공적으로 데이터 반환
     },
-    onSuccess : async (newComment) => {
-      QueryClient.invalidateQueries(['comments', detailId]); // 관련된 쿼리를 무효화하여 데이터 재요청
-      onSubmit(newComment);
-      setCommentContent("");
-      setRating(0);
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(["locationDetail", detailId]); 
+      setCommentContent(""); 
+      setRating(0); 
+      alert("댓글이 생성되었습니다!");
+      onSubmit(); 
     },
-    onError : () => {
-      alert("오류가 발생 했습니다");
-    }
+    onError: (error) => {
+      alert("댓글 생성 중 오류가 발생했습니다. 다시 시도해주세요.");
+    },
   });
 
   const handleSubmit = () => {
     mutation.mutate({
-      comment : commentContent,
-      rating : rating,
-    })
-  }
+      detailId: detailId,
+      comment: commentContent,
+      rating: rating,
+    });
+  };
 
   return (
     <div className="my-4 p-4 border border-gray-300 rounded-lg">
@@ -58,7 +69,9 @@ export default function CommentForm({ onSubmit }) {
           {[1, 2, 3, 4, 5].map((star) => (
             <FaStar
               key={star}
-              className={`cursor-pointer ${star <= rating ? 'text-yellow-400' : 'text-gray-300'}`}
+              className={`cursor-pointer ${
+                star <= rating ? "text-yellow-400" : "text-gray-300"
+              }`}
               onClick={() => setRating(star)}
             />
           ))}

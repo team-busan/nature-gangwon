@@ -47,6 +47,7 @@ export default function Login() {
           });
           alert("로그인 성공");
           queryClient.invalidateQueries("user");
+          console.log(data.token);
           navigate("/");
         } catch (err) {
           setError("에러 발생");
