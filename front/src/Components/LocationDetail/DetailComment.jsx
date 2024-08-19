@@ -3,13 +3,12 @@ import { FaStar } from "react-icons/fa";
 import Comments from "../Comments";
 import CommentForm from "../CommentForm";
 import { useCookies } from "react-cookie";
-import { QueryClient, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { API_URL, axiosInstance } from "../../Stores/API";
 import { useParams } from "react-router-dom";
 
-export default function DetailComment({ comments }) {
+export default function DetailComment({ comments, refetchComments }) {
   const [isWritingComment, setIsWritingComment] = useState(false);
-  const [allComments, setAllComments] = useState(comments); // 댓글 목록을 상태로 관리
   const [cookies] = useCookies(["token"]);
   const [commentFilter, setCommentFilter] = useState("default");
   const { id } = useParams(); 
@@ -18,16 +17,24 @@ export default function DetailComment({ comments }) {
   const mutation = useMutation({
     mutationFn : async (option) => {
       const url = API_URL.LocationDetail.replace(":id", detailId);
-      const response = await axiosInstance.get(`${url}/commentsFilter`,{
+      const response = await axiosInstance.get(`${url}/commentsFilter`, {
         option : option.filter,
       });
       return response.data;
     }
-  })
+  });
 
-  const handleAddComment = (newComment) => {
-    setAllComments([newComment, ...allComments]);
-    setIsWritingComment(false); // 댓글 작성 후 양식 숨기기
+  const calculateAverageScore = (comments) => { // 평균 평점 계산하는 함수
+    if(comments.length === 0) return 0;
+    const totalScore = comments.reduce((acc, comment) => acc + comment.score, 0);
+    return (totalScore / comments.length).toFixed(1);
+  };
+
+  const averageScore = calculateAverageScore(comments); // 평균 평점
+
+  const handleAddComment = () => {
+    refetchComments(); // 댓글 목록 갱신
+    setIsWritingComment(false); // 작성 폼 숨기기
   };
 
   const handleWriteCommentClick = () => {
@@ -43,9 +50,9 @@ export default function DetailComment({ comments }) {
     if(option === "best"){
       mutation.mutate({
         filter : "best"
-      })
+      });
     }
-  }
+  };
 
   return (
     <section className="w-1420 p-3">
@@ -57,8 +64,8 @@ export default function DetailComment({ comments }) {
               <span className="text-yellow-400">
                 <FaStar />
               </span>
-              <p>4.0</p>
-              <p>({allComments.length})</p>
+              <p>{averageScore}</p>
+              <p>({comments.length})</p>
             </span>
           </div>
           <div>
@@ -75,7 +82,7 @@ export default function DetailComment({ comments }) {
             className={`mr-5 cursor-pointer ${
               commentFilter === "default" ? "text-softGreen font-bold" : ""
             }`}
-            onClick = {() => handleFilter("default")}
+            onClick={() => handleFilter("default")}
           >
             최신순
           </li>
@@ -83,7 +90,7 @@ export default function DetailComment({ comments }) {
             className={`cursor-pointer ${
               commentFilter !== "default" ? "text-softGreen font-bold" : ""
             }`}
-            onClick = {() => handleFilter("best")}
+            onClick={() => handleFilter("best")}
           >
             추천순
           </li>
@@ -91,10 +98,12 @@ export default function DetailComment({ comments }) {
       </div>
 
       <div>
-        {isWritingComment && <CommentForm onSubmit={handleAddComment} />}
+        {isWritingComment && 
+          <CommentForm 
+            onSubmit={handleAddComment} // 댓글 작성 후 handleAddComment 호출
+          />}
       </div>
-
-      <Comments comments={allComments} />
+      <Comments comments={comments} />
     </section>
   );
 }

@@ -12,6 +12,7 @@ const API_URL = {
   SEARCH: "/search",
   LocationInfo: "/destination/list",
   LocationDetail: "/destination/:id",
+  LocationComment : "/destination",
   MyPage: "/myPage",
   Plan: "/plan",
 };
