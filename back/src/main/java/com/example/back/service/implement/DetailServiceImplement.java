@@ -16,17 +16,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.back.dto.ResponseDto;
+import com.example.back.dto.request.detail.PostDetailCommentLikeRequestDto;
 import com.example.back.dto.request.detail.PostDetailCommentRequsetDto;
 import com.example.back.dto.response.detail.PostDetailCommentResponseDto;
+import com.example.back.dto.response.detail.DeleteDetailCommentResponseDto;
 import com.example.back.dto.response.detail.GetDetailListResponseDto;
 import com.example.back.dto.response.detail.GetDetailResponseDto;
+import com.example.back.dto.response.detail.PostDetailCommentLikeResponseDto;
 import com.example.back.dto.response.detail.Detailfiled.GetDetailImageDto;
 import com.example.back.dto.response.detail.Detailfiled.GetDetailListItemDto;
 import com.example.back.entity.DetailCommentEntity;
+import com.example.back.entity.DetailCommentLikeEntity;
 import com.example.back.entity.DetailDescriptionEntity;
 import com.example.back.entity.DetailEntity;
 import com.example.back.entity.DetailImageEntity;
 import com.example.back.entity.UserEntity;
+import com.example.back.repository.DetailCommentLikeRepository;
 import com.example.back.repository.DetailCommentRepository;
 import com.example.back.repository.DetailDescriptionRepository;
 import com.example.back.repository.DetailImageRepository;
@@ -49,6 +54,8 @@ public class DetailServiceImplement implements DetailService{
     private final DetailCommentRepository detailCommentRepository;
 
     private final UserRepository userRepository;
+
+    private final DetailCommentLikeRepository detailCommentLikeRepository;
 
     private String mapSigungucode(String sigunguName) {
         Map sigunguMap = new HashMap<>();
@@ -119,7 +126,7 @@ public class DetailServiceImplement implements DetailService{
             if (detailDescriptionEntity == null) {
                 return GetDetailResponseDto.getDetailFail();
             }
-            List<DetailCommentEntity> detailCommentList = detailCommentRepository.findByDetailId(detailId);
+            List<DetailCommentEntity> detailCommentList = detailCommentRepository.findByDetailIdOrderByDetailUploadDateDesc(detailId);
 
 
             GetDetailResponseDto responseDto = new GetDetailResponseDto(detailEntity, detailImageDto, detailDescriptionEntity, detailCommentList );
@@ -151,7 +158,7 @@ public class DetailServiceImplement implements DetailService{
             DetailCommentEntity detailCommentEntity = new DetailCommentEntity(userEntity, dto);
             detailCommentRepository.save(detailCommentEntity);
 
-            List<DetailCommentEntity> commentList = detailCommentRepository.findByDetailId(detailId);
+            List<DetailCommentEntity> commentList = detailCommentRepository.findByDetailIdOrderByDetailUploadDateDesc(detailId);
 
             BigDecimal totalScore = commentList.stream()
             .map(comment -> new BigDecimal(comment.getScore()))
@@ -172,6 +179,76 @@ public class DetailServiceImplement implements DetailService{
             return PostDetailCommentResponseDto.databaseError();
        }
        return PostDetailCommentResponseDto.success();
-    } 
+    }
+
+    //? 댓글 좋아요
+    @Override
+    public ResponseEntity<? super PostDetailCommentLikeResponseDto> postDetailCommentLike(String userEmail, PostDetailCommentLikeRequestDto dto) {
+        int detailCommentId = dto.getCommentId();
+        try{
+            UserEntity userEntity = userRepository.findByUserEmail(userEmail);
+            if(userEntity == null) {
+                return PostDetailCommentResponseDto.existUser();
+            }
+            DetailCommentEntity detailCommentEntity = detailCommentRepository.findByDetailCommentId(detailCommentId);
+            if(detailCommentEntity == null ) {
+                return PostDetailCommentLikeResponseDto.existDetail();
+            }
+
+            DetailCommentLikeEntity detailCommentLikeEntity = detailCommentLikeRepository.findByUserEmailAndDetailCommentId(userEmail, detailCommentId);
+            if(detailCommentLikeEntity == null ){
+                detailCommentLikeEntity = new DetailCommentLikeEntity(userEmail, detailCommentId);
+                detailCommentLikeRepository.save(detailCommentLikeEntity);
+            }else{
+                detailCommentLikeRepository.delete(detailCommentLikeEntity);
+            }
+
+            List<DetailCommentLikeEntity> detailCommentLikeList = detailCommentLikeRepository.findByDetailCommentId(detailCommentId);
+
+            return ResponseEntity.ok().body(PostDetailCommentLikeResponseDto.success(detailCommentEntity, detailCommentLikeList));
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return PostDetailCommentLikeResponseDto.DetailCommentLikeFail();
+        }
+    }
+
+    @Override
+    public ResponseEntity<? super DeleteDetailCommentResponseDto> deleteDetailComment(String userEmail, int detailCommentId, int detailId){
+        try{
+            DetailCommentEntity detailCommentEntity = detailCommentRepository.findByDetailCommentId(detailCommentId);
+            if(detailCommentEntity == null){
+                return DeleteDetailCommentResponseDto.existComment();
+            }
+
+            boolean isEqualWriter = userEmail.equals(detailCommentEntity.getUserEmail());
+            if(!isEqualWriter) {
+                return DeleteDetailCommentResponseDto.existUser();
+            }
+
+            detailCommentLikeRepository.deleteByDetailCommentId(detailCommentId);
+            detailCommentRepository.deleteByDetailCommentId(detailCommentId);
+
+            DetailEntity detailEntity = detailRepository.findByDetailId(detailId);
+
+            List<DetailCommentEntity> commentList = detailCommentRepository.findByDetailIdOrderByDetailUploadDateDesc(detailId);
+
+            BigDecimal totalScore = commentList.stream()
+            .map(comment -> new BigDecimal(comment.getScore()))
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            //? 평균 점수
+            BigDecimal averageScore = BigDecimal.ZERO;
+            if (!commentList.isEmpty()) {
+                averageScore = totalScore.divide(new BigDecimal(commentList.size()), MathContext.DECIMAL64);
+                averageScore = averageScore.setScale(1, RoundingMode.HALF_UP);
+            }
+            detailEntity.setDetailTotalScore(averageScore);
+            detailRepository.save(detailEntity);
+            return DeleteDetailCommentResponseDto.success();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+    }
 
 }

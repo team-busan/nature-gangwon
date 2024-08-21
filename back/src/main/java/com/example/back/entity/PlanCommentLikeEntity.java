@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @IdClass(PlanLikePK.class)
 public class PlanCommentLikeEntity {
     @Id
-    private int userEmail;
+    private String userEmail;
 
     @Id
     private int planCommentId;

@@ -5,21 +5,24 @@ const PlanItem = ({ item, handleClick }) => {
     <motion.li
       initial={{ backgroundColor: "#ffffff" }}
       whileHover={{ backgroundColor: "#C7F7C6" }}
-      key={item.detail_id}
+      key={item.locationBasedId}
       onClick={handleClick ? () => handleClick(item) : null}
-      className="flex gap-4 cursor-pointer p-2 mr-2 rounded-lg"
+      className="w-full flex gap-4 cursor-pointer p-2 rounded-lg shadow-md border-[1px] border-gray-200"
     >
-      <div>
+      {item.locationFirstimage === "" ? (
+        <div className="w-28 h-28 rounded-lg flex justify-center items-center bg-gray-300">
+          이미지 준비중
+        </div>
+      ) : (
         <img
-          src={item.detail_firstimage2}
-          alt={item.detail_title}
+          src={item.locationFirstimage}
+          alt={item.locationTitle}
           className="object-cover w-28 h-28 rounded-lg"
         />
-      </div>
-      <div className="flex flex-col justify-between">
-        <p className="line-clamp-1">{item.detail_title}</p>
-        <p className="line-clamp-1">{item.detail_address}</p>
-        <p className="line-clamp-1">⭐{item.detail_total_score}</p>
+      )}
+      <div className="flex flex-col gap-2">
+        <p className="line-clamp-1">{item.locationTitle}</p>
+        <p className="">{item.locationAdd1}</p>
       </div>
     </motion.li>
   );
