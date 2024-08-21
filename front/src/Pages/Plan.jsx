@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { axiosInstance, API_URL } from "../Stores/API.js";
+import axios from "axios";
 import { useAnimationControls } from "framer-motion";
 import { differenceInDays } from "date-fns";
 
@@ -10,7 +10,7 @@ import PlanBuild from "../Components/Plan/PlanBuild";
 import PlanPhotos from "../Components/Plan/PlanPhotos";
 
 import { useRecoilState } from "recoil";
-import { planList } from "../atoms.js";
+import { planList } from "../state/planState.js";
 
 const Plan = () => {
   const [planStage, setPlanStage] = useState(0);
@@ -29,14 +29,18 @@ const Plan = () => {
   }, [plans]);
 
   const getLocationsInfo = async () => {
-    const res = await axiosInstance.get(API_URL.SEARCH);
-    return res.data;
+    const res = await axios.get(
+      "http://localhost:8000/location/list?&page=1&size=50"
+    );
+    return res.data.locationList;
   };
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["planContent"],
     queryFn: getLocationsInfo,
   });
+
+  console.log(data);
 
   useEffect(() => {
     if (planStage === 1) {

@@ -15,7 +15,7 @@ const PlanStatusBar = ({
 
   return (
     <div
-      className={`absolute left-0 top-0 h-full z-[101] bg-white flex rounded-r-xl w-[${PLAN_STATUSBAR_WIDTH}px] border-r-[1px] border-lightGreen}`}
+      className={`absolute left-0 top-0 h-full z-[102] bg-white flex rounded-r-xl w-[${PLAN_STATUSBAR_WIDTH}px] border-r-[1px] border-lightGreen}`}
     >
       <div className="flex flex-col w-full h-full gap-10">
         <motion.div
