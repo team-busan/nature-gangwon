@@ -3,8 +3,10 @@ import { motion } from "framer-motion";
 import NaverMap from "../NaverMap.js";
 import PlanSearch from "./PlanSearch";
 import PlanMySelect from "./PlanMySelect";
-import { MdArrowBackIos } from "react-icons/md";
+import { MdArrowBackIosNew } from "react-icons/md";
 import { useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { planList } from "../../state/planState.js";
 
 const PlanBuild = ({
   foldStage,
@@ -13,9 +15,12 @@ const PlanBuild = ({
   dates,
   data,
   handleFold,
+  refetch,
+  curData,
 }) => {
-  const lat = "37.5665";
-  const lng = "126.9780";
+  const [plans, setPlans] = useRecoilState(planList);
+  const lat = "37.8228";
+  const lng = "128.1555";
 
   const foldVariants = {
     fold: { width: "0px", paddingLeft: 0 },
@@ -30,7 +35,11 @@ const PlanBuild = ({
   };
 
   useEffect(() => {
-    setFoldStage(1);
+    if (plans[0].length === 0) {
+      setFoldStage(1);
+    } else {
+      setFoldStage(2);
+    }
   }, []);
 
   return (
@@ -38,33 +47,29 @@ const PlanBuild = ({
       <motion.div
         variants={foldVariants}
         animate={foldControl}
-        className={`absolute left-[120px] top-0 z-[101] flex justify-between bg-white rounded-r-xl w-[500px] h-lvh py-4 pl-4 pr-8 shadow-lightGreen`}
+        className={`absolute left-[120px] top-0 z-[101] flex justify-between items-center bg-white rounded-r-xl ${
+          foldStage === 1 ? "w-[500px]" : "w-[1000px]"
+        } h-lvh py-4 pl-4 shadow-lightGreen`}
       >
         <PlanSearch
           foldStage={foldStage}
           setFoldStage={setFoldStage}
           dates={dates}
           data={data}
+          refetch={refetch}
+          curData={curData}
         />
         {foldStage === 2 ? <PlanMySelect /> : null}
-        <div className="relative">
-          <motion.div
-            variants={arrowVariants}
-            animate={foldControl}
-            className={`absolute ${
-              foldStage === 0
-                ? "-right-6"
-                : foldStage === 1
-                ? "-right-6"
-                : "-right-8"
-            } top-1/2`}
-          >
-            <MdArrowBackIos
-              className={`text-2xl cursor-pointer rotate-180`}
-              onClick={handleFold}
-            />
-          </motion.div>
-        </div>
+        <motion.div
+          variants={arrowVariants}
+          animate={foldControl}
+          className="shrink-0 ml-1 w-8 h-8 rounded-full bg-white flex justify-center items-center"
+        >
+          <MdArrowBackIosNew
+            className={`text-2xl cursor-pointer rotate-180`}
+            onClick={handleFold}
+          />
+        </motion.div>
       </motion.div>
       <div className={`absolute top-0 left-[120px]`}>
         <NaverMap

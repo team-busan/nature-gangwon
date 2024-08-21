@@ -2,7 +2,7 @@ import { useRecoilState } from "recoil";
 import { planList } from "../../state/planState.js";
 import { alertState } from "../../state/alertState.js";
 
-import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
+import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 
 import PlanDraggableItem from "./PlanDraggableItem.jsx";
 import PlanAlert from "./PlanAlert.jsx";
@@ -10,12 +10,9 @@ import { useState, useEffect } from "react";
 
 const PlanMySelect = () => {
   const [plans, setPlans] = useRecoilState(planList);
-
   const [message, setMessage] = useRecoilState(alertState);
 
   const onDragEnd = ({ destination, source }) => {
-    console.log(destination);
-    console.log(source);
     // 드롭 대상이 없는 경우, 아무 작업도 하지 않습니다.
     if (!destination) return;
 
@@ -27,18 +24,16 @@ const PlanMySelect = () => {
     // 드래그된 아이템과 목적지의 아이템을 가져옵니다.
     const sourceItem = plans[sourceIdx][sourceItemIdx];
 
-    // 드롭하려는 day의 items가 5개 이상이면 아무 작업도 하지 않음
-    if (plans[destinationIdx].length >= 5) {
-      setMessage("해당 날짜에 이미 5개의 장소가 계획되어 있습니다.");
-      return;
-    }
-
     let plansCopy = [...plans];
 
     if (sourceIdx === destinationIdx) {
       let dayCopy = [...plansCopy[sourceIdx]];
       dayCopy.splice(sourceItemIdx, 1);
       dayCopy.splice(destinationItemIdx, 0, sourceItem);
+      if (dayCopy.length >= 6) {
+        setMessage("해당 날짜에 이미 5개의 장소가 계획되어 있습니다.");
+        return;
+      }
       plansCopy.splice(sourceIdx, 1, dayCopy);
     } else {
       let sourceDayCopy = [...plansCopy[sourceIdx]];
@@ -46,6 +41,10 @@ const PlanMySelect = () => {
 
       sourceDayCopy.splice(sourceItemIdx, 1);
       destinationDayCopy.splice(destinationItemIdx, 0, sourceItem);
+      if (destinationDayCopy.length >= 6) {
+        setMessage("해당 날짜에 이미 5개의 장소가 계획되어 있습니다.");
+        return;
+      }
 
       plansCopy.splice(sourceIdx, 1, sourceDayCopy);
       plansCopy.splice(destinationIdx, 1, destinationDayCopy);
@@ -64,6 +63,14 @@ const PlanMySelect = () => {
       setEnabled(false);
     };
   }, []);
+
+  const handleDelete = (listIdx, idx) => {
+    let plansCopy = [...plans];
+    let dayCopy = [...plansCopy[listIdx]];
+    dayCopy.splice(idx, 1);
+    plansCopy.splice(listIdx, 1, dayCopy);
+    setPlans(plansCopy);
+  };
 
   return (
     <div className="w-1/2 h-full relative overflow-y-scroll">
@@ -84,7 +91,13 @@ const PlanMySelect = () => {
                     className="flex flex-col gap-4"
                   >
                     {day.map((item, idx2) => (
-                      <PlanDraggableItem key={idx2} item={item} idx2={idx2} />
+                      <PlanDraggableItem
+                        key={idx2}
+                        item={item}
+                        idx={idx}
+                        idx2={idx2}
+                        handleDelete={handleDelete}
+                      />
                     ))}
                     {provided.placeholder}
                   </ul>

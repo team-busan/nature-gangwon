@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useAnimationControls } from "framer-motion";
-import { differenceInDays } from "date-fns";
 
 import PlanStatusBar from "../Components/Plan/PlanStatusBar";
 import PlanCalendar from "../Components/Plan/PlanCalendar";
@@ -10,49 +9,66 @@ import PlanBuild from "../Components/Plan/PlanBuild";
 import PlanPhotos from "../Components/Plan/PlanPhotos";
 
 import { useRecoilState } from "recoil";
-import { planList } from "../state/planState.js";
+import {
+  searchQueryState,
+  contentTypeState,
+  sigunguCodeState,
+  pageState,
+  optionChangedState,
+} from "../state/planSearchQueryStates";
 
 const Plan = () => {
   const [planStage, setPlanStage] = useState(0);
   const [dates, setDates] = useState([new Date(), new Date()]);
   const [foldStage, setFoldStage] = useState(1);
+  const [dataState, setDataState] = useState([]);
+
+  const [searchQuery, setSearchQuery] = useRecoilState(searchQueryState);
+  const [contentType, setContentType] = useRecoilState(contentTypeState);
+  const [sigunguCode, setSigunguCode] = useRecoilState(sigunguCodeState);
+  const [page, setPage] = useRecoilState(pageState);
+  const [optionChanged, setOptionChanged] = useRecoilState(optionChangedState);
 
   const control1 = useAnimationControls();
   const control2 = useAnimationControls();
   const control3 = useAnimationControls();
   const foldControl = useAnimationControls();
 
-  const [plans, setPlans] = useRecoilState(planList);
-
-  useEffect(() => {
-    console.log(plans);
-  }, [plans]);
-
   const getLocationsInfo = async () => {
     const res = await axios.get(
-      "http://localhost:8000/location/list?&page=1&size=50"
+      `http://localhost:8000/location/list?${
+        contentType ? "&locationContenttypeid=" + contentType : ""
+      }${
+        sigunguCode ? "&locationSigungucode=" + sigunguCode : ""
+      }&page=${page}&size=50`
     );
     return res.data.locationList;
   };
 
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isLoading, refetch } = useQuery({
     queryKey: ["planContent"],
     queryFn: getLocationsInfo,
   });
 
-  console.log(data);
+  useEffect(() => {
+    if (data) {
+      if (optionChanged) {
+        setDataState(data);
+      } else {
+        setDataState((prev) => [...prev, ...data]);
+      }
+      setPage((prev) => prev + 1);
+    }
+  }, [data]);
 
   useEffect(() => {
-    if (planStage === 1) {
-      const days = differenceInDays(dates[1], dates[0]);
-      console.log(days);
-      let emptyList = [];
-      for (let i = 0; i <= days; i++) {
-        emptyList.push([]);
-      }
-      setPlans(emptyList);
-    }
-  }, [planStage]);
+    const loadData = async () => {
+      await refetch();
+    };
+    loadData();
+    setOptionChanged(false);
+  }, [optionChanged]);
+  // 작업중인 코드
 
   useEffect(() => {
     if (planStage === 0) {
@@ -102,6 +118,7 @@ const Plan = () => {
 
       {planStage === 0 ? (
         <PlanCalendar
+          planStage={planStage}
           setPlanStage={setPlanStage}
           dates={dates}
           setDates={setDates}
@@ -113,8 +130,10 @@ const Plan = () => {
           setFoldStage={setFoldStage}
           foldControl={foldControl}
           dates={dates}
-          data={data}
+          data={dataState}
           handleFold={handleFold}
+          refetch={refetch}
+          curData={data}
         />
       ) : (
         <PlanPhotos setPlanStage={setPlanStage} />
