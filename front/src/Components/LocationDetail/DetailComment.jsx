@@ -7,7 +7,7 @@ import { useLocation, useParams } from "react-router-dom";
 import CommentForm from "../Comment/CommentForm";
 import Comments from "../Comment/Comments";
 import { useRecoilState } from "recoil";
-import { commentContents, commentEdit, isWritingCommentState, score } from "../../atoms";
+import { commentContents, commentEdit, isWritingCommentState, score } from "../../state/comment"
 import { set } from "react-hook-form";
 
 export default function DetailComment({ comments, refetchComments }) {

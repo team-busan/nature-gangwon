@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { API_URL, axiosInstance } from "../../Stores/API";
 import { useRecoilState } from "recoil";
-import { commentContents, commentEdit, score } from "./../../atoms";
+import { commentContents, commentEdit, score } from "../../state/comment"
 
 export default function CommentForm({ onSubmit }) {
   const [commentContent, setCommentContent] = useRecoilState(commentContents);

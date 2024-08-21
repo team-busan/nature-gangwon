@@ -1,5 +1,5 @@
 import { useRecoilState } from "recoil";
-import { planList } from "../../atoms";
+import { planList } from "../../state/comment";
 
 import PlanItem from "./PlanItem";
 

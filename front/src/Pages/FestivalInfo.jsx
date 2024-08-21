@@ -17,7 +17,6 @@ export default function FestivalInfo() {
 
   const fetchFestivalInfo = async ({queryKey}) => {
     const [_key, page] = queryKey;
-
   }
 
   const {data, error, isLoading} = useQuery({

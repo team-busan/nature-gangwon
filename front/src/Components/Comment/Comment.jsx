@@ -8,7 +8,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { API_URL, axiosInstance } from "../../Stores/API";
 import { useCookies } from "react-cookie";
 import { useParams } from "react-router-dom";
-import { commentContents, commentEdit, isWritingCommentState, score } from "../../atoms";
+import { commentContents, commentEdit, isWritingCommentState, score } from "../../state/comment";
 
 export default function Comment({ comment, onLike, formRef }) {
   const [isExpanded, setIsExpanded] = useState(false);
