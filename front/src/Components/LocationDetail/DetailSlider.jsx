@@ -36,7 +36,7 @@ export default function DetailSlider({ images }) {
       </div>
       <div className="flex items-center justify-center mt-4 w-1410 h-44 bg-gray-100">
         <button
-          className="text-4xl px-2 h-full text-white bg-green"
+          className="text-4xl px-2 h-full text-white bg-darkGreen"
           onClick={handlePrevClick}
         >
           <FaAngleLeft />
@@ -69,7 +69,7 @@ export default function DetailSlider({ images }) {
           </div>
         </div>
         <button
-          className="text-4xl px-2 h-full text-white bg-green"
+          className="text-4xl px-2 h-full text-white bg-darkGreen"
           onClick={handleNextClick}
         >
           <FaAngleRight />

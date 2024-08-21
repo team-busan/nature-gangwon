@@ -1,18 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaStar } from "react-icons/fa";
-import Comments from "../Comments";
-import CommentForm from "../CommentForm";
 import { useCookies } from "react-cookie";
 import { useMutation } from "@tanstack/react-query";
 import { API_URL, axiosInstance } from "../../Stores/API";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
+import CommentForm from "../Comment/CommentForm";
+import Comments from "../Comment/Comments";
+import { useRecoilState } from "recoil";
+import { commentContents, commentEdit, isWritingCommentState, score } from "../../state/comment"
+import { set } from "react-hook-form";
 
 export default function DetailComment({ comments, refetchComments }) {
-  const [isWritingComment, setIsWritingComment] = useState(false);
   const [cookies] = useCookies(["token"]);
   const [commentFilter, setCommentFilter] = useState("default");
   const { id } = useParams(); 
   const detailId = Number(id);
+  const [rating, setRating] = useRecoilState(score);
+  const [commentContent, setCommentContent] = useRecoilState(commentContents);
+  const [isWritingComment, setIsWritingComment] = useRecoilState(isWritingCommentState);
+  const [edit, setEdit] = useRecoilState(commentEdit);
+  const formRef = useRef(null);
+  const location = useLocation();
+
+  useEffect(() => {
+    return () => {
+      setIsWritingComment(false);
+      setEdit(false);
+      setRating(0);
+      setCommentContent("");
+    }
+  }, [location.pathname]) // 페이지 변경될 때 상태 초기화
 
   const mutation = useMutation({
     mutationFn : async (option) => {
@@ -23,6 +40,7 @@ export default function DetailComment({ comments, refetchComments }) {
       return response.data;
     }
   });
+
 
   const calculateAverageScore = (comments) => { // 평균 평점 계산하는 함수
     if(comments.length === 0) return 0;
@@ -42,7 +60,12 @@ export default function DetailComment({ comments, refetchComments }) {
       alert("로그인 후 이용이 가능합니다.");
       return;
     }
+    setEdit(false);
     setIsWritingComment(!isWritingComment);
+    if(!isWritingComment){ // 댓글 작성이 꺼져있는 상태면 메시지랑, 별점 초기화
+      setRating(0);
+      setCommentContent("");
+    }
   };
 
   const handleFilter = (option) => {
@@ -55,7 +78,7 @@ export default function DetailComment({ comments, refetchComments }) {
   };
 
   return (
-    <section className="w-1420 p-3">
+    <section className="w-1420 p-3" ref = {formRef}>
       <div>
         <div className="flex items-center justify-between mb-3">
           <div className="flex gap-10 items-center">
@@ -100,10 +123,13 @@ export default function DetailComment({ comments, refetchComments }) {
       <div>
         {isWritingComment && 
           <CommentForm 
-            onSubmit={handleAddComment} // 댓글 작성 후 handleAddComment 호출
+            onSubmit={handleAddComment}
           />}
       </div>
-      <Comments comments={comments} />
+      <Comments 
+        comments={comments} 
+        formRef = {formRef}
+      />
     </section>
   );
 }
