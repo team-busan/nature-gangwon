@@ -9,6 +9,7 @@ const PlanAlert = () => {
   const [message, setMessage] = useRecoilState(alertState);
 
   useEffect(() => {
+    console.log("alert");
     const timer = setTimeout(() => setMessage(""), 5000);
     return () => clearTimeout(timer);
   }, []);

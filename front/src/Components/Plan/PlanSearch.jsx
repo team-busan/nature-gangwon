@@ -130,7 +130,7 @@ const SearchList = ({ data, setFoldStage }) => {
   };
 
   return (
-    <ul className="overflow-y-scroll h-full flex flex-col gap-4 pr-4">
+    <ul className="flex flex-col gap-4 pr-4">
       {data?.map((item, idx) => (
         <PlanItem key={idx} item={item} handleClick={handleClick} />
       ))}
@@ -149,7 +149,7 @@ const PlanSearch = ({ foldStage, setFoldStage, dates, data }) => {
           : foldStage === 1
           ? "w-full block"
           : "w-1/2 block"
-      } overflow-hidden bg-white`}
+      } overflow-y-scroll pr-4 bg-white`}
     >
       <p>장소선택</p>
       <p>

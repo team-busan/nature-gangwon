@@ -38,7 +38,7 @@ const PlanBuild = ({
       <motion.div
         variants={foldVariants}
         animate={foldControl}
-        className={`absolute left-[120px] top-0 z-50 flex justify-between bg-white rounded-r-xl w-[500px] h-lvh py-4 pl-4 pr-8 shadow-lightGreen`}
+        className={`absolute left-[120px] top-0 z-[101] flex justify-between bg-white rounded-r-xl w-[500px] h-lvh py-4 pl-4 pr-8 shadow-lightGreen`}
       >
         <PlanSearch
           foldStage={foldStage}
