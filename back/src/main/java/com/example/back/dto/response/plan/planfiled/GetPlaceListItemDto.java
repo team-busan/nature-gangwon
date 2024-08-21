@@ -4,10 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class GetPlaceListItemDto {
+    private int placeId;
     private int planId;
     private int locationBasedId;
     private int dayNumber;
@@ -17,4 +20,5 @@ public class GetPlaceListItemDto {
     private String title;
     private String mapx;
     private String mapy;
+    private List<String> photoUrls;
 }
