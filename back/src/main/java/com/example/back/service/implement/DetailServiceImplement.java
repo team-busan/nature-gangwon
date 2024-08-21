@@ -126,7 +126,7 @@ public class DetailServiceImplement implements DetailService{
             if (detailDescriptionEntity == null) {
                 return GetDetailResponseDto.getDetailFail();
             }
-            List<DetailCommentEntity> detailCommentList = detailCommentRepository.findByDetailId(detailId);
+            List<DetailCommentEntity> detailCommentList = detailCommentRepository.findByDetailIdOrderByDetailUploadDateDesc(detailId);
 
 
             GetDetailResponseDto responseDto = new GetDetailResponseDto(detailEntity, detailImageDto, detailDescriptionEntity, detailCommentList );
@@ -158,7 +158,7 @@ public class DetailServiceImplement implements DetailService{
             DetailCommentEntity detailCommentEntity = new DetailCommentEntity(userEntity, dto);
             detailCommentRepository.save(detailCommentEntity);
 
-            List<DetailCommentEntity> commentList = detailCommentRepository.findByDetailId(detailId);
+            List<DetailCommentEntity> commentList = detailCommentRepository.findByDetailIdOrderByDetailUploadDateDesc(detailId);
 
             BigDecimal totalScore = commentList.stream()
             .map(comment -> new BigDecimal(comment.getScore()))
@@ -213,9 +213,9 @@ public class DetailServiceImplement implements DetailService{
     }
 
     @Override
-    public ResponseEntity<? super DeleteDetailCommentResponseDto> deleteDetailComment(String userEmail, int commentId){
+    public ResponseEntity<? super DeleteDetailCommentResponseDto> deleteDetailComment(String userEmail, int detailCommentId, int detailId){
         try{
-            DetailCommentEntity detailCommentEntity = detailCommentRepository.findByDetailCommentId(commentId);
+            DetailCommentEntity detailCommentEntity = detailCommentRepository.findByDetailCommentId(detailCommentId);
             if(detailCommentEntity == null){
                 return DeleteDetailCommentResponseDto.existComment();
             }
@@ -225,8 +225,25 @@ public class DetailServiceImplement implements DetailService{
                 return DeleteDetailCommentResponseDto.existUser();
             }
 
-            detailCommentLikeRepository.deleteByDetailCommentId(commentId);
-            detailCommentRepository.deleteByDetailCommentId(commentId);
+            detailCommentLikeRepository.deleteByDetailCommentId(detailCommentId);
+            detailCommentRepository.deleteByDetailCommentId(detailCommentId);
+
+            DetailEntity detailEntity = detailRepository.findByDetailId(detailId);
+
+            List<DetailCommentEntity> commentList = detailCommentRepository.findByDetailIdOrderByDetailUploadDateDesc(detailId);
+
+            BigDecimal totalScore = commentList.stream()
+            .map(comment -> new BigDecimal(comment.getScore()))
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            //? 평균 점수
+            BigDecimal averageScore = BigDecimal.ZERO;
+            if (!commentList.isEmpty()) {
+                averageScore = totalScore.divide(new BigDecimal(commentList.size()), MathContext.DECIMAL64);
+                averageScore = averageScore.setScale(1, RoundingMode.HALF_UP);
+            }
+            detailEntity.setDetailTotalScore(averageScore);
+            detailRepository.save(detailEntity);
             return DeleteDetailCommentResponseDto.success();
         } catch (Exception exception) {
             exception.printStackTrace();

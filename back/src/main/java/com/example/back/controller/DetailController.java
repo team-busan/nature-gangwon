@@ -70,12 +70,13 @@ public class DetailController {
         return response;
     }
 
-    @DeleteMapping("/comment/{commentId}")
+    @DeleteMapping("/{detailId}/{detailCommentId}")
     public ResponseEntity<? super DeleteDetailCommentResponseDto> deleteDetailComment(
         @AuthenticationPrincipal String userEmail,
-        @PathVariable("commentId") int commentId
+        @PathVariable(name = "detailCommentId") int detailCommentId,
+        @PathVariable(name = "detailId") int detailId
     ){
-        ResponseEntity<? super DeleteDetailCommentResponseDto> response = detailService.deleteDetailComment(userEmail, commentId);
+        ResponseEntity<? super DeleteDetailCommentResponseDto> response = detailService.deleteDetailComment(userEmail, detailCommentId, detailId);
         return response;
     }
 }

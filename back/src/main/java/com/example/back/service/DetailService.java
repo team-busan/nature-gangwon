@@ -15,5 +15,5 @@ public interface DetailService {
     ResponseEntity<? super GetDetailResponseDto> getDetail(int detailId);
     ResponseEntity<? super PostDetailCommentResponseDto> postComment(String userEmail, PostDetailCommentRequsetDto dto);
     ResponseEntity<? super PostDetailCommentLikeResponseDto> postDetailCommentLike(String userEmail, PostDetailCommentLikeRequestDto dto);
-    ResponseEntity<? super DeleteDetailCommentResponseDto> deleteDetailComment(String userEmail, int commentId);
+    ResponseEntity<? super DeleteDetailCommentResponseDto> deleteDetailComment(String userEmail, int commentId, int detailId);
 }

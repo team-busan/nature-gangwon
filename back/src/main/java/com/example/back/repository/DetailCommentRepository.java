@@ -8,7 +8,7 @@ import com.example.back.entity.DetailCommentEntity;
 import java.util.List;
 
 public interface DetailCommentRepository extends JpaRepository<DetailCommentEntity, Integer> {
-    List<DetailCommentEntity> findByDetailId(int detailId);
+    List<DetailCommentEntity> findByDetailIdOrderByDetailUploadDateDesc(int detailId);
     long countByDetailId(int detailId);
     DetailCommentEntity findByDetailCommentId(int detailCommentId);
     
