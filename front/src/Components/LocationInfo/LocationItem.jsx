@@ -23,7 +23,7 @@ const LocationItem = ({ item }) => (
           <div className="flex">
             <span className="flex items-center">
               <FaRegComment className="text-green mr-1" />
-              <p className="text-center font-medium">{item.detailTotalScore}</p>
+              <p className="text-center font-medium">{item.detailTotalComment}</p>
             </span>
             <span className="flex items-center ml-2">
               <FaStar className="text-yellow-400 mr-1" />

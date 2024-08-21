@@ -11,6 +11,7 @@ export default {
         green: "#00A05B",
         darkGreen: "#00704A",
         deepGreen: "#1E3932",
+        tomato : "#ff6347"
       },
       width: {
         1420: "1420px",
