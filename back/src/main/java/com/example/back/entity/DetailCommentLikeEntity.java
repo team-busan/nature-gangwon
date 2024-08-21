@@ -13,12 +13,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Entity(name = "deatil_comment_like")
-@Table(name = "deatil_comment_like")
+@Entity(name = "detail_comment_like")
+@Table(name = "detail_comment_like")
 @IdClass(DetailLikePK.class)
 public class DetailCommentLikeEntity {
     @Id
-    private int userEmail;
+    private String userEmail;
 
     @Id
     private int detailCommentId;

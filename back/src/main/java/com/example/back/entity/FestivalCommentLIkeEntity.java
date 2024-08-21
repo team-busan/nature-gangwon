@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @IdClass(FestivalLikePK.class)
 public class FestivalCommentLIkeEntity {
     @Id
-    private int userEmail;
+    private String userEmail;
 
     @Id
     private int festivalCommentId;

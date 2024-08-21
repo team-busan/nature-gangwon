@@ -16,17 +16,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.back.dto.ResponseDto;
+import com.example.back.dto.request.detail.PostDetailCommentLikeRequestDto;
 import com.example.back.dto.request.detail.PostDetailCommentRequsetDto;
 import com.example.back.dto.response.detail.PostDetailCommentResponseDto;
+import com.example.back.dto.response.detail.DeleteDetailCommentResponseDto;
 import com.example.back.dto.response.detail.GetDetailListResponseDto;
 import com.example.back.dto.response.detail.GetDetailResponseDto;
+import com.example.back.dto.response.detail.PostDetailCommentLikeResponseDto;
 import com.example.back.dto.response.detail.Detailfiled.GetDetailImageDto;
 import com.example.back.dto.response.detail.Detailfiled.GetDetailListItemDto;
 import com.example.back.entity.DetailCommentEntity;
+import com.example.back.entity.DetailCommentLikeEntity;
 import com.example.back.entity.DetailDescriptionEntity;
 import com.example.back.entity.DetailEntity;
 import com.example.back.entity.DetailImageEntity;
 import com.example.back.entity.UserEntity;
+import com.example.back.repository.DetailCommentLikeRepository;
 import com.example.back.repository.DetailCommentRepository;
 import com.example.back.repository.DetailDescriptionRepository;
 import com.example.back.repository.DetailImageRepository;
@@ -49,6 +54,8 @@ public class DetailServiceImplement implements DetailService{
     private final DetailCommentRepository detailCommentRepository;
 
     private final UserRepository userRepository;
+
+    private final DetailCommentLikeRepository detailCommentLikeRepository;
 
     private String mapSigungucode(String sigunguName) {
         Map sigunguMap = new HashMap<>();
@@ -172,6 +179,59 @@ public class DetailServiceImplement implements DetailService{
             return PostDetailCommentResponseDto.databaseError();
        }
        return PostDetailCommentResponseDto.success();
-    } 
+    }
+
+    //? 댓글 좋아요
+    @Override
+    public ResponseEntity<? super PostDetailCommentLikeResponseDto> postDetailCommentLike(String userEmail, PostDetailCommentLikeRequestDto dto) {
+        int detailCommentId = dto.getCommentId();
+        try{
+            UserEntity userEntity = userRepository.findByUserEmail(userEmail);
+            if(userEntity == null) {
+                return PostDetailCommentResponseDto.existUser();
+            }
+            DetailCommentEntity detailCommentEntity = detailCommentRepository.findByDetailCommentId(detailCommentId);
+            if(detailCommentEntity == null ) {
+                return PostDetailCommentLikeResponseDto.existDetail();
+            }
+
+            DetailCommentLikeEntity detailCommentLikeEntity = detailCommentLikeRepository.findByUserEmailAndDetailCommentId(userEmail, detailCommentId);
+            if(detailCommentLikeEntity == null ){
+                detailCommentLikeEntity = new DetailCommentLikeEntity(userEmail, detailCommentId);
+                detailCommentLikeRepository.save(detailCommentLikeEntity);
+            }else{
+                detailCommentLikeRepository.delete(detailCommentLikeEntity);
+            }
+
+            List<DetailCommentLikeEntity> detailCommentLikeList = detailCommentLikeRepository.findByDetailCommentId(detailCommentId);
+
+            return ResponseEntity.ok().body(PostDetailCommentLikeResponseDto.success(detailCommentEntity, detailCommentLikeList));
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return PostDetailCommentLikeResponseDto.DetailCommentLikeFail();
+        }
+    }
+
+    @Override
+    public ResponseEntity<? super DeleteDetailCommentResponseDto> deleteDetailComment(String userEmail, int commentId){
+        try{
+            DetailCommentEntity detailCommentEntity = detailCommentRepository.findByDetailCommentId(commentId);
+            if(detailCommentEntity == null){
+                return DeleteDetailCommentResponseDto.existComment();
+            }
+
+            boolean isEqualWriter = userEmail.equals(detailCommentEntity.getUserEmail());
+            if(!isEqualWriter) {
+                return DeleteDetailCommentResponseDto.existUser();
+            }
+
+            detailCommentLikeRepository.deleteByDetailCommentId(commentId);
+            detailCommentRepository.deleteByDetailCommentId(commentId);
+            return DeleteDetailCommentResponseDto.success();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+    }
 
 }
