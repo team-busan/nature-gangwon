@@ -74,7 +74,7 @@ public class LocationBasedServiceImplement implements LocationBasedService {
             String mappedCode = (locationSigungucode != null && !locationSigungucode.isEmpty()) ? mapSigungucode(locationSigungucode) : null;
 
             if (mappedType == null && mappedCode == null) {
-                locationList = locationBasedRepository.findAll(pageable);
+                locationList = locationBasedRepository.findAllRandom(pageable);
             } else if (mappedType != null && mappedCode != null) {
                 locationList = locationBasedRepository.findByLocationContenttypeidAndLocationSigungucode(mappedType, mappedCode, pageable);
             } else if (mappedType != null) {

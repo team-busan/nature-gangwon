@@ -10,10 +10,12 @@ import com.example.back.dto.response.plan.GetPlanResponseDto;
 import com.example.back.dto.response.plan.PostPlanResponseDto;
 import com.example.back.dto.response.plan.planfiled.GetPlaceListItemDto;
 import com.example.back.entity.LocationBasedEntity;
+import com.example.back.entity.PhotosEntity;
 import com.example.back.entity.PlacesEntity;
 import com.example.back.entity.PlanEntity;
 import com.example.back.entity.UserEntity;
 import com.example.back.repository.LocationBasedRepository;
+import com.example.back.repository.PhotosRepository;
 import com.example.back.repository.PlacesRepository;
 import com.example.back.repository.PlanRepository;
 import com.example.back.repository.UserRepository;
@@ -21,6 +23,8 @@ import com.example.back.service.PlanService;
 
 import java.util.List;
 import java.util.ArrayList;
+
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,6 +35,7 @@ public class PlanServiceImplement implements PlanService{
     private final UserRepository userRepository;
     private final PlacesRepository placesRepository;
     private final LocationBasedRepository locationBasedRepository;
+    private final PhotosRepository photosRepository;
 
     //? 계획 작성하기 
     @Override
@@ -59,6 +64,16 @@ public class PlanServiceImplement implements PlanService{
                     placesEntity.setPlaceAdd1(locationBasedEntity.getLocationAddr1());
                     placesEntity.setTitle(locationBasedEntity.getLocationTitle());
                     placesRepository.save(placesEntity);
+
+                    List<String> photoUrls = placeRequestDto.getPhotoUrls();
+                    if (photoUrls != null && !photoUrls.isEmpty()) {
+                        for (String photoUrl : photoUrls) {
+                            PhotosEntity photosEntity = new PhotosEntity();
+                            photosEntity.setPlacesId(placesEntity.getPlacesId());
+                            photosEntity.setPhotoUrl(photoUrl);
+                            photosRepository.save(photosEntity);
+                        }
+                    }
                 }
         }catch (Exception e) {
             e.printStackTrace();
@@ -81,7 +96,9 @@ public class PlanServiceImplement implements PlanService{
 
             for(PlacesEntity place : placesEntity) {
                 LocationBasedEntity location = locationBasedRepository.findByLocationBasedId(place.getLocationBasedId());
+                List<PhotosEntity> photos = photosRepository.findByPlacesId(place.getPlacesId());
                 GetPlaceListItemDto placeDto = new GetPlaceListItemDto(
+                    place.getPlacesId(),
                     place.getPlanId(),
                     place.getLocationBasedId(),
                     place.getDayNumber(),
@@ -90,7 +107,8 @@ public class PlanServiceImplement implements PlanService{
                     place.getPlaceAdd1(),
                     place.getTitle(),
                     location != null ? location.getLocationMapx() : null,
-                    location != null ? location.getLocationMapy() : null
+                    location != null ? location.getLocationMapy() : null,
+                    photos.stream().map(PhotosEntity::getPhotoUrl).collect(Collectors.toList())
                 );
                 getPlaceListItemDtos.add(placeDto);
             }

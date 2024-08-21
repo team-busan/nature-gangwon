@@ -41,5 +41,6 @@ public class PostPlanRequestDto {
 
         private String note2;
 
+        private List<String> photoUrls;
     }
 }
