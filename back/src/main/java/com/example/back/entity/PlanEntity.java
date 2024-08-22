@@ -3,6 +3,7 @@ package com.example.back.entity;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
+import com.example.back.dto.request.plan.PatchPlanRequestDto;
 import com.example.back.dto.request.plan.PostPlanRequestDto;
 
 import jakarta.persistence.Entity;
@@ -45,4 +46,11 @@ public class PlanEntity {
     public void increasePlanCount() {
         this.planCount++;
     }
+
+    public void patch(PatchPlanRequestDto dto) {
+        this.planTitle = dto.getPlanTitle();
+        this.startDate = dto.getStartDate();
+        this.endDate = dto.getEndDate();
+    }
+
 }

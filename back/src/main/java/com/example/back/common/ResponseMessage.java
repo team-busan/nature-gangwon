@@ -19,8 +19,10 @@ public interface ResponseMessage {
     String NOT_EXIST_PLAN = "Not Exist Plan.";
     String NOT_EXIST_USER = "Not Exist User.";
     String NOT_EXIST_DETAIL = "Not Exist Detail.";
+    String NOT_PERMISSION = "Not Permission.";
 
     String MAIL_FAIL = "Mail Send Fail.";
 
     String INVALID = "Invalid.";
+    String IT_DOESNT_EXIST = "It Doesn't Exist.";
 }

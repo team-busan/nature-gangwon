@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface PlacesRepository extends JpaRepository<PlacesEntity, Integer> {
     List<PlacesEntity> findByPlanId(int planId);
+    PlacesEntity findByPlanIdAndLocationBasedId(int planId, int locationBasedId);
 }

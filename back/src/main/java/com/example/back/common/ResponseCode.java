@@ -19,8 +19,11 @@ public interface ResponseCode {
     String NOT_EXIST_PLAN = "NEP";
     String NOT_EXIST_USER = "NEU";
     String NOT_EXIST_DETAIL = "NED";
+    String NOT_PERMISSION = "NP";
 
     String MAIL_FAIL = "MF";
 
     String INVALID = "I";
+
+    String IT_DOESNT_EXIST = "IDE"; 
 }
