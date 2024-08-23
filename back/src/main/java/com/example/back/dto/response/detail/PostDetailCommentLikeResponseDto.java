@@ -35,7 +35,7 @@ public class PostDetailCommentLikeResponseDto extends ResponseDto{
 
     public static ResponseEntity<ResponseDto> existUser(){
         ResponseDto responseBody = new ResponseDto(ResponseCode.NOT_EXIST_USER, ResponseMessage.NOT_EXIST_USER);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
     }
 
     public static ResponseEntity<ResponseDto> existDetail() {

@@ -10,13 +10,13 @@ import com.example.back.dto.ResponseDto;
 import lombok.Getter;
 
 @Getter
-public class UpdateDetailCommentResponseDto extends ResponseDto {
-    private UpdateDetailCommentResponseDto(){
+public class PatchDetailCommentResponseDto extends ResponseDto {
+    private PatchDetailCommentResponseDto(){
         super();
     }
 
-    public static ResponseEntity<UpdateDetailCommentResponseDto> success(){
-        UpdateDetailCommentResponseDto responseBody = new UpdateDetailCommentResponseDto();
+    public static ResponseEntity<PatchDetailCommentResponseDto> success(){
+        PatchDetailCommentResponseDto responseBody = new PatchDetailCommentResponseDto();
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 
