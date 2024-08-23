@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data
-public class UpdateDetailCommentRequestDto {
+public class PatchDetailCommentRequestDto {
     @Min(1)
     private int detailId;
 
