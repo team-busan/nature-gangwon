@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   format,
   addMonths,
@@ -9,9 +9,13 @@ import {
   endOfWeek,
   isSameDay,
   addDays,
+  differenceInDays,
 } from "date-fns";
 import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
 import { motion } from "framer-motion";
+
+import { useRecoilState } from "recoil";
+import { planList } from "../../state/planState.js";
 
 const CalendarHeader = ({ curMon, prevMon, nextMon }) => {
   return (
@@ -88,7 +92,7 @@ const CaledarBody = ({ curMon, dates, onDateClick, rangeState }) => {
               ${isSameDay(day, dates[1]) ? "bg-softGreen rounded-r-full" : null}
               ${dates[0] < day && day < dates[1] ? "bg-lightGreen" : ""}
               hover:${
-                rangeState == true && dates[0] < day ? "bg-lightGreen" : null
+                rangeState === true && dates[0] < day ? "bg-lightGreen" : null
               }`}
               key={idx}
               onClick={() => onDateClick(day)}
@@ -102,15 +106,21 @@ const CaledarBody = ({ curMon, dates, onDateClick, rangeState }) => {
   );
 };
 
-const PlanCalendar = ({ setPlanStage, dates, setDates, setFoldStage }) => {
+const PlanCalendar = ({
+  planStage,
+  setPlanStage,
+  dates,
+  setDates,
+  setFoldStage,
+}) => {
+  const [plans, setPlans] = useRecoilState(planList);
   const [curMon, setCurMon] = useState(new Date());
   const prevMon = () => setCurMon(subMonths(curMon, 1));
   const nextMon = () => setCurMon(addMonths(curMon, 1));
   const [rangeState, setRangeState] = useState(false);
 
   const onDateClick = (date) => {
-    if (rangeState == false) {
-      setDates([date, date]);
+    if (rangeState === false) {
       setDates((prev) => [date, prev[1]]);
       setRangeState(true);
     } else {
@@ -123,8 +133,17 @@ const PlanCalendar = ({ setPlanStage, dates, setDates, setFoldStage }) => {
     }
   };
 
+  useEffect(() => {
+    const days = differenceInDays(dates[1], dates[0]);
+    let emptyList = [];
+    for (let i = 0; i <= days; i++) {
+      emptyList.push([]);
+    }
+    setPlans(emptyList);
+  }, [dates]);
+
   return (
-    <div className="w-1/2">
+    <div className="w-1/2 mt-20">
       <CalendarHeader curMon={curMon} prevMon={prevMon} nextMon={nextMon} />
       <CaledarBody
         curMon={curMon}
@@ -133,7 +152,7 @@ const PlanCalendar = ({ setPlanStage, dates, setDates, setFoldStage }) => {
         rangeState={rangeState}
       />
 
-      <div className="flex justify-between items-center">
+      <div className="mt-12 flex justify-between items-center">
         <div>
           <div>{!rangeState ? "여행 시작 날 선택" : "여행 마지막 날 선택"}</div>
           <div>여행 시작 날 : {format(dates[0], "yyyy M dd")}</div>

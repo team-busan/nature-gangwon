@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import useDetectClose from "../../Hooks/useDetectClose.js";
 import { format } from "date-fns";
 
@@ -9,13 +9,21 @@ import { useRecoilState } from "recoil";
 import { planList } from "../../state/planState.js";
 import { alertState } from "../../state/alertState.js";
 import PlanSelect from "./PlanSelect.jsx";
+import {
+  contentTypeState,
+  isScrollState,
+  pageState,
+  searchQueryState,
+  sigunguCodeState,
+} from "../../state/planSearchQueryStates.js";
 
-const SearchBar = ({ searchValue, setSearchValue }) => {
-  const [sigungu, setSigungu] = useState("");
-  const [contentTypeId, setContentTypeId] = useState("");
+const SearchBar = ({ refetch }) => {
+  const [searchQuery, setSearchQuery] = useRecoilState(searchQueryState);
+  const [sigunguCode, setSigunguCode] = useRecoilState(sigunguCodeState);
+  const [contentType, setContentType] = useRecoilState(contentTypeState);
 
-  const sigunguRef = useRef();
-  const contentTypeIdRef = useRef();
+  const sigunguRef = useRef(null);
+  const contentTypeIdRef = useRef(null);
 
   const [sigunguOpen, setSigunguOpen] = useDetectClose(sigunguRef, false);
   const [contentTypeIdOpen, setContentTypeIdOpen] = useDetectClose(
@@ -49,47 +57,55 @@ const SearchBar = ({ searchValue, setSearchValue }) => {
   return (
     <div className="my-4 flex flex-col gap-4">
       <div className="flex gap-1 bg-white py-2 px-3 rounded-lg shadow">
-        <MdOutlineSearch className="text-2xl" />
+        <MdOutlineSearch
+          className="text-2xl cursor-pointer"
+          onClick={() => refetch()}
+        />
         <input
           type="text"
           placeholder="찾으시는 여행지가 있으신가요?"
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.currentTarget.value)}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.currentTarget.value)}
           className="w-full outline-none"
         />
-        {searchValue ? (
+        {searchQuery ? (
           <MdOutlineAddCircle
             className="text-2xl rotate-45 text-gray-400 cursor-pointer"
-            onClick={() => setSearchValue("")}
+            onClick={() => searchQueryState("")}
           />
         ) : null}
       </div>
       <PlanSelect
         label="시군구"
         id="sigungu"
-        value={sigungu}
-        setValue={setSigungu}
+        value={sigunguCode}
+        setValue={setSigunguCode}
         open={sigunguOpen}
         setOpen={setSigunguOpen}
         list={sigunguList}
+        refetch={refetch}
       />
       <PlanSelect
         label="관광 타입"
         id="contentTypeId"
-        value={contentTypeId}
-        setValue={setContentTypeId}
+        value={contentType}
+        setValue={setContentType}
         open={contentTypeIdOpen}
         setOpen={setContentTypeIdOpen}
         list={contentTypeIdList}
+        refetch={refetch}
       />
     </div>
   );
 };
 
-const SearchList = ({ data, setFoldStage }) => {
+const SearchList = ({ data, setFoldStage, observeRef, curData, refetch }) => {
   const [plans, setPlans] = useRecoilState(planList);
   const [message, setMessage] = useRecoilState(alertState);
+  const [page, setPage] = useRecoilState(pageState);
+  const [isScroll, setIsScroll] = useRecoilState(isScrollState);
 
+  // 이중 배열 state 컨트롤
   const deepCopy = (obj) => {
     // 배열 타입인 경우
     if (Array.isArray(obj)) {
@@ -109,6 +125,7 @@ const SearchList = ({ data, setFoldStage }) => {
     return obj;
   };
 
+  // 장소 선택
   const handleClick = (item) => {
     let plansCopy = deepCopy(plans);
     for (let i = 0; i < plansCopy.length; i++) {
@@ -129,17 +146,49 @@ const SearchList = ({ data, setFoldStage }) => {
     }
   };
 
+  // 무한 스크롤
+  const onIntersection = async (entries) => {
+    const firstEntry = entries[0];
+
+    if (firstEntry.isIntersecting) {
+      await setIsScroll(true);
+      refetch();
+    }
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(onIntersection);
+    if (observeRef.current) {
+      observer.observe(observeRef.current);
+    }
+    return () => {
+      if (observeRef.current) {
+        observer.unobserve(observeRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <ul className="flex flex-col gap-4 pr-4">
+    <ul className="flex flex-col gap-4">
       {data?.map((item, idx) => (
         <PlanItem key={idx} item={item} handleClick={handleClick} />
       ))}
+      <li className="mx-auto" ref={observeRef}>
+        {curData.length < 50 ? "" : "콘텐츠 더 불러오는중..."}
+      </li>
     </ul>
   );
 };
 
-const PlanSearch = ({ foldStage, setFoldStage, dates, data }) => {
-  const [searchValue, setSearchValue] = useState("");
+const PlanSearch = ({
+  foldStage,
+  setFoldStage,
+  dates,
+  data,
+  refetch,
+  curData,
+}) => {
+  const observeRef = useRef(null);
 
   return (
     <div
@@ -149,14 +198,20 @@ const PlanSearch = ({ foldStage, setFoldStage, dates, data }) => {
           : foldStage === 1
           ? "w-full block"
           : "w-1/2 block"
-      } overflow-y-scroll pr-4 bg-white`}
+      } overflow-y-scroll h-full pr-4 bg-white`}
     >
       <p>장소선택</p>
       <p>
         {format(dates[0], "yyyy M dd")} ~ {format(dates[1], "yyyy M dd")}
       </p>
-      <SearchBar searchValue={searchValue} setSearchValue={setSearchValue} />
-      <SearchList data={data} setFoldStage={setFoldStage} />
+      <SearchBar refetch={refetch} />
+      <SearchList
+        data={data}
+        setFoldStage={setFoldStage}
+        observeRef={observeRef}
+        curData={curData}
+        refetch={refetch}
+      />
     </div>
   );
 };

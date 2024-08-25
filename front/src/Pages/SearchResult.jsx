@@ -1,4 +1,4 @@
-import { axiosInstance, API_URL } from "../Stores/API.js";
+import axios from "axios";
 
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
@@ -8,8 +8,10 @@ import ContentController from "../Components/SearchResult/ContentController";
 
 const SearchResult = () => {
   const getLocationsInfo = async () => {
-    const response = await axiosInstance.get(API_URL.SEARCH);
-    return response.data;
+    const response = await axios.get(
+      "http://localhost:8000/location/list?page=1&size=50"
+    );
+    return response.data.locationList;
   };
 
   const { data, error, isLoading } = useQuery({
@@ -25,7 +27,7 @@ const SearchResult = () => {
     return <div>Loading...</div>;
   } else {
     return (
-      <div className="flex gap-[50px] w-[1420px] h-full">
+      <div className="flex gap-[50px] w-[1420px] h-full mt-6">
         <ContentList data={data} />
         <ContentController />
       </div>
