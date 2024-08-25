@@ -20,7 +20,7 @@ export const pageState = atom({
   default: 1,
 });
 
-export const optionChangedState = atom({
-  key: "optionChangedState",
+export const isScrollState = atom({
+  key: "isScrollState",
   default: false,
 });

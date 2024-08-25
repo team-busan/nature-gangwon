@@ -14,7 +14,7 @@ import {
   contentTypeState,
   sigunguCodeState,
   pageState,
-  optionChangedState,
+  isScrollState,
 } from "../state/planSearchQueryStates";
 
 const Plan = () => {
@@ -27,7 +27,7 @@ const Plan = () => {
   const [contentType, setContentType] = useRecoilState(contentTypeState);
   const [sigunguCode, setSigunguCode] = useRecoilState(sigunguCodeState);
   const [page, setPage] = useRecoilState(pageState);
-  const [optionChanged, setOptionChanged] = useRecoilState(optionChangedState);
+  const [isScroll, setIsScroll] = useRecoilState(isScrollState);
 
   const control1 = useAnimationControls();
   const control2 = useAnimationControls();
@@ -52,23 +52,16 @@ const Plan = () => {
 
   useEffect(() => {
     if (data) {
-      if (optionChanged) {
-        setDataState(data);
-      } else {
+      if (isScroll) {
         setDataState((prev) => [...prev, ...data]);
+        setIsScroll(false);
+      } else {
+        setPage(1);
+        setDataState(data);
       }
       setPage((prev) => prev + 1);
     }
   }, [data]);
-
-  useEffect(() => {
-    const loadData = async () => {
-      await refetch();
-    };
-    loadData();
-    setOptionChanged(false);
-  }, [optionChanged]);
-  // 작업중인 코드
 
   useEffect(() => {
     if (planStage === 0) {

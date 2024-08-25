@@ -1,17 +1,12 @@
 import { forwardRef } from "react";
 import { MdArrowDropDown } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  optionChangedState,
-  pageState,
-} from "../../state/planSearchQueryStates";
+import { pageState } from "../../state/planSearchQueryStates";
 import { useRecoilState } from "recoil";
 
 const PlanSelect = forwardRef(
-  ({ label, id, value, setValue, open, setOpen, list, refetch }, ref) => {
+  ({ label, id, value, setValue, open, setOpen, list }, ref) => {
     const [page, setPage] = useRecoilState(pageState);
-    const [optionChanged, setOptionChanged] =
-      useRecoilState(optionChangedState);
 
     return (
       <div ref={ref} className="relative w-full">
@@ -51,7 +46,6 @@ const PlanSelect = forwardRef(
                   onClick={() => {
                     setValue(item);
                     setPage(1);
-                    setOptionChanged(true);
                     setOpen(!open);
                   }}
                 >

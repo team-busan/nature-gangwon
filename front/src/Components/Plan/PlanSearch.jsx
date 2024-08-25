@@ -11,37 +11,19 @@ import { alertState } from "../../state/alertState.js";
 import PlanSelect from "./PlanSelect.jsx";
 import {
   contentTypeState,
+  isScrollState,
+  pageState,
   searchQueryState,
   sigunguCodeState,
 } from "../../state/planSearchQueryStates.js";
 
-const SearchBar = ({ refetch, observeRef }) => {
+const SearchBar = ({ refetch }) => {
   const [searchQuery, setSearchQuery] = useRecoilState(searchQueryState);
   const [sigunguCode, setSigunguCode] = useRecoilState(sigunguCodeState);
   const [contentType, setContentType] = useRecoilState(contentTypeState);
 
   const sigunguRef = useRef(null);
   const contentTypeIdRef = useRef(null);
-
-  const onIntersection = (entries) => {
-    const firstEntry = entries[0];
-
-    if (firstEntry.isIntersecting) {
-      refetch();
-    }
-  };
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(onIntersection);
-    if (observeRef.current) {
-      observer.observe(observeRef.current);
-    }
-    return () => {
-      if (observeRef.current) {
-        observer.unobserve(observeRef.current);
-      }
-    };
-  }, []);
 
   const [sigunguOpen, setSigunguOpen] = useDetectClose(sigunguRef, false);
   const [contentTypeIdOpen, setContentTypeIdOpen] = useDetectClose(
@@ -117,10 +99,13 @@ const SearchBar = ({ refetch, observeRef }) => {
   );
 };
 
-const SearchList = ({ data, setFoldStage, observeRef, curData }) => {
+const SearchList = ({ data, setFoldStage, observeRef, curData, refetch }) => {
   const [plans, setPlans] = useRecoilState(planList);
   const [message, setMessage] = useRecoilState(alertState);
+  const [page, setPage] = useRecoilState(pageState);
+  const [isScroll, setIsScroll] = useRecoilState(isScrollState);
 
+  // 이중 배열 state 컨트롤
   const deepCopy = (obj) => {
     // 배열 타입인 경우
     if (Array.isArray(obj)) {
@@ -140,6 +125,7 @@ const SearchList = ({ data, setFoldStage, observeRef, curData }) => {
     return obj;
   };
 
+  // 장소 선택
   const handleClick = (item) => {
     let plansCopy = deepCopy(plans);
     for (let i = 0; i < plansCopy.length; i++) {
@@ -159,6 +145,28 @@ const SearchList = ({ data, setFoldStage, observeRef, curData }) => {
       }
     }
   };
+
+  // 무한 스크롤
+  const onIntersection = async (entries) => {
+    const firstEntry = entries[0];
+
+    if (firstEntry.isIntersecting) {
+      await setIsScroll(true);
+      refetch();
+    }
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(onIntersection);
+    if (observeRef.current) {
+      observer.observe(observeRef.current);
+    }
+    return () => {
+      if (observeRef.current) {
+        observer.unobserve(observeRef.current);
+      }
+    };
+  }, []);
 
   return (
     <ul className="flex flex-col gap-4">
@@ -196,12 +204,13 @@ const PlanSearch = ({
       <p>
         {format(dates[0], "yyyy M dd")} ~ {format(dates[1], "yyyy M dd")}
       </p>
-      <SearchBar refetch={refetch} observeRef={observeRef} />
+      <SearchBar refetch={refetch} />
       <SearchList
         data={data}
         setFoldStage={setFoldStage}
         observeRef={observeRef}
         curData={curData}
+        refetch={refetch}
       />
     </div>
   );

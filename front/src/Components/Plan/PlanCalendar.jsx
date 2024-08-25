@@ -143,7 +143,7 @@ const PlanCalendar = ({
   }, [dates]);
 
   return (
-    <div className="w-1/2">
+    <div className="w-1/2 mt-20">
       <CalendarHeader curMon={curMon} prevMon={prevMon} nextMon={nextMon} />
       <CaledarBody
         curMon={curMon}
@@ -152,7 +152,7 @@ const PlanCalendar = ({
         rangeState={rangeState}
       />
 
-      <div className="flex justify-between items-center">
+      <div className="mt-12 flex justify-between items-center">
         <div>
           <div>{!rangeState ? "여행 시작 날 선택" : "여행 마지막 날 선택"}</div>
           <div>여행 시작 날 : {format(dates[0], "yyyy M dd")}</div>
