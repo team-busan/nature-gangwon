@@ -7,6 +7,8 @@ import com.example.back.common.ResponseCode;
 import com.example.back.common.ResponseMessage;
 import com.example.back.dto.ResponseDto;
 import com.example.back.dto.response.plan.planfiled.GetPlaceListItemDto;
+import com.example.back.dto.response.plan.planfiled.GetPlanCommentListItemDto;
+import com.example.back.entity.PlanCommentEntity;
 import com.example.back.entity.PlanEntity;
 
 import lombok.Getter;
@@ -21,14 +23,17 @@ public class GetPlanResponseDto extends ResponseDto {
 
     private List<GetPlaceListItemDto> getPlaceListItemDto;
 
+    private List<GetPlanCommentListItemDto> getPlanCommentList;
+
     private GetPlanResponseDto() {
         super();
     }
 
-    public static ResponseEntity<GetPlanResponseDto> success(PlanEntity planEntity, List<GetPlaceListItemDto> getPlaceListItemDto) {
+    public static ResponseEntity<GetPlanResponseDto> success(PlanEntity planEntity, List<GetPlaceListItemDto> getPlaceListItemDto, List<GetPlanCommentListItemDto> getPlanCommentList) {
         GetPlanResponseDto responseBody = new GetPlanResponseDto();
         responseBody.setPlanEntity(planEntity);
         responseBody.setGetPlaceListItemDto(getPlaceListItemDto);
+        responseBody.setGetPlanCommentList(getPlanCommentList);
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 
