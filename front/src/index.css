@@ -5,9 +5,8 @@
 }
 
 @font-face {
-  font-family: "BMJUA";
-  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMJUA.woff")
-    format("woff");
+  font-family: "gmarket";
+  src: url("./fonts/GmarketSansTTFMedium.ttf");
   font-weight: normal;
   font-style: normal;
 }
@@ -39,7 +38,7 @@
 /* src/index.css */
 body,
 * {
-  font-family: "BMJUA", sans-serif;
+  font-family: "gmarket", sans-serif;
 
   ::-webkit-scrollbar {
     width: 8px; /* 스크롤바의 너비 */

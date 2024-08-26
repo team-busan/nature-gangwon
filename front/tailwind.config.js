@@ -4,6 +4,8 @@ export default {
   theme: {
     extend: {
       colors: {
+        smLightGreen : "#F0FDF0",
+        veryLightGreen : "#E3FBE3",
         primary: "#8c7ae6",
         lightGreen: "#C7F7C6",
         paleGreen: "#3BF17C",

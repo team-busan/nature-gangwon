@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export default function Authenticate({ email, onVerificationSuccess }) {
   const [verificationCode, setVerificationCode] = useState("");
@@ -9,7 +10,10 @@ export default function Authenticate({ email, onVerificationSuccess }) {
     mutationFn: (data) =>
       axios.post("http://localhost:8000/auth/email-send-certification", data),
     onSuccess: () => {
-      alert("메일을 발송했습니다");
+      Swal.fire({
+        title : '메일을 발송 했습니다',
+        confirmButtonColor : 'green',
+      })
     },
     onError: () => {
       alert("메일 발송에 실패했습니다. 다시 시도해주세요.");
@@ -23,7 +27,10 @@ export default function Authenticate({ email, onVerificationSuccess }) {
       onVerificationSuccess(verificationCode); // 인증코드 확인
     },
     onError: () => {
-      alert("인증 코드가 유효하지 않습니다.");
+      Swal.fire({
+        title : '인증코드가 유효하지 않습니다.',
+        confirmButtonColor : 'red',
+      })
     },
   });
 

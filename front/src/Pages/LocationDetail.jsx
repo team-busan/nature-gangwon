@@ -26,6 +26,19 @@ export default function LocationDetail() {
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error loading details</p>;
 
+  const description = destination.detailDescriptionEntity.detailOverview;
+
+  const detailEntity = {
+    Title: destination.detailEntity.detailTitle,
+    Address: destination.detailEntity.detailAddress,
+    Tel: destination.detailEntity.detailTel,
+    TotalScore: destination.detailEntity.detailTotalScore,
+    Views: destination.detailEntity.detailViews,
+    Mapx: destination.detailEntity.detailMapx,
+    Mapy: destination.detailEntity.detailMapy,
+    Firstimage: destination.detailEntity.detailFirstimage,
+  };
+
   const information = {
     lat: destination.detailEntity.detailMapy,
     lng: destination.detailEntity.detailMapx,
@@ -47,9 +60,9 @@ export default function LocationDetail() {
 
   return (
     <>
-      <DetailHeader header={destination.detailEntity} />
+      <DetailHeader header={detailEntity} />
       <DetailSlider images={images} />
-      <DetailDescription description={destination.detailDescriptionEntity} />
+      <DetailDescription description={description} />
       <DetailInformation information={information} />
       <DetailComment
         comments={destination.detailCommentList}

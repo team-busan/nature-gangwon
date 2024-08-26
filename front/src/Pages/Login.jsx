@@ -6,6 +6,7 @@ import { FaEyeSlash } from "react-icons/fa";
 import { useCookies } from "react-cookie";
 import { useSetRecoilState } from "recoil";
 import { userState } from "../state/userState";
+import Swal from "sweetalert2";
 
 export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -45,7 +46,12 @@ export default function Login() {
             userNickname: userData.userNickname,
             userProfile: userData.userProfile,
           });
-          alert("로그인 성공");
+          Swal.fire({
+            title: '로그인 성공!',
+            icon: 'success',
+            confirmButtonText: '확인',
+            confirmButtonColor: 'green'
+        });
           queryClient.invalidateQueries("user");
           console.log(data.token);
           navigate("/");

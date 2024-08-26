@@ -25,7 +25,7 @@ export default function DetailHeader({ header }) {
       <div className="flex flex-row w-full justify-between items-center">
         <div className="flex justify-between w-full">
           <span>
-            <h1 className="flex text-darkGreen">{header.detailTitle}</h1>
+            <h1 className="flex text-darkGreen">{header.Title}</h1>
           </span>
           <div className="flex gap-3 relative">
             <button className="">
@@ -47,15 +47,15 @@ export default function DetailHeader({ header }) {
           </div>
         </div>
       </div>
-      <h4 className="text-softGreen">{header.detailAddress}</h4>
+      <h4 className="text-softGreen">{header.Address}</h4>
       <div className="flex flex-row w-full justify-between items-center mt-2">
         <span className="flex items-center">
           <FaStar className="text-yellow-400 mr-1" />
-          <h3>{header.detailTotalScore}</h3>
+          <h3>{header.TotalScore}</h3>
         </span>
         <span className="flex items-center">
           <PiEyesDuotone className="mr-2 text-2xl transform rotate-180" />
-          <p className="mr-4">{header.detailViews}</p>
+          <p className="mr-4">{header.Views}</p>
           <FaRegComment className="mr-2 text-2xl" />
           <p>0</p>
         </span>

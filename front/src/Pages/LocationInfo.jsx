@@ -71,7 +71,7 @@ export default function LocationInfo() {
   };
 
   return (
-    <div className="w-full overflow-x-hidden">
+    <section className="w-full overflow-x-hidden">
       <MainImage image = {mainImage}/>
       <LocationSelector
         selectedLocation={
@@ -84,7 +84,7 @@ export default function LocationInfo() {
         searchQuery={searchQuery}
         onSearchChange={(e) => setSearchQuery(e.target.value)}
       />
-      <LocationList data={data} loading={isLoading} error={error} />
+      <LocationList data={data} loading={isLoading} error={error} idKey="detailId" routePrefix="/destination" />
       <div className="flex justify-center mt-4">
         <ReactPaginate
           previousLabel={<FaAngleLeft />} // 이전 페이지 버튼의 라벨
@@ -105,6 +105,6 @@ export default function LocationInfo() {
           forcePage={page - 1} // 현재 페이지를 강제로 설정
         />
       </div>
-    </div>
+    </section>
   );
 }

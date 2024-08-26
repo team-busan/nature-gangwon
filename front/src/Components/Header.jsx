@@ -1,19 +1,21 @@
 import React, { useEffect } from "react";
 import { IoIosSearch } from "react-icons/io";
 import { FaRegCircleUser } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom"; // useLocation 추가
 import { useCookies } from "react-cookie";
 import { useRecoilState } from "recoil";
 import { userState } from "../state/userState";
 import axios from "axios";
+import { CiLogin } from "react-icons/ci";
 
 const Header = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const [user, setUser] = useRecoilState(userState);
+  const location = useLocation(); // 현재 경로를 가져오는 useLocation 사용
 
   useEffect(() => {
     const fetchUserData = async () => {
-      if (cookies.token && !user) { // 토큰이 있고 Recoil 상태에 사용자가 없는 경우에만 요청
+      if (cookies.token && !user) {
         try {
           const response = await axios.get("http://localhost:8000/user", {
             headers: {
@@ -37,8 +39,8 @@ const Header = () => {
 
   const handleLogout = () => {
     removeCookie("token", { path: "/" });
-    setUser(null); // Recoil 상태 초기화
-    window.location.reload(); // 로그아웃 후 페이지를 새로고침하여 변경 사항 반영
+    setUser(null);
+    window.location.reload();
   };
 
   return (
@@ -51,13 +53,13 @@ const Header = () => {
         </div>
         <nav className="w-3/12">
           <ul className="flex justify-between">
-            <li className="hover:text-green">
+            <li className={`hover:text-green ${location.pathname === '/destination/list' ? 'border-b-2 border-green' : ''}`}>
               <Link to="/destination/list">여행계획</Link>
             </li>
-            <li className="hover:text-green">
+            <li className={`hover:text-green ${location.pathname === '/festival/list' ? 'border-b-2 border-green' : ''}`}>
               <Link to="/festival/list">축제정보</Link>
             </li>
-            <li className="hover:text-green">
+            <li className={`hover:text-green ${location.pathname === '/' ? 'border-b-2 border-green' : ''}`}>
               <Link to="/">장소추천</Link>
             </li>
           </ul>
@@ -89,7 +91,10 @@ const Header = () => {
             </>
           ) : (
             <Link to="/Login">
-              <button>로그인</button>
+              <span className="flex items-center">
+                <CiLogin className="text-2xl mr-2" />
+                <button>로그인</button>
+              </span>
             </Link>
           )}
         </div>
