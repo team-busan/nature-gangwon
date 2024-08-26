@@ -9,20 +9,20 @@ import { API_URL, axiosInstance } from "../../Stores/API";
 import { useCookies } from "react-cookie";
 import { useParams } from "react-router-dom";
 import { commentContents, commentEdit, isWritingCommentState, score } from "../../state/comment";
+import Swal from "sweetalert2"; // SweetAlert2 추가
 
 export default function Comment({ comment, onLike, formRef }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const maxLength = 320;
   const [user] = useRecoilState(userState);
   const [cookies] = useCookies(["token"]);
-  const {id} = useParams();
+  const { id } = useParams();
   const detailId = Number(id);
   const queryClient = useQueryClient();
   const [isWritingComment, setIsWritingComment] = useRecoilState(isWritingCommentState);
   const [rating, setRating] = useRecoilState(score);
   const [commentContent, setCommentContent] = useRecoilState(commentContents);
   const [edit, setEdit] = useRecoilState(commentEdit);
-
 
   const userEmail = user ? user.userEmail : "";
 
@@ -31,34 +31,32 @@ export default function Comment({ comment, onLike, formRef }) {
   };
 
   useEffect(() => {
-    if(edit && formRef.current){
+    if (edit && formRef.current) {
       formRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [edit]);
-  
+
   const mutation = useMutation({
-    mutationKey : ["commentDelete", comment.detailCommentId],
-    mutationFn : async (Comment) => {
-      const response = await axiosInstance.post(
-        `${API_URL.LocationComment}/post-comment`,
+    mutationKey: ["commentDelete", comment.detailCommentId],
+    mutationFn: async (Comment) => {
+      const url = API_URL.LocationDetail.replace(":id", id);
+      const response = await axiosInstance.delete(
+        `${url}/${Comment.detailCommentId}`,
         {
-          detailCommentId : Comment.detailCommentId,
-        },
-        {
-          headers : {
-              Authorization : `Bearer ${cookies.token}`,
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
           },
         }
       );
       return response.data;
     },
-    onSucess : async () => {
-      await queryClient.invalidateQueries(["locationDetail", detailId]); // locationDetail로 시작하고 detailId에 해당하는 데이터 오래된 데이터로 만듬
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(["locationDetail", detailId]);
     },
-    onError : (error) => {
+    onError: (error) => {
       alert("오류가 발생했습니다. 다시 시도해주세요");
-    }
-  })
+    },
+  });
 
   const renderContent = () => {
     if (!comment.detailContent) return "";
@@ -75,24 +73,44 @@ export default function Comment({ comment, onLike, formRef }) {
   };
 
   const handleDelete = () => {
-    mutation.mutate({
-      detailCommentId : comment.detailCommentId,
-      detailId : detailId,
-    })
-  }
+    Swal.fire({
+      title: '삭제하시겠습니까?',
+      text: "이 작업은 되돌릴 수 없습니다!",
+      icon: 'warning', // 모달에 표시할 아이콘 종류
+      showCancelButton: true, // 취소 버튼 표시
+      confirmButtonColor: '#3085d6', // 확인 버튼 색상
+      cancelButtonColor: '#d33', // 취소 버튼 색상
+      confirmButtonText: '삭제', // 확인 버튼 텍스트
+      cancelButtonText: '취소' // 취소 버튼 텍스트
+    }).then((result) => {
+      if (result.isConfirmed) {
+        mutation.mutate({
+          detailCommentId: comment.detailCommentId,
+          detailId: detailId,
+        });
+        Swal.fire(
+          '삭제 완료!',
+          '댓글이 성공적으로 삭제되었습니다.',
+          'success'
+        );
+      }
+    });
+  };
 
   const handleModify = (id, content, score) => {
-    if(!isWritingComment){
-      setIsWritingComment(!isWritingComment);
-      setEdit(!edit);
-      setRating(score);
-      setCommentContent(content);
-    }else{
+    if (edit && isWritingComment) {
+      setIsWritingComment(false);
+      setEdit(false);
+      setRating(0);
+      setCommentContent('');
+    } else {
+      setIsWritingComment(true);
       setEdit(true);
       setRating(score);
       setCommentContent(content);
     }
   };
+  
 
   return (
     <div className="w-full">
@@ -108,19 +126,21 @@ export default function Comment({ comment, onLike, formRef }) {
             className="text-red-600 cursor-pointer"
             onClick={() => onLike(comment.detailCommentId)}
           />
-          <p className="ml-1">{/* {comment.like} */}5</p>
+          <p className="ml-1">{comment.like}</p>
         </span>
         {comment.userEmail === userEmail ? (
           <span className="flex flex-row">
-            <button 
+            <button
               className="bg-green text-white p-1 rounded-lg w-14 h-8 flex items-center justify-center mr-1"
-              onClick = {() => handleModify(comment.detailCommentId, comment.detailContent, comment.score)}>
+              onClick={() => handleModify(comment.detailCommentId, comment.detailContent, comment.score)}
+            >
               수정
               <MdModeEditOutline />
             </button>
-            <button 
+            <button
               className="bg-tomato text-white p-1 rounded-lg w-14 h-8 flex items-center justify-center"
-              onClick = {() => handleDelete()}>
+              onClick={handleDelete}
+            >
               삭제
               <IoClose />
             </button>

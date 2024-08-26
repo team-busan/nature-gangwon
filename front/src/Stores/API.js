@@ -13,9 +13,9 @@ const API_URL = {
   LocationInfo: "/destination/list",
   LocationDetail: "/destination/:id",
   LocationComment : "/destination",
+  FestivalInfo : "/festival/list",
   MyPage: "/myPage",
   Plan: "/plan",
 };
-
 
 export { axiosInstance, API_URL };
