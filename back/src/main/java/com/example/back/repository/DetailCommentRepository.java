@@ -12,8 +12,6 @@ public interface DetailCommentRepository extends JpaRepository<DetailCommentEnti
     long countByDetailId(int detailId);
     DetailCommentEntity findByDetailCommentId(int detailCommentId);
     
-    @Transactional
-    public void deleteByDetailId(int detailId);
 
     @Transactional
     public void deleteByDetailCommentId(int detailCommentId);

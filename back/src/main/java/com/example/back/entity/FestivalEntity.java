@@ -1,6 +1,9 @@
 package com.example.back.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -60,6 +63,10 @@ public class FestivalEntity {
         this.festivalFirstimage = festivalFirstimage;
         this.festivalFirstimage2 = festivalFirstimage2;
         this.festivalSigungucode = festivalSigungucode;
+    }
+    
+    public LocalDate getEndDateAsLocalDate() {
+        return LocalDate.parse(this.festivalEndDate, DateTimeFormatter.ISO_DATE);
     }
 
     public void increaseViewCount() {
