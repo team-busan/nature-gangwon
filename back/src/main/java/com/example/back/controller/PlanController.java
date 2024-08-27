@@ -2,6 +2,7 @@ package com.example.back.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,12 +15,16 @@ import com.example.back.dto.request.plan.PatchPlanCommentRequestDto;
 import com.example.back.dto.request.plan.PatchPlanRequestDto;
 import com.example.back.dto.request.plan.PostPlanCommentLikeRequestDto;
 import com.example.back.dto.request.plan.PostPlanCommentRequestDto;
+import com.example.back.dto.request.plan.PostPlanMarkRequestDto;
 import com.example.back.dto.request.plan.PostPlanRequestDto;
+import com.example.back.dto.response.plan.DeletePlanCommentResponseDto;
+import com.example.back.dto.response.plan.DeletePlanResponseDto;
 import com.example.back.dto.response.plan.GetPlanResponseDto;
 import com.example.back.dto.response.plan.PatchPlanCommentResponseDto;
 import com.example.back.dto.response.plan.PatchPlanResponseDto;
 import com.example.back.dto.response.plan.PostPlanCommentLikeResponseDto;
 import com.example.back.dto.response.plan.PostPlanCommentResponseDto;
+import com.example.back.dto.response.plan.PostPlanMarkResponseDto;
 import com.example.back.dto.response.plan.PostPlanResponseDto;
 import com.example.back.service.PlanService;
 
@@ -87,6 +92,35 @@ public class PlanController {
         @Valid @RequestBody PostPlanCommentLikeRequestDto requestBody
     ) {
         ResponseEntity<? super PostPlanCommentLikeResponseDto> response = planService.postPlanCommentLike(userEmail, requestBody);
+        return response;
+    }
+
+    @PostMapping("/mark")
+    public ResponseEntity<? super PostPlanMarkResponseDto> postPlanMark(
+        @AuthenticationPrincipal String userEmail,
+        @Valid @RequestBody PostPlanMarkRequestDto requestBody
+    ) {
+        ResponseEntity<? super PostPlanMarkResponseDto> response = planService.postPlanMark(userEmail, requestBody);
+        return response;
+    }
+
+    //? 계획 댓글 삭제
+    @DeleteMapping("/delete-comment/{planCommentId}")
+    public ResponseEntity<? super DeletePlanCommentResponseDto> deletePlanComment(
+        @AuthenticationPrincipal String userEmail,
+        @PathVariable(name = "planCommentId") int planCommentId
+    ) {
+        ResponseEntity<? super DeletePlanCommentResponseDto> response = planService.deletePlanComment(userEmail, planCommentId);
+        return response;
+    }
+
+    //? 계획 삭제
+    @DeleteMapping("/delete/{planId}")
+    public ResponseEntity<? super DeletePlanResponseDto> deletePlan(
+        @AuthenticationPrincipal String userEmail,
+        @PathVariable(name = "planId") int planId
+    ) {
+        ResponseEntity<? super DeletePlanResponseDto> response = planService.deletePlan(userEmail, planId);
         return response;
     }
 }

@@ -17,9 +17,6 @@ public class PatchPlanRequestDto {
     private int planId;
 
     @NotBlank
-    private String userEmail;
-
-    @NotBlank
     private String startDate;
 
     @NotBlank

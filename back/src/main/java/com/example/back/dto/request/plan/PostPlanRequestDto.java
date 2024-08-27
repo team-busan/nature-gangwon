@@ -13,9 +13,6 @@ import lombok.NoArgsConstructor;
 @Data
 public class PostPlanRequestDto {
     @NotBlank
-    private String userEmail;
-
-    @NotBlank
     private String startDate;
 
     @NotBlank
