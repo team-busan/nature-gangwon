@@ -65,7 +65,7 @@ export default function FestivalInfo() {
       <MainImage image={mainImage} />
       {/* 진행 중인 축제 */}
       <div className = "mb-1">
-        <div className=" p-4 flex items-center bg-orange-300 shadow-md">
+        <div className=" p-4 flex items-center bg-orange-300 shadow-md mt-7">
           <h3 className="">진행중인 축제 🔥</h3>
         </div>
         <LocationList

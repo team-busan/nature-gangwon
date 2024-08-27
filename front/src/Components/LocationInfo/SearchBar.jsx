@@ -2,7 +2,7 @@ import React from 'react';
 import { IoIosSearch } from "react-icons/io";
 
 const SearchBar = () => (
-  <section className="w-screen">
+  <section className="w-screen mt-3">
     <div className="w-1420 flex mx-auto p-2">
       <div className="relative w-5/12 mr-5">
         <input

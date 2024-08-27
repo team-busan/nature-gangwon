@@ -12,7 +12,7 @@ export default function FestivalSchedule({ type, startDate }) {
   const backgroundColor = type === 'festival_ing' ? 'bg-orange-500' : 'bg-green';
 
   return (
-    <div className={`absolute top-0 right-0 ${backgroundColor} text-white text-sm p-2 rounded z-10 opacity-80`}>
+    <div className={`absolute top-0 right-0 ${backgroundColor} text-white text-sm p-2 rounded z-10 opacity-95`}>
       {type === 'festival_ing' ? '진행 중' : calculateDaysLeft(startDate)}
     </div>
   );

@@ -131,14 +131,14 @@ export default function Comment({ comment, onLike, formRef }) {
         {comment.userEmail === userEmail ? (
           <span className="flex flex-row">
             <button
-              className="bg-green text-white p-1 rounded-lg w-14 h-8 flex items-center justify-center mr-1"
+              className="bg-green text-white p-1 rounded-lg w-16 h-10 flex items-center justify-center mr-1"
               onClick={() => handleModify(comment.detailCommentId, comment.detailContent, comment.score)}
             >
               수정
               <MdModeEditOutline />
             </button>
             <button
-              className="bg-tomato text-white p-1 rounded-lg w-14 h-8 flex items-center justify-center"
+              className="bg-tomato text-white p-1 rounded-lg w-16 h-10 flex items-center justify-center"
               onClick={handleDelete}
             >
               삭제
