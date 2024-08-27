@@ -9,9 +9,9 @@ const LocationItem = ({ item, type = "" }) => {
   const address = type.includes("festival") ? item.festivalAddress : item.detailAddress;
   const image = type.includes("festival") ? item.festivalFirstImage : item.detailFirstimage;
   const totalScore = type.includes("festival") ? item.festivalTotalScore : item.detailTotalScore;
-  const totalComments = type.includes("festival") ? item.festivalTotalComments : item.detailTotalComment;
-  const startDate = type.includes("festival") ? item.festivalStartDate : null
-  const endDate = type.includes("festival") ? item.festivalStartDate : null
+  const totalComments = type.includes("festival") ? item.festivalTotalComment : item.detailTotalComment;
+  const startDate = type.includes("festival") ? item.festivalStartDate.split(' ')[0] : null;
+  const endDate = type.includes("festival") ? item.festivalEndDate.split(' ')[0] : null;
   
   return (
     <div className="w-full h-full relative shadow-lg">
@@ -22,7 +22,7 @@ const LocationItem = ({ item, type = "" }) => {
           <img
             src={image}
             className="w-full h-full object-cover rounded-t-lg"
-            alt={type === "festival" ? "축제 이미지" : "관광지 이미지"}
+            alt={type.includes("festival") ? "축제 이미지" : "관광지 이미지"}
           />
         </li>
         <li className="p-2">

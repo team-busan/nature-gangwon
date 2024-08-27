@@ -35,20 +35,9 @@ export default function FestivalInfo() {
     const params = { page, size }
     const url = `${axiosInstance.defaults.baseURL}${API_URL.FestivalInfo}`;
     const response = await axiosInstance.get(url, {params});
-
-    const pageSize = 16;
-    const startIndex = (page - 1) * pageSize;
-    const endIndex = startIndex + pageSize;
-
-    // 필요한 페이지의 데이터를 잘라서 반환
-    const paginatedData = {
-      ...festival_info.upComing,
-      festivals: festival_info.upComing.festivals.slice(startIndex, endIndex),
-    };
-    console.log(paginatedData);
-    setTotalPages(paginatedData.totalPage);
-
-    return paginatedData;
+    setTotalPages(response.data.upComing.totalPage);
+    console.log(response.data);
+    return response.data;
   };
 
   const { data, error, isLoading } = useQuery({
@@ -71,10 +60,10 @@ export default function FestivalInfo() {
       {/* 진행 중인 축제 */}
       <div className = "mb-1">
         <div className=" p-4 flex items-center bg-orange-300 shadow-md mt-7">
-          <h3 className="">진행중인 축제 🔥</h3>
+          <h3 className="font-semibold">진행중인 축제 🔥</h3>
         </div>
         <LocationList
-          data={festival_info.onGoing}
+          data={data.onGoing}
           loading={false}
           error={null}
           type="festival_ing"
@@ -84,11 +73,11 @@ export default function FestivalInfo() {
       </div>
       {/* 예정된 축제*/}
       <div className = "bg-lightGreen shadow-md">
-        <h3 className="p-4">다가오는 축제 ⏱️</h3>
+        <h3 className="p-4 font-semibold">다가오는 축제 ⏱️</h3>
       </div>
       <SortButtons/>
       <LocationList
-        data={data?.festivals}
+        data={data.upComing.festivals}
         loading={isLoading}
         error={error}
         type="festival"
