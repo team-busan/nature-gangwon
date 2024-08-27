@@ -17,6 +17,7 @@ public class GetFestivalListItemDto {
     private String festivalAddress;
     private String festivalStartDate;
     private String festivalEndDate;
+    private String festivalFirstimage;
     private BigDecimal festivalTotalScore;
     private String festivalContentid;
     private int festivalViews;
@@ -29,6 +30,7 @@ public class GetFestivalListItemDto {
         this.festivalAddress = festivalEntity.getFestivalAddress();
         this.festivalStartDate = festivalEntity.getFestivalStartDate();
         this.festivalEndDate = festivalEntity.getFestivalEndDate();
+        this.festivalFirstimage = festivalEntity.getFestivalFirstimage();
         this.festivalTotalScore = festivalEntity.getFestivalTotalScore();
         this.festivalViews = festivalEntity.getFestivalViews();
         this.festivalTotalComment = festivalTotalComment;
