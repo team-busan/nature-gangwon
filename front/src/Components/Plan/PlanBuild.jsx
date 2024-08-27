@@ -49,7 +49,7 @@ const PlanBuild = ({
         animate={foldControl}
         className={`absolute left-[120px] top-0 z-[101] flex justify-between items-center bg-white rounded-r-xl ${
           foldStage === 1 ? "w-[500px]" : "w-[1000px]"
-        } h-lvh py-4 pl-4 shadow-lightGreen`}
+        } h-lvh py-4 pl-6 shadow-lightGreen`}
       >
         <PlanSearch
           foldStage={foldStage}

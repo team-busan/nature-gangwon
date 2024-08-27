@@ -1,8 +1,9 @@
 import { useRecoilState } from "recoil";
-import { planList } from "../../state/planState.js";
+import { planList, planTitleState } from "../../state/planState.js";
 import { alertState } from "../../state/alertState.js";
 
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
+import { MdCheck, MdEdit } from "react-icons/md";
 
 import PlanDraggableItem from "./PlanDraggableItem.jsx";
 import PlanAlert from "./PlanAlert.jsx";
@@ -11,6 +12,8 @@ import { useState, useEffect } from "react";
 const PlanMySelect = () => {
   const [plans, setPlans] = useRecoilState(planList);
   const [message, setMessage] = useRecoilState(alertState);
+  const [planTitle, setPlanTitle] = useRecoilState(planTitleState);
+  const [text, setText] = useState("");
 
   const onDragEnd = ({ destination, source }) => {
     // 드롭 대상이 없는 경우, 아무 작업도 하지 않습니다.
@@ -74,7 +77,28 @@ const PlanMySelect = () => {
 
   return (
     <div className="w-1/2 h-full relative overflow-y-scroll">
-      <h3 className="w-full text-center py-4">내가 선택한 장소</h3>
+      {planTitle ? (
+        <h3 className="w-full text-center py-4 flex justify-center items-center gap-4">
+          {planTitle}{" "}
+          <MdEdit className="text-gray-400" onClick={() => setPlanTitle("")} />
+        </h3>
+      ) : (
+        <div className="p-4 relative">
+          <input
+            type="text"
+            className="w-full py-2 px-4 outline-none border-2 border-paleGreen rounded-full"
+            placeholder="여행 제목을 입력해주세요"
+            value={text}
+            onChange={(e) => setText(e.currentTarget.value)}
+          />
+          <div
+            onClick={() => setPlanTitle(text)}
+            className="absolute top-[22px] right-6 bg-paleGreen w-8 h-8 flex items-center justify-center rounded-full cursor-pointer"
+          >
+            <MdCheck className="text-2xl text-white" />
+          </div>
+        </div>
+      )}
       {enabled ? (
         <DragDropContext onDragEnd={onDragEnd}>
           {plans.map((day, idx) => (
@@ -105,6 +129,13 @@ const PlanMySelect = () => {
               </Droppable>
             </div>
           ))}
+
+          <div className="px-4">
+            <div className="w-full h-4 bg-gray-100 rounded mb-4"></div>
+            <button className="bg-darkGreen w-full py-2 text-white rounded-lg">
+              다음으로
+            </button>
+          </div>
         </DragDropContext>
       ) : null}
       {message ? <PlanAlert /> : null}

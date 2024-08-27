@@ -5,3 +5,8 @@ export const planList = atom({
   default: [],
   dangerouslyAllowMutability: true,
 });
+
+export const planTitleState = atom({
+  key: "planTitle",
+  default: "",
+});
