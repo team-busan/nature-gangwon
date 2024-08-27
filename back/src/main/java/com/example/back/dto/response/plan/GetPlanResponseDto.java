@@ -8,7 +8,6 @@ import com.example.back.common.ResponseMessage;
 import com.example.back.dto.ResponseDto;
 import com.example.back.dto.response.plan.planfiled.GetPlaceListItemDto;
 import com.example.back.dto.response.plan.planfiled.GetPlanCommentListItemDto;
-import com.example.back.entity.PlanCommentEntity;
 import com.example.back.entity.PlanEntity;
 
 import lombok.Getter;

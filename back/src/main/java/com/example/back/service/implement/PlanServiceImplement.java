@@ -10,13 +10,16 @@ import com.example.back.dto.request.plan.PostPlanRequestDto;
 import com.example.back.dto.request.plan.PatchPlanRequestDto.PatchPlanPlaceRequestDto;
 import com.example.back.dto.request.plan.PostPlanCommentLikeRequestDto;
 import com.example.back.dto.request.plan.PostPlanCommentRequestDto;
+import com.example.back.dto.request.plan.PostPlanMarkRequestDto;
 import com.example.back.dto.request.plan.PostPlanRequestDto.PostPlanPlaceRequestDto;
 import com.example.back.dto.response.plan.DeletePlanCommentResponseDto;
+import com.example.back.dto.response.plan.DeletePlanResponseDto;
 import com.example.back.dto.response.plan.GetPlanResponseDto;
 import com.example.back.dto.response.plan.PatchPlanCommentResponseDto;
 import com.example.back.dto.response.plan.PatchPlanResponseDto;
 import com.example.back.dto.response.plan.PostPlanCommentLikeResponseDto;
 import com.example.back.dto.response.plan.PostPlanCommentResponseDto;
+import com.example.back.dto.response.plan.PostPlanMarkResponseDto;
 import com.example.back.dto.response.plan.PostPlanResponseDto;
 import com.example.back.dto.response.plan.planfiled.GetPlaceListItemDto;
 import com.example.back.dto.response.plan.planfiled.GetPlanCommentListItemDto;
@@ -26,12 +29,14 @@ import com.example.back.entity.PlacesEntity;
 import com.example.back.entity.PlanCommentEntity;
 import com.example.back.entity.PlanCommentLikeEntity;
 import com.example.back.entity.PlanEntity;
+import com.example.back.entity.PlanMarkEntity;
 import com.example.back.entity.UserEntity;
 import com.example.back.repository.LocationBasedRepository;
 import com.example.back.repository.PhotosRepository;
 import com.example.back.repository.PlacesRepository;
 import com.example.back.repository.PlanCommentLikeRepository;
 import com.example.back.repository.PlanCommentRespository;
+import com.example.back.repository.PlanMarkRepository;
 import com.example.back.repository.PlanRepository;
 import com.example.back.repository.UserRepository;
 import com.example.back.service.PlanService;
@@ -55,12 +60,13 @@ public class PlanServiceImplement implements PlanService{
     private final PhotosRepository photosRepository;
     private final PlanCommentRespository planCommentRespository;
     private final PlanCommentLikeRepository planCommentLikeRepository;
+    private final PlanMarkRepository planMarkRepository;
 
     //? 계획 작성하기 
     @Override
     public ResponseEntity<? super PostPlanResponseDto> postPlan(String userEmail, PostPlanRequestDto dto) {
         try{
-            UserEntity userEntity = userRepository.findByUserEmail(dto.getUserEmail());
+            UserEntity userEntity = userRepository.findByUserEmail(userEmail);
             if(userEntity == null) return PostPlanResponseDto.notExistUser();
 
             PlanEntity planEntity = new PlanEntity(userEntity, dto);
@@ -110,6 +116,9 @@ public class PlanServiceImplement implements PlanService{
                 return GetPlanResponseDto.existPlan();
             } 
 
+            int markCount = planMarkRepository.countByPlanId(planId);
+            planEntity.setMarkCount(markCount);
+
             List<PlacesEntity> placesEntity = placesRepository.findByPlanId(planId);
             List<GetPlaceListItemDto> placeList = new ArrayList<>();
 
@@ -149,6 +158,7 @@ public class PlanServiceImplement implements PlanService{
 
                 planCommentList.add(planCommentDto);
             }
+
 
             planEntity.increasePlanCount();
             planRepository.save(planEntity);
@@ -324,15 +334,95 @@ public class PlanServiceImplement implements PlanService{
         }
         return PostPlanCommentLikeResponseDto.success();
     }
+    
+    //? 계획 즐겨찾기
+    @Override
+    public ResponseEntity<? super PostPlanMarkResponseDto> postPlanMark(String userEmail, PostPlanMarkRequestDto dto) {
+        try {
+            UserEntity userEntity = userRepository.findByUserEmail(userEmail);
+            if(userEntity == null) {
+                return PostPlanMarkResponseDto.notPermissionUser();
+            }
+
+            PlanEntity planEntity = planRepository.findByPlanId(dto.getPlanId());
+            if(planEntity == null) {
+                return PostPlanMarkResponseDto.invalidId();
+            }
+
+            PlanMarkEntity planMarkEntity = planMarkRepository.findByUserEmailAndPlanId(userEmail, dto.getPlanId());
+            if(planMarkEntity == null) {
+                planMarkEntity = new PlanMarkEntity(userEntity, dto.getPlanId());
+                planMarkRepository.save(planMarkEntity);
+            } else {
+                planMarkRepository.delete(planMarkEntity);
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseDto.databaseError();
+        }
+        return PostPlanMarkResponseDto.success();
+    }
 
     //? 계획 댓글 개별 삭제
-    // @Override
-    // public ResponseEntity<? super DeletePlanCommentResponseDto> deleteDetailComment(String userEmail, int postCommentId, int planId) {
-    //     try {
-            
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         return ResponseDto.databaseError();
-    //     }
-    // }
+    @Override
+    public ResponseEntity<? super DeletePlanCommentResponseDto> deletePlanComment(String userEmail, int planCommentId) {
+        try {
+            PlanCommentEntity planCommentEntity = planCommentRespository.findByPlanCommentId(planCommentId);
+            if(planCommentEntity == null) {
+                return DeletePlanCommentResponseDto.invalidId();
+            }
+
+            boolean isEqualWriter = userEmail.equals(planCommentEntity.getUserEmail());
+            if(!isEqualWriter) {
+                return DeletePlanCommentResponseDto.notPermissionUser();
+            }
+
+            planCommentLikeRepository.deleteByPlanCommentId(planCommentId);
+            planCommentRespository.deleteByPlanCommentId(planCommentId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return DeletePlanCommentResponseDto.success();
+    }
+
+    //? 게획 완전 삭제
+    @Override
+    public ResponseEntity<? super DeletePlanResponseDto> deletePlan(String userEmail, int planId) {
+        try {
+            PlanEntity planEntity = planRepository.findByPlanId(planId);
+            if(planEntity == null) {
+                return DeletePlanResponseDto.invalidId();
+            }
+
+            boolean isEqualWriter = userEmail.equals(planEntity.getUserEmail());
+            if(!isEqualWriter) {
+                return DeletePlanResponseDto.notPermissionUser();
+            }
+
+            List<PlanCommentEntity> planCommentEntities = planCommentRespository.findByPlanIdOrderByPlanUploadDateDesc(planId);
+            for (PlanCommentEntity planCommentEntity : planCommentEntities) {
+                planCommentLikeRepository.deleteByPlanCommentId(planCommentEntity.getPlanCommentId());
+                planCommentRespository.deleteByPlanCommentId(planCommentEntity.getPlanCommentId());
+            }
+
+            List<PlacesEntity> placesEntities = placesRepository.findByPlanId(planId);
+            for (PlacesEntity placesEntity : placesEntities) {
+                photosRepository.deleteByPlacesId(placesEntity.getPlacesId());
+            }
+
+            planMarkRepository.deleteByPlanId(planId);
+            placesRepository.deleteByPlanId(planId);
+            planRepository.deleteByPlanId(planId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseDto.databaseError();
+        }
+        return DeletePlanResponseDto.success();
+    }
+
+
+    
 }

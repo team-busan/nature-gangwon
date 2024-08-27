@@ -1,6 +1,8 @@
 package com.example.back.entity;
 
 import java.util.Date;
+
+
 import java.text.SimpleDateFormat;
 
 import com.example.back.dto.request.plan.PatchPlanRequestDto;
@@ -11,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -51,6 +54,17 @@ public class PlanEntity {
         this.planTitle = dto.getPlanTitle();
         this.startDate = dto.getStartDate();
         this.endDate = dto.getEndDate();
+    }
+
+    @Transient
+    private int markCount;
+
+    public int getMarkCount() {
+        return markCount;
+    }
+
+    public void setMarkCount(int markCount) {
+        this.markCount = markCount;
     }
 
 }

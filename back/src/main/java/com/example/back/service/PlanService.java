@@ -6,13 +6,16 @@ import com.example.back.dto.request.plan.PatchPlanCommentRequestDto;
 import com.example.back.dto.request.plan.PatchPlanRequestDto;
 import com.example.back.dto.request.plan.PostPlanCommentLikeRequestDto;
 import com.example.back.dto.request.plan.PostPlanCommentRequestDto;
+import com.example.back.dto.request.plan.PostPlanMarkRequestDto;
 import com.example.back.dto.request.plan.PostPlanRequestDto;
 import com.example.back.dto.response.plan.DeletePlanCommentResponseDto;
+import com.example.back.dto.response.plan.DeletePlanResponseDto;
 import com.example.back.dto.response.plan.GetPlanResponseDto;
 import com.example.back.dto.response.plan.PatchPlanCommentResponseDto;
 import com.example.back.dto.response.plan.PatchPlanResponseDto;
 import com.example.back.dto.response.plan.PostPlanCommentLikeResponseDto;
 import com.example.back.dto.response.plan.PostPlanCommentResponseDto;
+import com.example.back.dto.response.plan.PostPlanMarkResponseDto;
 import com.example.back.dto.response.plan.PostPlanResponseDto;
 
 public interface PlanService {
@@ -22,5 +25,7 @@ public interface PlanService {
     ResponseEntity<? super PostPlanCommentResponseDto> postPlanComment(String userEmail, PostPlanCommentRequestDto dto);
     ResponseEntity<? super PatchPlanCommentResponseDto> patchPlanComment(String userEmail, PatchPlanCommentRequestDto dto);
     ResponseEntity<? super PostPlanCommentLikeResponseDto> postPlanCommentLike(String userEmail, PostPlanCommentLikeRequestDto dto);
-    //ResponseEntity<? super DeletePlanCommentResponseDto> deleteDetailComment(String userEmail, int postCommentId, int planId);
+    ResponseEntity<? super PostPlanMarkResponseDto> postPlanMark(String userEmail, PostPlanMarkRequestDto dto);
+    ResponseEntity<? super DeletePlanCommentResponseDto> deletePlanComment(String userEmail, int planCommentId);
+    ResponseEntity<? super DeletePlanResponseDto> deletePlan(String userEmail, int planId);
 }
