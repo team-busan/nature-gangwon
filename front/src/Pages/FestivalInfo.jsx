@@ -8,6 +8,7 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { festival_info } from "../Stores/mockData";
 import ReactPaginate from "react-paginate";
 import { FaFireAlt } from "react-icons/fa";
+import { API_URL, axiosInstance } from "../Stores/API";
 
 export default function FestivalInfo() {
   const [size] = useState(16);
@@ -28,8 +29,12 @@ export default function FestivalInfo() {
   const mainImage =
     "http://tong.visitkorea.or.kr/cms/resource/07/3112107_image2_1.jpg";
 
-  const fetchFestivalInfo = ({ queryKey }) => {
+  const fetchFestivalInfo = async ({ queryKey }) => {
     const [_key, page] = queryKey;
+
+    const params = { page, size }
+    const url = `${axiosInstance.defaults.baseURL}${API_URL.FestivalInfo}`;
+    const response = await axiosInstance.get(url, {params});
 
     const pageSize = 16;
     const startIndex = (page - 1) * pageSize;
