@@ -1,5 +1,7 @@
 package com.example.back.service;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 
 import com.example.back.dto.request.plan.PatchPlanCommentRequestDto;
@@ -11,6 +13,8 @@ import com.example.back.dto.request.plan.PostPlanRequestDto;
 import com.example.back.dto.response.plan.DeletePlanCommentResponseDto;
 import com.example.back.dto.response.plan.DeletePlanResponseDto;
 import com.example.back.dto.response.plan.GetPlanResponseDto;
+import com.example.back.dto.response.plan.GetPlanTop3ListResponseDto;
+import com.example.back.dto.response.plan.GetPlanListResponseDto;
 import com.example.back.dto.response.plan.PatchPlanCommentResponseDto;
 import com.example.back.dto.response.plan.PatchPlanResponseDto;
 import com.example.back.dto.response.plan.PostPlanCommentLikeResponseDto;
@@ -28,4 +32,6 @@ public interface PlanService {
     ResponseEntity<? super PostPlanMarkResponseDto> postPlanMark(String userEmail, PostPlanMarkRequestDto dto);
     ResponseEntity<? super DeletePlanCommentResponseDto> deletePlanComment(String userEmail, int planCommentId);
     ResponseEntity<? super DeletePlanResponseDto> deletePlan(String userEmail, int planId);
+    ResponseEntity<? super GetPlanListResponseDto> getPlanList();
+    ResponseEntity<? super GetPlanTop3ListResponseDto> getPlanTop3List();
 }

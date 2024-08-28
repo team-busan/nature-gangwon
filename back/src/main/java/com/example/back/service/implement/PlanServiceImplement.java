@@ -1,8 +1,11 @@
 package com.example.back.service.implement;
 
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.example.back.common.ResponseCode;
 import com.example.back.dto.ResponseDto;
 import com.example.back.dto.request.plan.PatchPlanCommentRequestDto;
 import com.example.back.dto.request.plan.PatchPlanRequestDto;
@@ -15,6 +18,8 @@ import com.example.back.dto.request.plan.PostPlanRequestDto.PostPlanPlaceRequest
 import com.example.back.dto.response.plan.DeletePlanCommentResponseDto;
 import com.example.back.dto.response.plan.DeletePlanResponseDto;
 import com.example.back.dto.response.plan.GetPlanResponseDto;
+import com.example.back.dto.response.plan.GetPlanTop3ListResponseDto;
+import com.example.back.dto.response.plan.GetPlanListResponseDto;
 import com.example.back.dto.response.plan.PatchPlanCommentResponseDto;
 import com.example.back.dto.response.plan.PatchPlanResponseDto;
 import com.example.back.dto.response.plan.PostPlanCommentLikeResponseDto;
@@ -23,6 +28,7 @@ import com.example.back.dto.response.plan.PostPlanMarkResponseDto;
 import com.example.back.dto.response.plan.PostPlanResponseDto;
 import com.example.back.dto.response.plan.planfiled.GetPlaceListItemDto;
 import com.example.back.dto.response.plan.planfiled.GetPlanCommentListItemDto;
+import com.example.back.dto.response.plan.planfiled.GetPlanListItemDto;
 import com.example.back.entity.LocationBasedEntity;
 import com.example.back.entity.PhotosEntity;
 import com.example.back.entity.PlacesEntity;
@@ -45,6 +51,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Comparator;
 
 import java.util.stream.Collectors;
 
@@ -423,6 +430,88 @@ public class PlanServiceImplement implements PlanService{
         return DeletePlanResponseDto.success();
     }
 
+    //? 계획 좋아요순 탑 4
+    @Override
+    public ResponseEntity<? super GetPlanListResponseDto> getPlanList() {
+        try {
+            List<PlanEntity> allPlans = planRepository.findAll(Sort.by(Sort.Order.desc("planUploadDate")));
 
+            List<GetPlanListItemDto> planDtos = allPlans.stream()
+                .map(plan -> {
+                    int markCount = (int) planMarkRepository.countByPlanId(plan.getPlanId());
+
+                    List<PlacesEntity> placesEntities = placesRepository.findByPlanId(plan.getPlanId());
+                    List<String> photoUrls = placesEntities.stream()
+                        .flatMap(place -> photosRepository.findByPlacesId(place.getPlacesId()).stream())
+                        .map(PhotosEntity::getPhotoUrl)
+                        .collect(Collectors.toList());
+
+                    return new GetPlanListItemDto(
+                        plan.getPlanId(),
+                        plan.getPlanTitle(),
+                        plan.getPlanCount(),
+                        markCount,
+                        photoUrls
+                    );
+                })
+                .collect(Collectors.toList());
+
+            
+            List<GetPlanListItemDto> top4Plans = planDtos.stream()
+                .sorted(Comparator.comparingInt(GetPlanListItemDto::getMarkCount).reversed())
+                .limit(4)
+                .collect(Collectors.toList());
+
+            
+            List<GetPlanListItemDto> allPlansSortedByDate = planDtos.stream()
+                .sorted(Comparator.comparingInt(GetPlanListItemDto::getPlanId).reversed())
+                .collect(Collectors.toList());
+
+            return GetPlanListResponseDto.success(top4Plans, allPlansSortedByDate);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseDto.databaseError();
+        }
+        return null;
+    }
+
+    //? 계획 top3 리스트(조회순)
+    @Override
+    public ResponseEntity<? super GetPlanTop3ListResponseDto> getPlanTop3List() {
+        try {
+            List<PlanEntity> top3List = planRepository.findTop3ByOrderByPlanCountDesc();
+            
+            if (top3List.isEmpty()) {
+                return GetPlanTop3ListResponseDto.existPlan();
+            }
+            
+            List<GetPlanListItemDto> planDtos = new ArrayList<>();
+    
+            for (PlanEntity plan : top3List) {
+                int markCount = (int) planMarkRepository.countByPlanId(plan.getPlanId());
+
+                List<PlacesEntity> placesEntities = placesRepository.findByPlanId(plan.getPlanId());
+                List<String> photoUrls = placesEntities.stream()
+                    .flatMap(place -> photosRepository.findByPlacesId(place.getPlacesId()).stream())
+                    .map(PhotosEntity::getPhotoUrl)
+                    .collect(Collectors.toList());
+
+                    GetPlanListItemDto planDto = new GetPlanListItemDto(
+                    plan.getPlanId(),
+                    plan.getPlanTitle(),
+                    plan.getPlanCount(),
+                    markCount,
+                    photoUrls
+                );
+                
+                planDtos.add(planDto);
+            }
+
+            return GetPlanTop3ListResponseDto.success(planDtos);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+    }
     
 }

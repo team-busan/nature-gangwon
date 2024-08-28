@@ -17,9 +17,11 @@ import com.example.back.dto.request.plan.PostPlanCommentLikeRequestDto;
 import com.example.back.dto.request.plan.PostPlanCommentRequestDto;
 import com.example.back.dto.request.plan.PostPlanMarkRequestDto;
 import com.example.back.dto.request.plan.PostPlanRequestDto;
+import com.example.back.dto.response.plan.GetPlanListResponseDto;
 import com.example.back.dto.response.plan.DeletePlanCommentResponseDto;
 import com.example.back.dto.response.plan.DeletePlanResponseDto;
 import com.example.back.dto.response.plan.GetPlanResponseDto;
+import com.example.back.dto.response.plan.GetPlanTop3ListResponseDto;
 import com.example.back.dto.response.plan.PatchPlanCommentResponseDto;
 import com.example.back.dto.response.plan.PatchPlanResponseDto;
 import com.example.back.dto.response.plan.PostPlanCommentLikeResponseDto;
@@ -121,6 +123,20 @@ public class PlanController {
         @PathVariable(name = "planId") int planId
     ) {
         ResponseEntity<? super DeletePlanResponseDto> response = planService.deletePlan(userEmail, planId);
+        return response;
+    }
+
+    //? 계획 top4, 전체(최신순) 리스트
+    @GetMapping("/list")
+    public ResponseEntity<? super GetPlanListResponseDto> getPlanList() {
+        ResponseEntity<? super GetPlanListResponseDto> response = planService.getPlanList();
+        return response;
+    }
+
+    //? 계획 top3(조회순) 리스트
+    @GetMapping("/top3")
+    public ResponseEntity<? super GetPlanTop3ListResponseDto> getPlanTop3List() {
+        ResponseEntity<? super GetPlanTop3ListResponseDto> response = planService.getPlanTop3List();
         return response;
     }
 }
