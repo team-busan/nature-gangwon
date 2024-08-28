@@ -1,11 +1,13 @@
 package com.example.back.service.implement;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.example.back.common.ResponseCode;
 import com.example.back.dto.ResponseDto;
 import com.example.back.dto.request.plan.PatchPlanCommentRequestDto;
 import com.example.back.dto.request.plan.PatchPlanRequestDto;
@@ -29,6 +31,7 @@ import com.example.back.dto.response.plan.PostPlanResponseDto;
 import com.example.back.dto.response.plan.planfiled.GetPlaceListItemDto;
 import com.example.back.dto.response.plan.planfiled.GetPlanCommentListItemDto;
 import com.example.back.dto.response.plan.planfiled.GetPlanListItemDto;
+import com.example.back.dto.response.plan.planfiled.GetTop3ListItemDto;
 import com.example.back.entity.LocationBasedEntity;
 import com.example.back.entity.PhotosEntity;
 import com.example.back.entity.PlacesEntity;
@@ -41,7 +44,7 @@ import com.example.back.repository.LocationBasedRepository;
 import com.example.back.repository.PhotosRepository;
 import com.example.back.repository.PlacesRepository;
 import com.example.back.repository.PlanCommentLikeRepository;
-import com.example.back.repository.PlanCommentRespository;
+import com.example.back.repository.PlanCommentRepository;
 import com.example.back.repository.PlanMarkRepository;
 import com.example.back.repository.PlanRepository;
 import com.example.back.repository.UserRepository;
@@ -52,6 +55,9 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Comparator;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import java.util.stream.Collectors;
 
@@ -65,7 +71,7 @@ public class PlanServiceImplement implements PlanService{
     private final PlacesRepository placesRepository;
     private final LocationBasedRepository locationBasedRepository;
     private final PhotosRepository photosRepository;
-    private final PlanCommentRespository planCommentRespository;
+    private final PlanCommentRepository planCommentRepository;
     private final PlanCommentLikeRepository planCommentLikeRepository;
     private final PlanMarkRepository planMarkRepository;
 
@@ -148,7 +154,7 @@ public class PlanServiceImplement implements PlanService{
                 placeList.add(placeDto);
             }
 
-            List<PlanCommentEntity> planCommentEntity = planCommentRespository.findByPlanIdOrderByPlanUploadDateDesc(planId);
+            List<PlanCommentEntity> planCommentEntity = planCommentRepository.findByPlanIdOrderByPlanUploadDateDesc(planId);
             List<GetPlanCommentListItemDto> planCommentList = new ArrayList<>();
 
             for(PlanCommentEntity comment : planCommentEntity) {
@@ -270,7 +276,7 @@ public class PlanServiceImplement implements PlanService{
             }
 
             PlanCommentEntity planCommentEntity = new PlanCommentEntity(userEntity, dto);
-            planCommentRespository.save(planCommentEntity);
+            planCommentRepository.save(planCommentEntity);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.databaseError();
@@ -287,7 +293,7 @@ public class PlanServiceImplement implements PlanService{
                 PatchPlanCommentResponseDto.notExistPlan();
             }
 
-            PlanCommentEntity planCommentEntity = planCommentRespository.findByPlanCommentId(dto.getPlanCommentId());
+            PlanCommentEntity planCommentEntity = planCommentRepository.findByPlanCommentId(dto.getPlanCommentId());
             if(planCommentEntity == null) {
                 return PatchPlanCommentResponseDto.invalidId();
             }
@@ -298,7 +304,7 @@ public class PlanServiceImplement implements PlanService{
             }
 
             planCommentEntity.patch(dto);
-            planCommentRespository.save(planCommentEntity);
+            planCommentRepository.save(planCommentEntity);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -322,7 +328,7 @@ public class PlanServiceImplement implements PlanService{
                 return PostPlanCommentLikeResponseDto.notExistPlan();
             }
 
-            PlanCommentEntity planCommentEntity = planCommentRespository.findByPlanCommentId(planCommentId);
+            PlanCommentEntity planCommentEntity = planCommentRepository.findByPlanCommentId(planCommentId);
             if(planCommentEntity == null) {
                 return PostPlanCommentLikeResponseDto.invalidId();
             }
@@ -376,7 +382,7 @@ public class PlanServiceImplement implements PlanService{
     @Override
     public ResponseEntity<? super DeletePlanCommentResponseDto> deletePlanComment(String userEmail, int planCommentId) {
         try {
-            PlanCommentEntity planCommentEntity = planCommentRespository.findByPlanCommentId(planCommentId);
+            PlanCommentEntity planCommentEntity = planCommentRepository.findByPlanCommentId(planCommentId);
             if(planCommentEntity == null) {
                 return DeletePlanCommentResponseDto.invalidId();
             }
@@ -387,7 +393,7 @@ public class PlanServiceImplement implements PlanService{
             }
 
             planCommentLikeRepository.deleteByPlanCommentId(planCommentId);
-            planCommentRespository.deleteByPlanCommentId(planCommentId);
+            planCommentRepository.deleteByPlanCommentId(planCommentId);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.databaseError();
@@ -409,10 +415,10 @@ public class PlanServiceImplement implements PlanService{
                 return DeletePlanResponseDto.notPermissionUser();
             }
 
-            List<PlanCommentEntity> planCommentEntities = planCommentRespository.findByPlanIdOrderByPlanUploadDateDesc(planId);
+            List<PlanCommentEntity> planCommentEntities = planCommentRepository.findByPlanIdOrderByPlanUploadDateDesc(planId);
             for (PlanCommentEntity planCommentEntity : planCommentEntities) {
                 planCommentLikeRepository.deleteByPlanCommentId(planCommentEntity.getPlanCommentId());
-                planCommentRespository.deleteByPlanCommentId(planCommentEntity.getPlanCommentId());
+                planCommentRepository.deleteByPlanCommentId(planCommentEntity.getPlanCommentId());
             }
 
             List<PlacesEntity> placesEntities = placesRepository.findByPlanId(planId);
@@ -430,49 +436,96 @@ public class PlanServiceImplement implements PlanService{
         return DeletePlanResponseDto.success();
     }
 
-    //? 계획 좋아요순 탑 4
+    //? 계획 리스트
     @Override
-    public ResponseEntity<? super GetPlanListResponseDto> getPlanList() {
+    public ResponseEntity<? super GetPlanListResponseDto> getPlanList(String filter, String sortOrder, int page, int size) {
         try {
-            List<PlanEntity> allPlans = planRepository.findAll(Sort.by(Sort.Order.desc("planUploadDate")));
+            LocalDateTime currentDate = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedCurrentDate = currentDate.format(formatter);
 
-            List<GetPlanListItemDto> planDtos = allPlans.stream()
-                .map(plan -> {
-                    int markCount = (int) planMarkRepository.countByPlanId(plan.getPlanId());
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<PlanEntity> planPage;
 
-                    List<PlacesEntity> placesEntities = placesRepository.findByPlanId(plan.getPlanId());
-                    List<String> photoUrls = placesEntities.stream()
-                        .flatMap(place -> photosRepository.findByPlacesId(place.getPlacesId()).stream())
-                        .map(PhotosEntity::getPhotoUrl)
-                        .collect(Collectors.toList());
+        switch (filter) {
+            case "여행 전":
+                planPage = planRepository.findByStartDateAfter(formattedCurrentDate, pageable);
+                break;
+            case "여행 완료":
+                planPage = planRepository.findByEndDateBefore(formattedCurrentDate, pageable);
+                break;
+            case "여행 중":
+                planPage = planRepository.findByStartDateBeforeAndEndDateAfter(formattedCurrentDate, formattedCurrentDate, pageable);
+                break;
+            case "전체":
+            default:
+                planPage = planRepository.findAll(pageable);
+                break;
+        }
 
-                    return new GetPlanListItemDto(
-                        plan.getPlanId(),
-                        plan.getPlanTitle(),
-                        plan.getPlanCount(),
-                        markCount,
-                        photoUrls
-                    );
-                })
+        List<GetPlanListItemDto> planDtos = planPage.getContent().stream().map(plan -> {
+            UserEntity user = userRepository.findByUserEmail(plan.getUserEmail());
+            String userNickname = (user != null) ? user.getUserNickname() : "Unknown";
+
+            List<PlacesEntity> placesEntities = placesRepository.findByPlanId(plan.getPlanId());
+            List<String> photoUrls = placesEntities.stream()
+                .flatMap(place -> photosRepository.findByPlacesId(place.getPlacesId()).stream())
+                .map(PhotosEntity::getPhotoUrl)
                 .collect(Collectors.toList());
 
-            
-            List<GetPlanListItemDto> top4Plans = planDtos.stream()
-                .sorted(Comparator.comparingInt(GetPlanListItemDto::getMarkCount).reversed())
-                .limit(4)
-                .collect(Collectors.toList());
+            int commentCount = planCommentRepository.countByPlanId(plan.getPlanId());
+            int markCount = planMarkRepository.countByPlanId(plan.getPlanId());
+            String travelStatus = getTravelStatus(plan, currentDate);
 
-            
-            List<GetPlanListItemDto> allPlansSortedByDate = planDtos.stream()
-                .sorted(Comparator.comparingInt(GetPlanListItemDto::getPlanId).reversed())
-                .collect(Collectors.toList());
+            return new GetPlanListItemDto(
+                plan.getPlanId(),
+                userNickname,
+                plan.getPlanTitle(),
+                markCount,
+                photoUrls,
+                commentCount,
+                travelStatus,
+                plan.getPlanCount()
+            );
+        }).collect(Collectors.toList());
 
-            return GetPlanListResponseDto.success(top4Plans, allPlansSortedByDate);
+        Comparator<GetPlanListItemDto> comparator;
+        switch (sortOrder) {
+            case "인기순":
+                comparator = Comparator.comparing(GetPlanListItemDto::getMarkCount);
+                break;
+            case "댓글순":
+                comparator = Comparator.comparing(GetPlanListItemDto::getCommentCount);
+                break;
+            case "조회순":
+            default:
+                comparator = Comparator.comparing(GetPlanListItemDto::getPlanCount);
+                break;
+        }
+
+        planDtos.sort(comparator.reversed());
+
+        GetPlanListResponseDto responseBody = new GetPlanListResponseDto(planDtos, planPage.getTotalElements(), planPage.getTotalPages(), page);
+        return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
             e.printStackTrace();
-            ResponseDto.databaseError();
+            return ResponseDto.databaseError();
         }
-        return null;
+    }
+
+    private String getTravelStatus(PlanEntity plan, LocalDateTime now) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    
+        LocalDateTime startDate = LocalDateTime.parse(plan.getStartDate(), formatter);
+        LocalDateTime endDate = LocalDateTime.parse(plan.getEndDate(), formatter);
+    
+        if (endDate.isBefore(now)) {
+            return "여행 완료";
+        } else if (startDate.isAfter(now)) {
+            return "여행 전";
+        } else {
+            return "여행 중";
+        }
     }
 
     //? 계획 top3 리스트(조회순)
@@ -485,7 +538,7 @@ public class PlanServiceImplement implements PlanService{
                 return GetPlanTop3ListResponseDto.existPlan();
             }
             
-            List<GetPlanListItemDto> planDtos = new ArrayList<>();
+            List<GetTop3ListItemDto> planDtos = new ArrayList<>();
     
             for (PlanEntity plan : top3List) {
                 int markCount = (int) planMarkRepository.countByPlanId(plan.getPlanId());
@@ -496,7 +549,7 @@ public class PlanServiceImplement implements PlanService{
                     .map(PhotosEntity::getPhotoUrl)
                     .collect(Collectors.toList());
 
-                    GetPlanListItemDto planDto = new GetPlanListItemDto(
+                    GetTop3ListItemDto planDto = new GetTop3ListItemDto(
                     plan.getPlanId(),
                     plan.getPlanTitle(),
                     plan.getPlanCount(),
@@ -513,5 +566,4 @@ public class PlanServiceImplement implements PlanService{
             return ResponseDto.databaseError();
         }
     }
-    
 }

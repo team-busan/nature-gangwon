@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.back.dto.request.plan.PatchPlanCommentRequestDto;
@@ -126,10 +127,15 @@ public class PlanController {
         return response;
     }
 
-    //? 계획 top4, 전체(최신순) 리스트
+    //? 계획 리스트
     @GetMapping("/list")
-    public ResponseEntity<? super GetPlanListResponseDto> getPlanList() {
-        ResponseEntity<? super GetPlanListResponseDto> response = planService.getPlanList();
+    public ResponseEntity<? super GetPlanListResponseDto> getPlans(
+        @RequestParam(value = "filter", defaultValue = "전체") String filter,
+        @RequestParam(value = "sort", defaultValue = "조회순") String sortOrder,
+        @RequestParam(name = "page") int page,
+        @RequestParam(name = "size") int size
+    ) {
+        ResponseEntity<? super GetPlanListResponseDto> response = planService.getPlanList(filter, sortOrder, page, size);
         return response;
     }
 

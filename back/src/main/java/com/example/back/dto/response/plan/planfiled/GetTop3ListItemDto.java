@@ -7,13 +7,10 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class GetPlanListItemDto {
+public class GetTop3ListItemDto {
     private int planId;
-    private String userNickname;
     private String planTitle;
+    private int planCount;
     private int markCount;
     private List<String> photoUrls;
-    private int commentCount;
-    private String travelStatus;
-    private int planCount;
 }

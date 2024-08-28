@@ -7,10 +7,11 @@ import com.example.back.entity.PlanCommentEntity;
 
 import java.util.List;
 
-public interface PlanCommentRespository extends JpaRepository<PlanCommentEntity, Integer> {
+public interface PlanCommentRepository extends JpaRepository<PlanCommentEntity, Integer> {
     PlanCommentEntity findByPlanCommentId(int planCommentId);
     List<PlanCommentEntity> findByPlanIdOrderByPlanUploadDateDesc(int planId);
     PlanCommentEntity findByPlanId(int planId);
+    int countByPlanId(int planId);
     @Transactional
     public void deleteByPlanCommentId(int planCommentId);
 }

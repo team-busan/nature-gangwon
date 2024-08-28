@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import com.example.back.common.ResponseCode;
 import com.example.back.common.ResponseMessage;
 import com.example.back.dto.ResponseDto;
-import com.example.back.dto.response.plan.planfiled.GetPlanListItemDto;
+import com.example.back.dto.response.plan.planfiled.GetTop3ListItemDto;
 
 import lombok.Data;
 
@@ -14,13 +14,13 @@ import java.util.List;
 
 @Data
 public class GetPlanTop3ListResponseDto extends ResponseDto {
-    private List<GetPlanListItemDto> top3List;
+    private List<GetTop3ListItemDto> top3List;
 
     private GetPlanTop3ListResponseDto() {
         super();
     }
 
-    public static ResponseEntity<GetPlanTop3ListResponseDto> success(List<GetPlanListItemDto> top3List) {
+    public static ResponseEntity<GetPlanTop3ListResponseDto> success(List<GetTop3ListItemDto> top3List) {
         GetPlanTop3ListResponseDto responseBody = new GetPlanTop3ListResponseDto();
         responseBody.setTop3List(top3List);
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);

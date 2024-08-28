@@ -9,22 +9,28 @@ import com.example.back.dto.ResponseDto;
 import com.example.back.dto.response.plan.planfiled.GetPlanListItemDto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class GetPlanListResponseDto extends ResponseDto {
-    private List<GetPlanListItemDto> top4Plans;
-    private List<GetPlanListItemDto> allPlans;
+    private List<GetPlanListItemDto> plans;
+    private long totalData;
+    private int totalPage;
+    private int currentPage;
 
-    private GetPlanListResponseDto() {
+    public GetPlanListResponseDto(List<GetPlanListItemDto> plans, long totalData, int totalPage, int currentPage) {
         super();
+        this.plans = plans;
+        this.totalData = totalData;
+        this.totalPage = totalPage;
+        this.currentPage = currentPage;
     }
 
-    public static ResponseEntity<GetPlanListResponseDto> success(List<GetPlanListItemDto> top4Plans, List<GetPlanListItemDto> allPlans) {
-        GetPlanListResponseDto responseBody = new GetPlanListResponseDto();
-        responseBody.setTop4Plans(top4Plans);
-        responseBody.setAllPlans(allPlans);
+    public static ResponseEntity<GetPlanListResponseDto> success(List<GetPlanListItemDto> plans, long totalData, int totalPage, int currentPage) {
+        GetPlanListResponseDto responseBody = new GetPlanListResponseDto(plans, totalData, totalPage, currentPage);
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 
