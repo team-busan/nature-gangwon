@@ -9,7 +9,7 @@ import PlanDraggableItem from "./PlanDraggableItem.jsx";
 import PlanAlert from "./PlanAlert.jsx";
 import { useState, useEffect } from "react";
 
-const PlanMySelect = () => {
+const PlanMySelect = ({ setPlanStage }) => {
   const [plans, setPlans] = useRecoilState(planList);
   const [message, setMessage] = useRecoilState(alertState);
   const [planTitle, setPlanTitle] = useRecoilState(planTitleState);
@@ -75,6 +75,22 @@ const PlanMySelect = () => {
     setPlans(plansCopy);
   };
 
+  const handleToNext = () => {
+    for (let i = 0; i < plans.length; i++) {
+      if (plans[i].length === 0) {
+        setMessage("하루에 최소 한 곳 이상의 여행지를 추가해주세요.");
+        setPlanStage(1);
+        return;
+      }
+    }
+    if (!planTitle) {
+      setMessage("여행 제목을 입력해주세요.");
+      setPlanStage(1);
+      return;
+    }
+    setPlanStage(2);
+  };
+
   return (
     <div className="w-1/2 h-full relative overflow-y-scroll">
       {planTitle ? (
@@ -132,7 +148,10 @@ const PlanMySelect = () => {
 
           <div className="px-4">
             <div className="w-full h-4 bg-gray-100 rounded mb-4"></div>
-            <button className="bg-darkGreen w-full py-2 text-white rounded-lg">
+            <button
+              onClick={() => handleToNext()}
+              className="bg-darkGreen w-full py-2 text-white rounded-lg"
+            >
               다음으로
             </button>
           </div>

@@ -1,5 +1,8 @@
 import { motion } from "framer-motion";
 import { PLAN_STATUSBAR_WIDTH } from "../../Constants/constants";
+import { useRecoilState } from "recoil";
+import { planList, planTitleState } from "../../state/planState";
+import { alertState } from "../../state/alertState";
 
 const PlanStatusBar = ({
   planStage,
@@ -12,6 +15,10 @@ const PlanStatusBar = ({
     active: { scale: 1.2 },
     inactive: { scale: 1 },
   };
+
+  const [plan, setPlan] = useRecoilState(planList);
+  const [message, setMessage] = useRecoilState(alertState);
+  const [planTitle, setPlanTitle] = useRecoilState(planTitleState);
 
   return (
     <div
@@ -41,7 +48,21 @@ const PlanStatusBar = ({
         <motion.div
           animate={control3}
           variants={variants}
-          onClick={() => setPlanStage(2)}
+          onClick={() => {
+            for (let i = 0; i < plan.length; i++) {
+              if (plan[i].length === 0) {
+                setMessage("하루에 최소 한 곳 이상의 여행지를 추가해주세요.");
+                setPlanStage(1);
+                return;
+              }
+            }
+            if (!planTitle) {
+              setMessage("여행 제목을 입력해주세요.");
+              setPlanStage(1);
+              return;
+            }
+            setPlanStage(2);
+          }}
           className={`cursor-pointer p-6 w-full  ${
             planStage === 2 ? "text-paleGreen" : "text-gray-400"
           }`}

@@ -147,10 +147,6 @@ const SearchList = ({ data, setFoldStage, observeRef, curData, refetch }) => {
     }
   };
 
-  useEffect(() => {
-    console.log(plans);
-  }, [plans]);
-
   // 무한 스크롤
   const onIntersection = async (entries) => {
     const firstEntry = entries[0];

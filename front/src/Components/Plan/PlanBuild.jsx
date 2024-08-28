@@ -7,6 +7,7 @@ import { MdArrowBackIosNew } from "react-icons/md";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { planList } from "../../state/planState.js";
+import { alertState } from "../../state/alertState.js";
 
 const PlanBuild = ({
   foldStage,
@@ -17,8 +18,10 @@ const PlanBuild = ({
   handleFold,
   refetch,
   curData,
+  setPlanStage,
 }) => {
   const [plans, setPlans] = useRecoilState(planList);
+  const [message, setMessage] = useRecoilState(alertState);
   const lat = "37.8228";
   const lng = "128.1555";
 
@@ -42,6 +45,12 @@ const PlanBuild = ({
     }
   }, []);
 
+  useEffect(() => {
+    if (message) {
+      setFoldStage(2);
+    }
+  }, [message]);
+
   return (
     <div className={`h-lvh w-full relative`}>
       <motion.div
@@ -59,7 +68,7 @@ const PlanBuild = ({
           refetch={refetch}
           curData={curData}
         />
-        {foldStage === 2 ? <PlanMySelect /> : null}
+        {foldStage === 2 ? <PlanMySelect setPlanStage={setPlanStage} /> : null}
         <motion.div
           variants={arrowVariants}
           animate={foldControl}

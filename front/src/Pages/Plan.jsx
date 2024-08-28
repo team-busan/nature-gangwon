@@ -16,6 +16,9 @@ import {
   pageState,
   isScrollState,
 } from "../state/planSearchQueryStates";
+import { planList, planTitleState } from "../state/planState";
+import { alertState } from "../state/alertState";
+import { set } from "date-fns";
 
 const Plan = () => {
   const [planStage, setPlanStage] = useState(0);
@@ -127,6 +130,7 @@ const Plan = () => {
           handleFold={handleFold}
           refetch={refetch}
           curData={data}
+          setPlanStage={setPlanStage}
         />
       ) : (
         <PlanPhotos setPlanStage={setPlanStage} />
