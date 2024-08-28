@@ -36,7 +36,6 @@ export default function FestivalInfo() {
     const url = `${axiosInstance.defaults.baseURL}${API_URL.FestivalInfo}`;
     const response = await axiosInstance.get(url, {params});
     setTotalPages(response.data.upComing.totalPage);
-    console.log(response.data);
     return response.data;
   };
 
@@ -63,7 +62,7 @@ export default function FestivalInfo() {
           <h3 className="font-semibold">진행중인 축제 🔥</h3>
         </div>
         <LocationList
-          data={data.onGoing}
+          data={data?.onGoing}
           loading={false}
           error={null}
           type="festival_ing"
@@ -77,7 +76,7 @@ export default function FestivalInfo() {
       </div>
       <SortButtons/>
       <LocationList
-        data={data.upComing.festivals}
+        data={data?.upComing.festivals}
         loading={isLoading}
         error={error}
         type="festival"
