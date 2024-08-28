@@ -13,6 +13,7 @@ import Signup from "./Pages/SignUp.jsx";
 import Plan from "./Pages/Plan.jsx";
 import FestivalInfo from "./Pages/FestivalInfo.jsx";
 import FestivalDetail from "./Pages/FestivalDetail.jsx";
+import PlanInfo from "./Pages/PlanInfo.jsx";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: "/festival/:id",
         element: <FestivalDetail />,
+      },
+      {
+        path : "/plan/list",
+        element : <PlanInfo/>,
       },
       {
         path: "/myPage/:id",

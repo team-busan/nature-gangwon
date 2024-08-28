@@ -53,14 +53,14 @@ const Header = () => {
         </div>
         <nav className="w-3/12">
           <ul className="flex justify-between">
-            <li className={`hover:text-green ${location.pathname === '/destination/list' ? 'border-b-2 border-green' : ''}`}>
-              <Link to="/destination/list">여행계획</Link>
+            <li className={`hover:text-green ${location.pathname === '/plan/list' ? 'border-b-2 border-green' : ''}`}>
+              <Link to="/plan/list">여행계획</Link>
             </li>
             <li className={`hover:text-green ${location.pathname === '/festival/list' ? 'border-b-2 border-green' : ''}`}>
               <Link to="/festival/list">축제정보</Link>
             </li>
-            <li className={`hover:text-green ${location.pathname === '/' ? 'border-b-2 border-green' : ''}`}>
-              <Link to="/">장소추천</Link>
+            <li className={`hover:text-green ${location.pathname === '/destination/list' ? 'border-b-2 border-green' : ''}`}>
+              <Link to="/destination/list">장소추천</Link>
             </li>
           </ul>
         </nav>
