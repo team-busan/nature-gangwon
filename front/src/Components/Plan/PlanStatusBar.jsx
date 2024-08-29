@@ -10,6 +10,7 @@ const PlanStatusBar = ({
   control1,
   control2,
   control3,
+  control4,
 }) => {
   const variants = {
     active: { scale: 1.2 },
@@ -68,6 +69,16 @@ const PlanStatusBar = ({
           }`}
         >
           3. 사진 추가
+        </motion.div>
+        <motion.div
+          animate={control4}
+          variants={variants}
+          onClick={() => setPlanStage(3)}
+          className={`cursor-pointer p-6 w-full  ${
+            planStage === 3 ? "text-paleGreen" : "text-gray-400"
+          }`}
+        >
+          4. 썸네일 선택
         </motion.div>
       </div>
     </div>
