@@ -17,8 +17,8 @@ const Footer = () => {
         Nature
       </Link>
       <div className="flex justify-between w-96">
-        <span>Developers</span>
-        <div className="flex gap-10">
+        <span className="mr-2">Developers</span>
+        <div className="flex justify-between w-full">
           <span>송은우</span>
           <span>이재형</span>
           <span>이철민</span>
@@ -26,8 +26,8 @@ const Footer = () => {
         </div>
       </div>
       <div className="flex justify-between w-96">
-        <span>Git Hub</span>
-        <div className="flex gap-10">
+        <span className="shrink-0 mr-10">Git Hub</span>
+        <div className="flex justify-between w-full">
           <Link target="_blank" to="https://github.com/Eunoos">
             송은우
           </Link>

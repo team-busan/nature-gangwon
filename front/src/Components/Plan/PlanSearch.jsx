@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import useDetectClose from "../../Hooks/useDetectClose.js";
 import { format } from "date-fns";
 
@@ -12,7 +12,6 @@ import PlanSelect from "./PlanSelect.jsx";
 import {
   contentTypeState,
   isScrollState,
-  pageState,
   searchQueryState,
   sigunguCodeState,
 } from "../../state/planSearchQueryStates.js";
@@ -102,7 +101,6 @@ const SearchBar = ({ refetch }) => {
 const SearchList = ({ data, setFoldStage, observeRef, curData, refetch }) => {
   const [plans, setPlans] = useRecoilState(planList);
   const [message, setMessage] = useRecoilState(alertState);
-  const [page, setPage] = useRecoilState(pageState);
   const [isScroll, setIsScroll] = useRecoilState(isScrollState);
 
   // 이중 배열 state 컨트롤
@@ -137,6 +135,9 @@ const SearchList = ({ data, setFoldStage, observeRef, curData, refetch }) => {
         }
       } else {
         let plansDayCopy = [...plansCopy[i]];
+        item.memo = "";
+        item.memo2 = "";
+        item.photoUrls = [];
         plansDayCopy.push(item);
         plansCopy.splice(i, 1, plansDayCopy);
         setPlans(plansCopy);

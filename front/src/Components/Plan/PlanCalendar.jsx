@@ -16,6 +16,8 @@ import { motion } from "framer-motion";
 
 import { useRecoilState } from "recoil";
 import { planList } from "../../state/planState.js";
+import PlanAlert from "./PlanAlert.jsx";
+import { alertState } from "../../state/alertState.js";
 
 const CalendarHeader = ({ curMon, prevMon, nextMon }) => {
   return (
@@ -106,18 +108,13 @@ const CaledarBody = ({ curMon, dates, onDateClick, rangeState }) => {
   );
 };
 
-const PlanCalendar = ({
-  planStage,
-  setPlanStage,
-  dates,
-  setDates,
-  setFoldStage,
-}) => {
+const PlanCalendar = ({ setPlanStage, dates, setDates, setFoldStage }) => {
   const [plans, setPlans] = useRecoilState(planList);
   const [curMon, setCurMon] = useState(new Date());
   const prevMon = () => setCurMon(subMonths(curMon, 1));
   const nextMon = () => setCurMon(addMonths(curMon, 1));
   const [rangeState, setRangeState] = useState(false);
+  const [message, setMessage] = useRecoilState(alertState);
 
   const onDateClick = (date) => {
     if (rangeState === false) {
@@ -125,7 +122,11 @@ const PlanCalendar = ({
       setRangeState(true);
     } else {
       if (date < dates[0]) {
-        setDates([date, date]);
+        setMessage("여행 마지막 날은 여행 시작 날 이후여야 합니다.");
+        setDates([new Date(), new Date()]);
+      } else if (differenceInDays(date, dates[0]) > 9) {
+        setMessage("최대 10일의 계획만 세울 수 있습니다.");
+        setDates([new Date(), new Date()]);
       } else {
         setDates((prev) => [prev[0], date]);
       }
@@ -143,7 +144,11 @@ const PlanCalendar = ({
   }, [dates]);
 
   return (
-    <div className="w-1/2 mt-20">
+    <div className="w-1/2">
+      <div className="w-full h-20 mt-5 mb-10 relative flex justify-center items-center">
+        <h2>{!rangeState ? "여행 시작 날 선택" : "여행 마지막 날 선택"}</h2>
+        {message && <PlanAlert />}
+      </div>
       <CalendarHeader curMon={curMon} prevMon={prevMon} nextMon={nextMon} />
       <CaledarBody
         curMon={curMon}
@@ -154,7 +159,6 @@ const PlanCalendar = ({
 
       <div className="mt-12 flex justify-between items-center">
         <div>
-          <div>{!rangeState ? "여행 시작 날 선택" : "여행 마지막 날 선택"}</div>
           <div>여행 시작 날 : {format(dates[0], "yyyy M dd")}</div>
           <div>여행 마지막 날 : {format(dates[1], "yyyy M dd")}</div>
         </div>

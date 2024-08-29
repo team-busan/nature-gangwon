@@ -16,6 +16,7 @@ import {
   pageState,
   isScrollState,
 } from "../state/planSearchQueryStates";
+import PlanChooseThumnail from "../Components/Plan/PlanChooseThumnail";
 
 const Plan = () => {
   const [planStage, setPlanStage] = useState(0);
@@ -32,6 +33,7 @@ const Plan = () => {
   const control1 = useAnimationControls();
   const control2 = useAnimationControls();
   const control3 = useAnimationControls();
+  const control4 = useAnimationControls();
   const foldControl = useAnimationControls();
 
   const getLocationsInfo = async () => {
@@ -68,14 +70,22 @@ const Plan = () => {
       control1.start("active");
       control2.start("inactive");
       control3.start("inactive");
+      control4.start("inactive");
     } else if (planStage === 1) {
       control1.start("inactive");
       control2.start("active");
       control3.start("inactive");
-    } else {
+      control4.start("inactive");
+    } else if (planStage === 2) {
       control1.start("inactive");
       control2.start("inactive");
       control3.start("active");
+      control4.start("inactive");
+    } else {
+      control1.start("inactive");
+      control2.start("inactive");
+      control3.start("inactive");
+      control4.start("active");
     }
   }, [planStage]);
 
@@ -99,17 +109,9 @@ const Plan = () => {
     }
   };
 
-  return (
-    <div className="relative w-full flex justify-center">
-      <PlanStatusBar
-        planStage={planStage}
-        setPlanStage={setPlanStage}
-        control1={control1}
-        control2={control2}
-        control3={control3}
-      />
-
-      {planStage === 0 ? (
+  const render = () => {
+    if (planStage === 0) {
+      return (
         <PlanCalendar
           planStage={planStage}
           setPlanStage={setPlanStage}
@@ -117,7 +119,9 @@ const Plan = () => {
           setDates={setDates}
           setFoldStage={setFoldStage}
         />
-      ) : planStage === 1 ? (
+      );
+    } else if (planStage === 1) {
+      return (
         <PlanBuild
           foldStage={foldStage}
           setFoldStage={setFoldStage}
@@ -127,10 +131,27 @@ const Plan = () => {
           handleFold={handleFold}
           refetch={refetch}
           curData={data}
+          setPlanStage={setPlanStage}
         />
-      ) : (
-        <PlanPhotos setPlanStage={setPlanStage} />
-      )}
+      );
+    } else if (planStage === 2) {
+      return <PlanPhotos setPlanStage={setPlanStage} />;
+    } else {
+      return <PlanChooseThumnail setPlanStage={setPlanStage} />;
+    }
+  };
+
+  return (
+    <div className="relative w-full flex justify-center">
+      <PlanStatusBar
+        planStage={planStage}
+        setPlanStage={setPlanStage}
+        control1={control1}
+        control2={control2}
+        control3={control3}
+        control4={control4}
+      />
+      {render()}
     </div>
   );
 };
