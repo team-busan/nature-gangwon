@@ -1,25 +1,58 @@
 import { useState, useRef } from "react";
 import useDetectClose from ".././../Hooks/useDetectClose.js";
 import ControllerSelect from "./ControllerSelect.jsx";
+import { useRecoilState } from "recoil";
+import {
+  searchResultDisplayNumState,
+  searchResultSigunguCodeState,
+  searchResultSortState,
+  searchResultTypeState,
+} from "../../state/searchResultState.js";
 
-const ContentController = () => {
-  const [sort, setSort] = useState("관련도순");
-  const [type, setType] = useState("전체");
-  const [displayNum, setDisplayNum] = useState(50);
+const ContentController = ({ refetch }) => {
+  const [sort, setSort] = useRecoilState(searchResultSortState);
+  const [type, setType] = useRecoilState(searchResultTypeState);
+  const [sigungu, setSigungu] = useRecoilState(searchResultSigunguCodeState);
+  const [displayNum, setDisplayNum] = useRecoilState(
+    searchResultDisplayNumState
+  );
 
-  const sortRef = useRef();
-  const typeRef = useRef();
-  const displayNumRef = useRef();
+  const sortRef = useRef(null);
+  const typeRef = useRef(null);
+  const sigunguRef = useRef(null);
+  const displayNumRef = useRef(null);
 
   const [sortOpen, setSortOpen] = useDetectClose(sortRef, false);
   const [typeOpen, setTypeOpen] = useDetectClose(typeRef, false);
+  const [sigunguOpen, setSigunguOpen] = useDetectClose(sigunguRef, false);
   const [displayNumOpen, setDisplayNumOpen] = useDetectClose(
     displayNumRef,
     false
   );
 
   const sortList = ["관련도순", "인기순", "리뷰순"];
-  const typeList = ["전체", "관광지", "축제", "숙박", "음식점"];
+  const typeList = ["", "관광지", "축제", "숙박", "음식점"];
+  const sigunguList = [
+    "",
+    "강릉시",
+    "고성군",
+    "동해시",
+    "삼척시",
+    "속초시",
+    "양구군",
+    "양양군",
+    "영월군",
+    "원주시",
+    "인제군",
+    "정선군",
+    "철원군",
+    "춘천시",
+    "태백시",
+    "평창군",
+    "홍천군",
+    "화천군",
+    "횡성군",
+  ];
   const displayNumList = [10, 50, 100];
 
   return (
@@ -35,6 +68,7 @@ const ContentController = () => {
             open={sortOpen}
             setOpen={setSortOpen}
             list={sortList}
+            refetch={refetch}
           />
           <ControllerSelect
             label="관광타입"
@@ -45,6 +79,18 @@ const ContentController = () => {
             open={typeOpen}
             setOpen={setTypeOpen}
             list={typeList}
+            refetch={refetch}
+          />
+          <ControllerSelect
+            label="시군구"
+            id="sigungu"
+            value={sigungu}
+            setValue={setSigungu}
+            ref={sigunguRef}
+            open={sigunguOpen}
+            setOpen={setSigunguOpen}
+            list={sigunguList}
+            refetch={refetch}
           />
           <ControllerSelect
             label="표시개수"
@@ -55,6 +101,7 @@ const ContentController = () => {
             open={displayNumOpen}
             setOpen={setDisplayNumOpen}
             list={displayNumList}
+            refetch={refetch}
           />
         </div>
       </div>

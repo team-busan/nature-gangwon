@@ -3,7 +3,7 @@ import { MdArrowDropDown } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion";
 
 const ControllerSelect = forwardRef(
-  ({ label, id, value, setValue, open, setOpen, list }, ref) => {
+  ({ label, id, value, setValue, open, setOpen, list, refetch }, ref) => {
     return (
       <div ref={ref} className="flex flex-col relative">
         <label htmlFor={id} className="cursor-pointer">
@@ -15,7 +15,7 @@ const ControllerSelect = forwardRef(
           } cursor-pointer py-2`}
           id={id}
           type="button"
-          value={value}
+          value={value === "" ? "전체" : value}
           onClick={() => setOpen(!open)}
         />
         <motion.div
@@ -38,12 +38,13 @@ const ControllerSelect = forwardRef(
                   whileHover={{ backgroundColor: "#C7F7C6" }}
                   className="cursor-pointer p-2 last:rounded-b-xl"
                   key={idx}
-                  onClick={() => {
-                    setValue(item);
+                  onClick={async () => {
+                    await setValue(item);
                     setOpen(!open);
+                    refetch();
                   }}
                 >
-                  {item}
+                  {item === "" ? "전체" : item}
                 </motion.li>
               ))}
             </motion.ul>
