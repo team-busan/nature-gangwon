@@ -32,6 +32,6 @@ public interface PlanService {
     ResponseEntity<? super PostPlanMarkResponseDto> postPlanMark(String userEmail, PostPlanMarkRequestDto dto);
     ResponseEntity<? super DeletePlanCommentResponseDto> deletePlanComment(String userEmail, int planCommentId);
     ResponseEntity<? super DeletePlanResponseDto> deletePlan(String userEmail, int planId);
-    ResponseEntity<? super GetPlanListResponseDto> getPlanList(String filter, String sortOrder,int page, int size);
+    ResponseEntity<? super GetPlanListResponseDto> getPlanList(String filter, String sortOrder, String keyword, int page, int size);
     ResponseEntity<? super GetPlanTop3ListResponseDto> getPlanTop3List();
 }

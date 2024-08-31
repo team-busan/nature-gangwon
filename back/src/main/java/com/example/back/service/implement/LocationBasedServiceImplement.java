@@ -64,7 +64,7 @@ public class LocationBasedServiceImplement implements LocationBasedService {
     //? 파라미터 lpcationSigungucode 지역별 리스트 sigungucode 1~18번 1 강릉시, 2 고성군, 3 동해시, 4 삼척시, 5 속초시, 6 양구군, 7 양양군, 8 영월군, 9 원주시, 
     //? 10 인제군, 11 정선군, 12 철원군, 13 춘천시, 14 태백시, 15 평창군, 16 홍천군, 17 화천군, 18 횡성군
     @Override
-    public ResponseEntity<? super GetLocationBasedListResponseDto> getLocationList(String locationContenttypeid, String locationSigungucode, int page, int size) {
+    public ResponseEntity<? super GetLocationBasedListResponseDto> getLocationList(String locationContenttypeid, String locationSigungucode, String keyword, int page, int size) {
         try {
             int zeroBasedPage = page - 1;
             Pageable pageable = PageRequest.of(zeroBasedPage, size);
@@ -73,7 +73,17 @@ public class LocationBasedServiceImplement implements LocationBasedService {
             String mappedType = (locationContenttypeid != null && !locationContenttypeid.isEmpty()) ? mapContenttypeName(locationContenttypeid) : null;
             String mappedCode = (locationSigungucode != null && !locationSigungucode.isEmpty()) ? mapSigungucode(locationSigungucode) : null;
 
-            if (mappedType == null && mappedCode == null) {
+            if (keyword != null && !keyword.isEmpty()) {
+                if (mappedType != null && mappedCode != null) {
+                    locationList = locationBasedRepository.findByLocationAddr1ContainingOrLocationTitleContainingAndLocationContenttypeidAndLocationSigungucode(keyword, keyword, mappedType, mappedCode, pageable);
+                } else if (mappedType != null) {
+                    locationList = locationBasedRepository.findByLocationAddr1ContainingOrLocationTitleContainingAndLocationContenttypeid(keyword, keyword, mappedType, pageable);
+                } else if (mappedCode != null) {
+                    locationList = locationBasedRepository.findByLocationAddr1ContainingOrLocationTitleContainingAndLocationSigungucode(keyword, keyword, mappedCode, pageable);
+                } else {
+                    locationList = locationBasedRepository.findByLocationAddr1ContainingOrLocationTitleContaining(keyword, keyword, pageable);
+                }
+            } else if (mappedType == null && mappedCode == null) {
                 locationList = locationBasedRepository.findAllRandom(pageable);
             } else if (mappedType != null && mappedCode != null) {
                 locationList = locationBasedRepository.findByLocationContenttypeidAndLocationSigungucode(mappedType, mappedCode, pageable);

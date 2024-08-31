@@ -448,7 +448,7 @@ public class PlanServiceImplement implements PlanService{
 
     //? 계획 리스트
     @Override
-    public ResponseEntity<? super GetPlanListResponseDto> getPlanList(String filter, String sortOrder, int page, int size) {
+    public ResponseEntity<? super GetPlanListResponseDto> getPlanList(String filter, String sortOrder, String keyword, int page, int size) {
         try {
             LocalDateTime currentDate = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -459,18 +459,28 @@ public class PlanServiceImplement implements PlanService{
 
             switch (filter) {
                 case "여행 전":
-                    planPage = planRepository.findByStartDateAfter(formattedCurrentDate, pageable);
+                    planPage = (keyword != null && !keyword.isEmpty()) ? 
+                        planRepository.findByStartDateAfterAndPlanTitleContaining(formattedCurrentDate, keyword, pageable) :
+                        planRepository.findByStartDateAfter(formattedCurrentDate, pageable);
                     break;
                 case "여행 완료":
-                    planPage = planRepository.findByEndDateBefore(formattedCurrentDate, pageable);
+                    planPage = (keyword != null && !keyword.isEmpty()) ?
+                        planRepository.findByEndDateBeforeAndPlanTitleContaining(formattedCurrentDate, keyword, pageable) :
+                        planRepository.findByEndDateBefore(formattedCurrentDate, pageable);
                     break;
                 case "여행 중":
-                    planPage = planRepository.findByStartDateBeforeAndEndDateAfter(formattedCurrentDate, formattedCurrentDate, pageable);
+                    planPage = (keyword != null && !keyword.isEmpty()) ?
+                        planRepository.findByStartDateBeforeAndEndDateAfterAndPlanTitleContaining(formattedCurrentDate, formattedCurrentDate, keyword, pageable) :
+                        planRepository.findByStartDateBeforeAndEndDateAfter(formattedCurrentDate, formattedCurrentDate, pageable);
                     break;
                 case "전체":
                 default:
-                    PageRequest pageableWithSort = PageRequest.of(page - 1, size, Sort.by("planUploadDate").descending());
-                    planPage = planRepository.findAll(pageableWithSort);
+                    if (keyword != null && !keyword.isEmpty()) {
+                        planPage = planRepository.findByPlanTitleContaining(keyword, pageable);
+                    } else {
+                        PageRequest pageableWithSort = PageRequest.of(page - 1, size, Sort.by("planUploadDate").descending());
+                        planPage = planRepository.findAll(pageableWithSort);
+                    }
                     break;
             }
 

@@ -27,11 +27,12 @@ public class LocationBasedController {
     public ResponseEntity<? super GetLocationBasedListResponseDto> getLocationBasedList(
         @RequestParam(name = "locationContenttypeid", required = false) String locationContenttypeid,
         @RequestParam(name = "locationSigungucode", required = false) String locationSigungucode,
+        @RequestParam(name = "keyword", required = false) String keyword,
         @RequestParam(name = "page", defaultValue = "0") int page,
         @RequestParam(name = "size", defaultValue = "50") int size
         ) {
         
-        ResponseEntity<? super GetLocationBasedListResponseDto> response = locationBasedService.getLocationList(locationContenttypeid, locationSigungucode, page, size);
+        ResponseEntity<? super GetLocationBasedListResponseDto> response = locationBasedService.getLocationList(locationContenttypeid, locationSigungucode, keyword, page, size);
         return response;
     }
     
