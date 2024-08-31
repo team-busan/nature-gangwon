@@ -11,6 +11,7 @@ public class GetPlanListItemDto {
     private int planId;
     private String userNickname;
     private String planTitle;
+    private String planUploadDate;
     private int markCount;
     private List<String> photoUrls;
     private int commentCount;
