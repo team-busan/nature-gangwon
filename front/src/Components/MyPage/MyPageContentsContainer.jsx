@@ -25,12 +25,12 @@ const MyPageContentsContainer = ({ contentNum, data, plan, samplePhotos }) => {
     <div className="mt-[50px]">
       <h4>{title}</h4>
       <hr className="bg-black h-[3px] mb-6" />
-      {/* <MyPageContent
+      <MyPageContent
         contentNum={contentNum}
         data={data}
         plan={plan}
         samplePhotos={samplePhotos}
-      /> */}
+      />
     </div>
   );
 };

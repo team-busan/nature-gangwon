@@ -2,20 +2,22 @@ import Plans from "./Plans";
 import Memos from "./Memos";
 import ContentList from "../SearchResult/ContentList";
 import Photos from "./Photos";
+import ExpensesDivision from "./ExpensesDivision";
+import EditProfile from "./EditProfile";
 
 const MyPageContent = ({ contentNum, data, plan, samplePhotos }) => {
   if (contentNum === 0) {
-    return <Plans plan={plan} />;
+    // return <Plans plan={plan} />;
   } else if (contentNum === 1) {
-    return <Memos />;
+    // return <Memos />;
   } else if (contentNum === 2) {
-    return <ContentList data={data} />;
+    // return <ContentList data={data} />;
   } else if (contentNum === 3) {
-    return <Photos samplePhotos={samplePhotos} />;
+    // return <Photos samplePhotos={samplePhotos} />;
   } else if (contentNum === 4) {
-    return <div>경비분할</div>;
+    return <ExpensesDivision />;
   } else if (contentNum === 5) {
-    return <div>정보수정</div>;
+    return <EditProfile />;
   }
 };
 

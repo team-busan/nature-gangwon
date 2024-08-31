@@ -2,10 +2,21 @@ import ProfileCard from "../Components/MyPage/ProfileCard.jsx";
 import MyActivity from "../Components/MyPage/MyActivity.jsx";
 import MyPageContentsContainer from "../Components/MyPage/MyPageContentsContainer.jsx";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { userState } from "../state/userState.js";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 
 const MyPage = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useRecoilState(userState);
+  useEffect(() => {
+    if (!user) {
+      navigate("/Login");
+    }
+  }, []);
+
   const [contentNum, setContentNum] = useState(0);
 
   // const { data, error, isLoading } = useQuery({
