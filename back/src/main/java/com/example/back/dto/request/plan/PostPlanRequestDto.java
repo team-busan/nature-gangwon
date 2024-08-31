@@ -21,6 +21,8 @@ public class PostPlanRequestDto {
     @NotBlank
     private String planTitle;
 
+    private String planImage;
+
     @NotEmpty
     private List<PostPlanPlaceRequestDto> postPlanList;
 
