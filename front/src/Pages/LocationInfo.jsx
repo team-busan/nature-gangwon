@@ -79,7 +79,7 @@ export default function LocationInfo() {
         }
         onLocationClick={handleLocationClick}
       />
-      <SortButtons sortOption = {setSortOption}/>
+      <SortButtons setSortOption={setSortOption} sortOption = {sortOption}  />
       <SearchBar
         searchQuery={searchQuery}
         onSearchChange={(e) => setSearchQuery(e.target.value)}
