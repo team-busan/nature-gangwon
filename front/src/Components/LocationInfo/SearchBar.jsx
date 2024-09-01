@@ -2,8 +2,8 @@ import React from 'react';
 import { IoIosSearch } from "react-icons/io";
 
 const SearchBar = () => (
-  <section className="w-screen mt-3">
-    <div className="w-1420 flex mx-auto p-2">
+  <section className="w-full mt-3">
+    <div className="w-1420 flex mx-auto">
       <div className="relative w-5/12 mr-5">
         <input
           placeholder="강원도 관광지를 검색 해보세요!"
