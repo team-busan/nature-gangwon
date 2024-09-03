@@ -17,6 +17,7 @@ export default function PlanInfo() {
   const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(1);
   const [selectTravel, setSelectTravel] = useState("전체");
+  const [keyword, setKeyword] = useState("");
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -37,8 +38,8 @@ export default function PlanInfo() {
   }, [currentPage, currentSort]);
 
   const fetchPlanInfo = async({queryKey}) => {
-    const [_key, page, sortOption, selectTravel] = queryKey;
-    const params = { page, size, sort : sortOption, filter : selectTravel};
+    const [_key, page, sortOption, selectTravel, keyword] = queryKey;
+    const params = { page, size, sort : sortOption, filter : selectTravel, keyword};
     const url = `${axiosInstance.defaults.baseURL}${API_URL.PlanInfo}`;
     const response = await axiosInstance.get(url, {params});
     setTotalPages(response.data.totalPage);
@@ -66,7 +67,7 @@ export default function PlanInfo() {
   };
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ["planInfo", page, sortOption, selectTravel],
+    queryKey: ["planInfo", page, sortOption, selectTravel, keyword],
     queryFn : fetchPlanInfo,
     keepPreviousData : true,
   });
@@ -83,7 +84,7 @@ export default function PlanInfo() {
         />
       </div>
       <SortButtons setSortOption={handleSortChange} sortOption = {sortOption} />
-      <SearchBar />
+      <SearchBar type = "계획"/>
       <PlanInfoList data = {data} loading = {isLoading} error = {error}/>
       <div className="flex justify-center mt-4">
         <ReactPaginate

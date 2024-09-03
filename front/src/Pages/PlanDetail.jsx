@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { API_URL, axiosInstance } from "../Stores/API";
-import NaverMapWithMarkers from "./../Components/NaverMapWithMarkers";
 import PlanDetailHeader from "../Components/Plan/PlanDetailHeader";
 import PlanDetailMap from "../Components/Plan/PlanDetailMap";
+import { userState } from "../state/userState";
+import { useRecoilState } from "recoil";
 
 export default function PlanDetail() {
+  const [user] = useRecoilState(userState);
   const { id } = useParams();
   const planId = Number(id);
 
@@ -41,24 +43,21 @@ export default function PlanDetail() {
 
   // 사용 가능한 dayNumber 리스트를 추출하고 중복 제거
   const availableDays = [...new Set(places.map((place) => place.dayNumber))];
-
-  console.log(availableDays);
+  const writer = user && planHeader && user.userEmail === planHeader.userEmail;
 
   return (
     <>
       <PlanDetailHeader
         planHeader={planHeader}
+      />
+      <PlanDetailMap
+        planHeader={planHeader}
         selectedDay={selectedDay}
         availableDays={availableDays}
         setSelectedDay={setSelectedDay}
-      />
-      <PlanDetailMap
         locations={filteredPlaces}
+        writer = {writer}
       />
-      <div className=""></div>
-      <div>
-        <div></div>
-      </div>
     </>
   );
 }
