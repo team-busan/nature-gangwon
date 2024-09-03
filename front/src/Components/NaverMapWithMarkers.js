@@ -20,7 +20,7 @@ const NaverMapWithMarkers = ({ width, height, locations = [], markerColors = [] 
 
         const map = new naver.maps.Map(mapRef.current, { 
           center: initialPosition, // 지도 초기 중심 좌표 설정
-          zoom: 8,
+          zoom: 15,
         });
 
         // 커스텀 오버레이 클래스 정의

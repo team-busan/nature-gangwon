@@ -37,7 +37,7 @@ export default function ShareModal({ isOpen, onClose, onCopy, shareButtonRef }) 
   return (
     <div
       ref={modalRef}
-      className="absolute top-full mt-2 right-0 bg-white border border-gray-300 rounded shadow-lg p-4 z-10 w-32"
+      className="absolute top-full mt-2 right-0 bg-white border border-gray-300 rounded shadow-lg p-4 z-10 w-36"
     >
       <h2 className="text-base font-semibold mb-2">공유하기</h2>
       <div className="flex flex-col gap-3">
