@@ -21,8 +21,8 @@ export default function PlanMainImage({ image }) {
         <div
           className="flex absolute w-36 h-14 items-center justify-center"
           style={{
-            left: '635px',
-            top: '225px',
+            left: "635px",
+            top: "225px",
           }}
         >
           <button className="w-full h-full bg-orange-400 rounded-lg text-white animate-bounce font-semibold">

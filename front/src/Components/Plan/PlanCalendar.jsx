@@ -47,48 +47,69 @@ const CaledarBody = ({ curMon, dates, onDateClick, rangeState }) => {
     queryFn: getWeather,
   });
 
-  // const groupByDate = (data) => {
-  //   const dataArray = Object.values(data);
-  //   return dataArray?.reduce((acc, cur) => {
-  //     const date = cur.fcstDate;
-  //     if (!acc[date]) {
-  //       acc[date] = [];
-  //     }
-  //     acc[date].push(cur);
-  //     return acc;
-  //   }, {});
-  // };
+  useEffect(() => {
+    if (data) {
+      if (data.response) {
+        if (data.response.body) {
+          if (data.response.body.items) {
+            if (data.response.body.items.item) {
+              function getMode(arr) {
+                const frequencyMap = {};
+                arr.forEach((value) => {
+                  frequencyMap[value] = (frequencyMap[value] || 0) + 1;
+                });
 
-  // const calDailyAve = (data, category) => {
-  //   const filteredData = data.filter((item) => item.category === category);
-  //   if (filteredData?.length === 0) return 0;
-  //   const sum = filteredData?.reduce(
-  //     (acc, cur) => acc + parseFloat(cur.fcstValue),
-  //     0
-  //   );
-  //   return Math.round(sum / filteredData?.length);
-  // };
+                let maxCount = 0;
+                let modeValue = null;
 
-  // const calAveByDate = (data) => {
-  //   const groupedData = groupByDate(data);
-  //   const averages = {};
-  //   console.log(groupedData);
+                Object.keys(frequencyMap).forEach((key) => {
+                  if (frequencyMap[key] > maxCount) {
+                    maxCount = frequencyMap[key];
+                    modeValue = key;
+                  }
+                });
 
-  //   Object.keys(groupedData).forEach((date) => {
-  //     const skyAverage = calDailyAve(groupedData[date], "SKY");
-  //     const ptyAverage = calDailyAve(groupedData[date], "PTY");
-  //     averages[date] = { skyAverage, ptyAverage };
-  //     return averages;
-  //   });
-  // };
+                return modeValue;
+              }
 
-  // useEffect(() => {
-  //   console.log(isLoading);
-  //   if (!isLoading) {
-  //     const averagesByDate = calAveByDate(data);
-  //     console.log(averagesByDate);
-  //   }
-  // }, [isLoading]);
+              // 날짜별로 데이터 처리 함수
+              function processWeatherData(weatherData) {
+                const dailyData = {};
+
+                weatherData.forEach((item) => {
+                  const { fcstDate, category, fcstValue } = item;
+
+                  // 날짜별로 데이터 그룹화
+                  if (!dailyData[fcstDate]) {
+                    dailyData[fcstDate] = { SKY: [], PTY: [] };
+                  }
+
+                  if (category === "SKY") {
+                    dailyData[fcstDate].SKY.push(fcstValue);
+                  } else if (category === "PTY") {
+                    dailyData[fcstDate].PTY.push(fcstValue);
+                  }
+                });
+
+                // 날짜별로 최빈값 계산
+                const result = Object.keys(dailyData).map((date) => {
+                  const mostFrequentSky = getMode(dailyData[date].SKY);
+                  const mostFrequentPty = getMode(dailyData[date].PTY);
+
+                  return { date, sky: mostFrequentSky, pty: mostFrequentPty };
+                });
+
+                return result;
+              }
+
+              const result = processWeatherData(data.response.body.items.item);
+              console.log(result);
+            }
+          }
+        }
+      }
+    }
+  }, [data]);
 
   const weeks = ["일", "월", "화", "수", "목", "금", "토"];
 
