@@ -1,5 +1,6 @@
 package com.example.back.dto.response.detail.Detailfiled;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import com.example.back.entity.DetailEntity;
@@ -7,6 +8,7 @@ import com.example.back.entity.DetailImageEntity;
 
 
 @Getter
+@AllArgsConstructor
 public class GetDetailImageDto {
     private int detailId;
     private String detailContentid;

@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface PlanRepository extends JpaRepository<PlanEntity, Integer> {
     PlanEntity findByPlanId(int planId);
+    List<PlanEntity> findByUserEmailOrderByPlanUploadDateDesc(String userEmail);
 
     @Transactional
     public void deleteByPlanId(int planId);
