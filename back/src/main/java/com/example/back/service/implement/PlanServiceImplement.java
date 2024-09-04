@@ -22,6 +22,7 @@ import com.example.back.dto.response.plan.DeletePlanResponseDto;
 import com.example.back.dto.response.plan.GetPlanResponseDto;
 import com.example.back.dto.response.plan.GetPlanTop3ListResponseDto;
 import com.example.back.dto.response.plan.GetPlanListResponseDto;
+import com.example.back.dto.response.plan.GetPlanMyListResponseDto;
 import com.example.back.dto.response.plan.PatchPlanCommentResponseDto;
 import com.example.back.dto.response.plan.PatchPlanResponseDto;
 import com.example.back.dto.response.plan.PostPlanCommentLikeResponseDto;
@@ -31,6 +32,7 @@ import com.example.back.dto.response.plan.PostPlanResponseDto;
 import com.example.back.dto.response.plan.planfiled.GetPlaceListItemDto;
 import com.example.back.dto.response.plan.planfiled.GetPlanCommentListItemDto;
 import com.example.back.dto.response.plan.planfiled.GetPlanListItemDto;
+import com.example.back.dto.response.plan.planfiled.GetPlanMyListItemDto;
 import com.example.back.dto.response.plan.planfiled.GetTop3ListItemDto;
 import com.example.back.entity.LocationBasedEntity;
 import com.example.back.entity.PhotosEntity;
@@ -560,32 +562,55 @@ public class PlanServiceImplement implements PlanService{
                 return GetPlanTop3ListResponseDto.existPlan();
             }
             
-            List<GetTop3ListItemDto> planDtos = new ArrayList<>();
-    
-            for (PlanEntity plan : top3List) {
+            List<GetTop3ListItemDto> planDtos = top3List.stream().map(plan -> {
                 int markCount = (int) planMarkRepository.countByPlanId(plan.getPlanId());
-
-                List<PlacesEntity> placesEntities = placesRepository.findByPlanId(plan.getPlanId());
-                List<String> photoUrls = placesEntities.stream()
-                    .flatMap(place -> photosRepository.findByPlacesId(place.getPlacesId()).stream())
-                    .map(PhotosEntity::getPhotoUrl)
-                    .collect(Collectors.toList());
-
-                    GetTop3ListItemDto planDto = new GetTop3ListItemDto(
+                
+                return new GetTop3ListItemDto(
                     plan.getPlanId(),
                     plan.getPlanTitle(),
                     plan.getPlanCount(),
                     markCount,
-                    photoUrls
+                    plan.getPlanUploadDate(),
+                    plan.getPlanImage()
                 );
-                
-                planDtos.add(planDto);
-            }
-
+            }).collect(Collectors.toList());
+    
             return GetPlanTop3ListResponseDto.success(planDtos);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.databaseError();
         }
+    }
+
+    //? 자신이 작성한 계획 들고오기
+    @Override
+    public ResponseEntity<? super GetPlanMyListResponseDto> getPlanMyList(String userEmail) {
+        try {
+            List<PlanEntity> planEntity = planRepository.findByUserEmailOrderByPlanUploadDateDesc(userEmail);
+            if (planEntity == null) {
+                return GetPlanMyListResponseDto.notExistPlan();
+            }
+
+            UserEntity userEntity = userRepository.findByUserEmail(userEmail);
+            if(userEntity == null) {
+                return GetPlanMyListResponseDto.notUser();
+            }
+
+            List<GetPlanMyListItemDto> myPlan = planEntity.stream().map(plan -> 
+            new GetPlanMyListItemDto(
+                plan.getPlanId(),
+                plan.getPlanTitle(),
+                plan.getStartDate(),
+                plan.getEndDate(),
+                plan.getPlanImage()
+            )
+        ).collect(Collectors.toList());
+
+        return GetPlanMyListResponseDto.success(myPlan);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseDto.databaseError();
+        }
+        return null;
     }
 }

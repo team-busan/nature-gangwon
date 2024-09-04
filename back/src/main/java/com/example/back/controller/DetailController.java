@@ -15,6 +15,7 @@ import com.example.back.dto.request.detail.PostDetailCommentLikeRequestDto;
 import com.example.back.dto.request.detail.PostDetailCommentRequsetDto;
 import com.example.back.dto.response.detail.PostDetailCommentResponseDto;
 import com.example.back.dto.response.detail.GetDetailListResponseDto;
+import com.example.back.dto.response.detail.GetDetailRandom3ListResponseDto;
 import com.example.back.dto.response.detail.GetDetailResponseDto;
 import com.example.back.dto.response.detail.PostDetailCommentLikeResponseDto;
 import com.example.back.dto.response.detail.DeleteDetailCommentResponseDto;
@@ -61,6 +62,8 @@ public class DetailController {
         return response;
 
     }
+
+    //? 관광지 댓글 좋아요
     @PostMapping("/{detailId}/commentLike")
     public ResponseEntity<? super PostDetailCommentLikeResponseDto> postCommentLike(
         @AuthenticationPrincipal String userEmail,
@@ -70,6 +73,7 @@ public class DetailController {
         return response;
     }
 
+    //? 관광지 댓글 삭제
     @DeleteMapping("/{detailId}/{detailCommentId}")
     public ResponseEntity<? super DeleteDetailCommentResponseDto> deleteDetailComment(
         @AuthenticationPrincipal String userEmail,
@@ -77,6 +81,14 @@ public class DetailController {
         @PathVariable(name = "detailId") int detailId
     ){
         ResponseEntity<? super DeleteDetailCommentResponseDto> response = detailService.deleteDetailComment(userEmail, detailCommentId, detailId);
+        return response;
+    }
+
+    //? 관광지 랜덤3개 리스트
+    @GetMapping("/random")
+    public ResponseEntity<? super GetDetailRandom3ListResponseDto> getRandom3List()
+    {
+        ResponseEntity<? super GetDetailRandom3ListResponseDto> response = detailService.getRandom3List();
         return response;
     }
 }

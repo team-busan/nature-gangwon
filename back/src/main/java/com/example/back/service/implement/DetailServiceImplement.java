@@ -3,6 +3,9 @@ package com.example.back.service.implement;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Collections;
+
+import java.util.stream.Collectors;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -21,10 +24,12 @@ import com.example.back.dto.request.detail.PostDetailCommentRequsetDto;
 import com.example.back.dto.response.detail.PostDetailCommentResponseDto;
 import com.example.back.dto.response.detail.DeleteDetailCommentResponseDto;
 import com.example.back.dto.response.detail.GetDetailListResponseDto;
+import com.example.back.dto.response.detail.GetDetailRandom3ListResponseDto;
 import com.example.back.dto.response.detail.GetDetailResponseDto;
 import com.example.back.dto.response.detail.PostDetailCommentLikeResponseDto;
 import com.example.back.dto.response.detail.Detailfiled.GetDetailImageDto;
 import com.example.back.dto.response.detail.Detailfiled.GetDetailListItemDto;
+import com.example.back.dto.response.detail.Detailfiled.GetDetailRandom3ListItemDto;
 import com.example.back.entity.DetailCommentEntity;
 import com.example.back.entity.DetailCommentLikeEntity;
 import com.example.back.entity.DetailDescriptionEntity;
@@ -247,6 +252,44 @@ public class DetailServiceImplement implements DetailService{
             return DeleteDetailCommentResponseDto.success();
         } catch (Exception exception) {
             exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+    }
+
+    //? 메인페이지 관광지 랜덤3개 리스트
+    @Override
+    public ResponseEntity<? super GetDetailRandom3ListResponseDto> getRandom3List() {
+        try {
+            List<DetailEntity> allDetails = detailRepository.findAll();
+
+            Collections.shuffle(allDetails); 
+            List<DetailEntity> randomDetails = allDetails.stream().limit(3).collect(Collectors.toList());
+
+            List<GetDetailRandom3ListItemDto> detailDtos = randomDetails.stream().map(detail -> {
+                DetailImageEntity image = detailImageRepository.findByDetailId(detail.getDetailId());
+
+                GetDetailImageDto detailImageDto = new GetDetailImageDto(
+                    detail.getDetailId(),
+                    detail.getDetailContentid(),
+                    detail.getDetailFirstimage(),
+                    detail.getDetailFirstimage2(),
+                    image != null ? image.getDetailImage1() : null,
+                    image != null ? image.getDetailImage2() : null,
+                    image != null ? image.getDetailImage3() : null,
+                    image != null ? image.getDetailImage4() : null,
+                    image != null ? image.getDetailImage5() : null
+                );
+
+                return new GetDetailRandom3ListItemDto(
+                    detail.getDetailId(),
+                    detail.getDetailTitle(),
+                    detailImageDto 
+                );
+            }).collect(Collectors.toList());
+
+            return GetDetailRandom3ListResponseDto.success(detailDtos);
+        } catch (Exception e) {
+            e.printStackTrace();
             return ResponseDto.databaseError();
         }
     }
