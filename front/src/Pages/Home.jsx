@@ -1,13 +1,34 @@
+import { useEffect, useState } from "react";
 import PlanCard from "../Components/Home/PlanCard";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 const Home = () => {
+  const [top3Plans, setTop3Plans] = useState([]);
+  const getTop3Plans = async () => {
+    const res = await axios.get("http://localhost:8000/plan/top3");
+    return res.data;
+  };
+
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["top3Plans"],
+    queryFn: getTop3Plans,
+  });
+
+  useEffect(() => {
+    console.log(data);
+    if (data) {
+      setTop3Plans(data.top3List);
+    }
+  }, [data]);
+
   return (
     <div className="w-[1420px]">
       <div className="w-full h-[500px] bg-random relative">
         <div className="flex justify-between w-full absolute -bottom-24">
-          <PlanCard date="2024.06.25" />
-          <PlanCard date="2024.06.25" />
-          <PlanCard date="2024.06.25" />
+          {top3Plans.map((plan, idx) => (
+            <PlanCard key={idx} plan={plan} />
+          ))}
         </div>
       </div>
 
@@ -23,9 +44,9 @@ const Home = () => {
       </div>
 
       <div className="flex justify-between w-full mt-20 mb-10">
+        {/* <PlanCard />
         <PlanCard />
-        <PlanCard />
-        <PlanCard />
+        <PlanCard /> */}
       </div>
     </div>
   );
