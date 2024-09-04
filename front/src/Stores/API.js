@@ -15,6 +15,7 @@ const API_URL = {
   LocationComment : "/destination",
   FestivalInfo : "/festival/list",
   PlanInfo : "/plan/list",
+  PlanDetail : "/plan/:id",
   MyPage: "/myPage",
   Plan: "/plan",
 };

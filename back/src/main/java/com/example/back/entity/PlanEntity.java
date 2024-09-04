@@ -33,6 +33,7 @@ public class PlanEntity {
     private String planUploadDate;
     private String planTitle;
     private int planCount;
+    private String planImage;
 
     public PlanEntity(UserEntity userEntity, PostPlanRequestDto postPlanRequestDto) {
         Date now = new Date();
@@ -43,6 +44,7 @@ public class PlanEntity {
         this.endDate = postPlanRequestDto.getEndDate();
         this.planTitle = postPlanRequestDto.getPlanTitle();
         this.planUploadDate = simpleDateFormat.format(now);
+        this.planImage = postPlanRequestDto.getPlanImage();
         this.planCount = 0;
     }
 
@@ -66,5 +68,11 @@ public class PlanEntity {
     public void setMarkCount(int markCount) {
         this.markCount = markCount;
     }
+
+    @Transient
+    private String userProfile;
+
+    @Transient
+    private String userNickname;
 
 }

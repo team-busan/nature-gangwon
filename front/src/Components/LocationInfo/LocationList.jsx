@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 const LocationList = ({ data, loading, error, type, idKey, routePrefix }) => {
   const navigate = useNavigate();
-  console.log(data);
 
   const handleItemClick = (id) => {
     navigate(`${routePrefix}/${id}`);

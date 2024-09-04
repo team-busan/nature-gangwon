@@ -65,9 +65,9 @@ public class FestivalEntity {
         this.festivalSigungucode = festivalSigungucode;
     }
     
-    public LocalDate getEndDateAsLocalDate() {
-        return LocalDate.parse(this.festivalEndDate, DateTimeFormatter.ISO_DATE);
-    }
+    // public LocalDate getEndDateAsLocalDate() {
+    //     return LocalDate.parse(this.festivalEndDate, DateTimeFormatter.ISO_DATE);
+    // }
 
     public void increaseViewCount() {
         this.festivalViews++;

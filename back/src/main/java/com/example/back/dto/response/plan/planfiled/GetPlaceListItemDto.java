@@ -18,6 +18,7 @@ public class GetPlaceListItemDto {
     private String note2;
     private String placeAdd1;
     private String title;
+    private String locationFirstimage;
     private String mapx;
     private String mapy;
     private List<String> photoUrls;

@@ -22,4 +22,13 @@ public interface PlanRepository extends JpaRepository<PlanEntity, Integer> {
     Page<PlanEntity> findByEndDateBefore(String currentDate, Pageable pageable);
     Page<PlanEntity> findByStartDateBeforeAndEndDateAfter(String currentDate, String currentDate2, Pageable pageable);
 
+    Page<PlanEntity> findByPlanTitleContaining(String planTitle, Pageable pageable);
+
+    Page<PlanEntity> findByStartDateAfterAndPlanTitleContaining(String startDate, String planTitle, Pageable pageable);
+
+    Page<PlanEntity> findByEndDateBeforeAndPlanTitleContaining(String endDate, String planTitle, Pageable pageable);
+
+    Page<PlanEntity> findByStartDateBeforeAndEndDateAfterAndPlanTitleContaining(
+        String startDate, String endDate, String planTitle, Pageable pageable);
+
 }

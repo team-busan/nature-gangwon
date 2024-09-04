@@ -132,10 +132,11 @@ public class PlanController {
     public ResponseEntity<? super GetPlanListResponseDto> getPlans(
         @RequestParam(value = "filter", defaultValue = "전체") String filter,
         @RequestParam(value = "sort", defaultValue = "조회순") String sortOrder,
+        @RequestParam(value = "keyword") String keyword,
         @RequestParam(name = "page") int page,
         @RequestParam(name = "size") int size
     ) {
-        ResponseEntity<? super GetPlanListResponseDto> response = planService.getPlanList(filter, sortOrder, page, size);
+        ResponseEntity<? super GetPlanListResponseDto> response = planService.getPlanList(filter, sortOrder, keyword, page, size);
         return response;
     }
 
