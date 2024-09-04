@@ -5,22 +5,42 @@ import { useEffect } from "react";
 
 import ContentList from "../Components/SearchResult/ContentList";
 import ContentController from "../Components/SearchResult/ContentController";
+import { useRecoilState } from "recoil";
+import {
+  searchResultDisplayNumState,
+  searchResultListState,
+  searchResultPageState,
+  searchResultSigunguCodeState,
+  searchResultSortState,
+  searchResultTypeState,
+} from "../state/searchResultState";
 
 const SearchResult = () => {
+  const [list, setList] = useRecoilState(searchResultListState);
+  const [sort, setSort] = useRecoilState(searchResultSortState);
+  const [type, setType] = useRecoilState(searchResultTypeState);
+  const [sigungu, setSigungu] = useRecoilState(searchResultSigunguCodeState);
+  const [displayNum, setDisplayNum] = useRecoilState(
+    searchResultDisplayNumState
+  );
+  const [page, setPage] = useRecoilState(searchResultPageState);
+
   const getLocationsInfo = async () => {
     const response = await axios.get(
-      "http://localhost:8000/location/list?page=1&size=50"
+      `http://localhost:8000/location/list?locationContenttypeid=${type}&locationSigungucode=${sigungu}&page=${page}&size=${displayNum}`
     );
-    return response.data.locationList;
+    return response.data;
   };
 
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isLoading, refetch } = useQuery({
     queryKey: ["content"],
     queryFn: getLocationsInfo,
   });
 
   useEffect(() => {
-    console.log(data);
+    if (data) {
+      setList(data.locationList);
+    }
   }, [data]);
 
   if (isLoading) {
@@ -28,8 +48,8 @@ const SearchResult = () => {
   } else {
     return (
       <div className="flex gap-[50px] w-[1420px] h-full mt-6">
-        <ContentList data={data} />
-        <ContentController />
+        <ContentList data={data} refetch={refetch} />
+        <ContentController refetch={refetch} />
       </div>
     );
   }

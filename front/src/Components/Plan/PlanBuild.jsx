@@ -69,16 +69,18 @@ const PlanBuild = ({
           curData={curData}
         />
         {foldStage === 2 ? <PlanMySelect setPlanStage={setPlanStage} /> : null}
-        <motion.div
-          variants={arrowVariants}
-          animate={foldControl}
-          className="shrink-0 ml-1 w-8 h-8 rounded-full bg-white flex justify-center items-center"
+        <div
+          onClick={handleFold}
+          className="bg-white w-10 h-20 rounded-r-xl flex items-center justify-center cursor-pointer"
         >
-          <FaAngleLeft
-            className={`text-2xl cursor-pointer rotate-180`}
-            onClick={handleFold}
-          />
-        </motion.div>
+          <motion.div
+            variants={arrowVariants}
+            animate={foldControl}
+            className="shrink-0 ml-1 w-8 h-8 rounded-full bg-white flex justify-center items-center"
+          >
+            <FaAngleLeft className="text-2xl rotate-180" />
+          </motion.div>
+        </div>
       </motion.div>
       <div className={`absolute top-0 left-[120px]`}>
         <NaverMap

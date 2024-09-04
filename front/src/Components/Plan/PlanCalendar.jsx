@@ -18,6 +18,8 @@ import { useRecoilState } from "recoil";
 import { planList } from "../../state/planState.js";
 import PlanAlert from "./PlanAlert.jsx";
 import { alertState } from "../../state/alertState.js";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 const CalendarHeader = ({ curMon, prevMon, nextMon }) => {
   return (
@@ -32,6 +34,62 @@ const CalendarHeader = ({ curMon, prevMon, nextMon }) => {
 };
 
 const CaledarBody = ({ curMon, dates, onDateClick, rangeState }) => {
+  const today = format(new Date(), "yyyyMMdd");
+  const getWeather = async () => {
+    const res = await axios.get(
+      `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=${process.env.REACT_APP_WEATHER_API_KEY}&numOfRows=9999&dataType=JSON&pageNo=1&base_date=${today}&base_time=0500&nx=84&ny=132`
+    );
+    return res.data;
+  };
+
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["weather"],
+    queryFn: getWeather,
+  });
+
+  // const groupByDate = (data) => {
+  //   const dataArray = Object.values(data);
+  //   return dataArray?.reduce((acc, cur) => {
+  //     const date = cur.fcstDate;
+  //     if (!acc[date]) {
+  //       acc[date] = [];
+  //     }
+  //     acc[date].push(cur);
+  //     return acc;
+  //   }, {});
+  // };
+
+  // const calDailyAve = (data, category) => {
+  //   const filteredData = data.filter((item) => item.category === category);
+  //   if (filteredData?.length === 0) return 0;
+  //   const sum = filteredData?.reduce(
+  //     (acc, cur) => acc + parseFloat(cur.fcstValue),
+  //     0
+  //   );
+  //   return Math.round(sum / filteredData?.length);
+  // };
+
+  // const calAveByDate = (data) => {
+  //   const groupedData = groupByDate(data);
+  //   const averages = {};
+  //   console.log(groupedData);
+
+  //   Object.keys(groupedData).forEach((date) => {
+  //     const skyAverage = calDailyAve(groupedData[date], "SKY");
+  //     const ptyAverage = calDailyAve(groupedData[date], "PTY");
+  //     averages[date] = { skyAverage, ptyAverage };
+  //     return averages;
+  //   });
+  // };
+
+  // useEffect(() => {
+  //   console.log(isLoading);
+  //   if (!isLoading) {
+  //     const averagesByDate = calAveByDate(data);
+  //     console.log(averagesByDate);
+  //   }
+  // }, [isLoading]);
+
   const weeks = ["일", "월", "화", "수", "목", "금", "토"];
 
   const monStart = startOfMonth(curMon);
