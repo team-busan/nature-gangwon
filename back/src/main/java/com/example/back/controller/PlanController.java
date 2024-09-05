@@ -20,6 +20,7 @@ import com.example.back.dto.request.plan.PostPlanMarkRequestDto;
 import com.example.back.dto.request.plan.PostPlanRequestDto;
 import com.example.back.dto.response.plan.GetPlanListResponseDto;
 import com.example.back.dto.response.plan.GetPlanMyListResponseDto;
+import com.example.back.dto.response.plan.GetPlanMyMarkListResponseDto;
 import com.example.back.dto.response.plan.DeletePlanCommentResponseDto;
 import com.example.back.dto.response.plan.DeletePlanResponseDto;
 import com.example.back.dto.response.plan.GetPlanResponseDto;
@@ -154,6 +155,15 @@ public class PlanController {
         @AuthenticationPrincipal String userEmail
     ) {
         ResponseEntity<? super GetPlanMyListResponseDto> response = planService.getPlanMyList(userEmail);
+        return response;
+    }
+
+    //? 자신이 마크한 계획 리스트
+    @GetMapping("/mark-list")
+    public ResponseEntity<? super GetPlanMyMarkListResponseDto> getPlanMyMarkList(
+        @AuthenticationPrincipal String userEmail
+    ) {
+        ResponseEntity<? super GetPlanMyMarkListResponseDto> response = planService.getPlanMyMarkList(userEmail);
         return response;
     }
 }

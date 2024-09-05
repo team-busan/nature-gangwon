@@ -23,6 +23,7 @@ import com.example.back.dto.response.plan.GetPlanResponseDto;
 import com.example.back.dto.response.plan.GetPlanTop3ListResponseDto;
 import com.example.back.dto.response.plan.GetPlanListResponseDto;
 import com.example.back.dto.response.plan.GetPlanMyListResponseDto;
+import com.example.back.dto.response.plan.GetPlanMyMarkListResponseDto;
 import com.example.back.dto.response.plan.PatchPlanCommentResponseDto;
 import com.example.back.dto.response.plan.PatchPlanResponseDto;
 import com.example.back.dto.response.plan.PostPlanCommentLikeResponseDto;
@@ -32,7 +33,7 @@ import com.example.back.dto.response.plan.PostPlanResponseDto;
 import com.example.back.dto.response.plan.planfiled.GetPlaceListItemDto;
 import com.example.back.dto.response.plan.planfiled.GetPlanCommentListItemDto;
 import com.example.back.dto.response.plan.planfiled.GetPlanListItemDto;
-import com.example.back.dto.response.plan.planfiled.GetPlanMyListItemDto;
+import com.example.back.dto.response.plan.planfiled.GetPlanMyListAndMarkItemDto;
 import com.example.back.dto.response.plan.planfiled.GetTop3ListItemDto;
 import com.example.back.entity.LocationBasedEntity;
 import com.example.back.entity.PhotosEntity;
@@ -51,6 +52,8 @@ import com.example.back.repository.PlanMarkRepository;
 import com.example.back.repository.PlanRepository;
 import com.example.back.repository.UserRepository;
 import com.example.back.service.PlanService;
+
+import io.jsonwebtoken.lang.Objects;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -596,8 +599,8 @@ public class PlanServiceImplement implements PlanService{
                 return GetPlanMyListResponseDto.notUser();
             }
 
-            List<GetPlanMyListItemDto> myPlan = planEntity.stream().map(plan -> 
-            new GetPlanMyListItemDto(
+            List<GetPlanMyListAndMarkItemDto> myPlan = planEntity.stream().map(plan -> 
+            new GetPlanMyListAndMarkItemDto(
                 plan.getPlanId(),
                 plan.getPlanTitle(),
                 plan.getStartDate(),
@@ -607,6 +610,42 @@ public class PlanServiceImplement implements PlanService{
         ).collect(Collectors.toList());
 
         return GetPlanMyListResponseDto.success(myPlan);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseDto.databaseError();
+        }
+        return null;
+    }
+
+    //? 자신이 마크한 계획 가져오기
+    @Override
+    public ResponseEntity<? super GetPlanMyMarkListResponseDto> getPlanMyMarkList(String userEmail) {
+        try {
+            List<PlanMarkEntity> planMarkList = planMarkRepository.findByUserEmail(userEmail);
+            if(planMarkList == null) {
+                return GetPlanMyMarkListResponseDto.notExistPlan();
+            }
+
+            UserEntity userEntity = userRepository.findByUserEmail(userEmail);
+            if(userEntity == null) {
+                return GetPlanMyMarkListResponseDto.notExistUser();
+            }
+
+            List<GetPlanMyListAndMarkItemDto> markedPlanDtos = planMarkList.stream()
+            .map(mark -> {
+                PlanEntity plan = planRepository.findById(mark.getPlanId()).orElse(null);
+                if (plan == null) return null;
+                return new GetPlanMyListAndMarkItemDto(
+                    plan.getPlanId(),
+                    plan.getPlanTitle(),
+                    plan.getStartDate(),
+                    plan.getEndDate(),
+                    plan.getPlanImage()
+                );
+            })
+            .collect(Collectors.toList());
+
+            return GetPlanMyMarkListResponseDto.success(markedPlanDtos);
         } catch (Exception e) {
             e.printStackTrace();
             ResponseDto.databaseError();

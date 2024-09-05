@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class GetPlanMyListItemDto {
+public class GetPlanMyListAndMarkItemDto {
     private int planId;
     private String planTitle;
     private String startDate;

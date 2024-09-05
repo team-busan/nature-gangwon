@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import com.example.back.common.ResponseCode;
 import com.example.back.common.ResponseMessage;
 import com.example.back.dto.ResponseDto;
-import com.example.back.dto.response.plan.planfiled.GetPlanMyListItemDto;
+import com.example.back.dto.response.plan.planfiled.GetPlanMyListAndMarkItemDto;
 
 import lombok.Getter;
 
@@ -14,14 +14,14 @@ import java.util.List;
 
 @Getter
 public class GetPlanMyListResponseDto extends ResponseDto{
-    private List<GetPlanMyListItemDto> myList;
+    private List<GetPlanMyListAndMarkItemDto> myList;
 
-    private GetPlanMyListResponseDto(List<GetPlanMyListItemDto> myList) {
+    private GetPlanMyListResponseDto(List<GetPlanMyListAndMarkItemDto> myList) {
         super();
         this.myList = myList;
     }
 
-    public static ResponseEntity<GetPlanMyListResponseDto> success(List<GetPlanMyListItemDto> myList) {
+    public static ResponseEntity<GetPlanMyListResponseDto> success(List<GetPlanMyListAndMarkItemDto> myList) {
         GetPlanMyListResponseDto responseBody = new GetPlanMyListResponseDto(myList);
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
