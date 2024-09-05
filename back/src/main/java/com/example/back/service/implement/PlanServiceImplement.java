@@ -24,6 +24,7 @@ import com.example.back.dto.response.plan.GetPlanTop3ListResponseDto;
 import com.example.back.dto.response.plan.GetPlanListResponseDto;
 import com.example.back.dto.response.plan.GetPlanMyListResponseDto;
 import com.example.back.dto.response.plan.GetPlanMyMarkListResponseDto;
+import com.example.back.dto.response.plan.GetPlanMyNoteListResponseDto;
 import com.example.back.dto.response.plan.PatchPlanCommentResponseDto;
 import com.example.back.dto.response.plan.PatchPlanResponseDto;
 import com.example.back.dto.response.plan.PostPlanCommentLikeResponseDto;
@@ -34,6 +35,7 @@ import com.example.back.dto.response.plan.planfiled.GetPlaceListItemDto;
 import com.example.back.dto.response.plan.planfiled.GetPlanCommentListItemDto;
 import com.example.back.dto.response.plan.planfiled.GetPlanListItemDto;
 import com.example.back.dto.response.plan.planfiled.GetPlanMyListAndMarkItemDto;
+import com.example.back.dto.response.plan.planfiled.GetPlanMyNoteListItemDto;
 import com.example.back.dto.response.plan.planfiled.GetTop3ListItemDto;
 import com.example.back.entity.LocationBasedEntity;
 import com.example.back.entity.PhotosEntity;
@@ -646,6 +648,48 @@ public class PlanServiceImplement implements PlanService{
             .collect(Collectors.toList());
 
             return GetPlanMyMarkListResponseDto.success(markedPlanDtos);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseDto.databaseError();
+        }
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<? super GetPlanMyNoteListResponseDto> getPlanMyNoteList(String userEmail) {
+        try {
+            List<PlanEntity> planEntity = planRepository.findByUserEmailOrderByPlanUploadDateDesc(userEmail);
+            if (planEntity == null) {
+                return GetPlanMyListResponseDto.notExistPlan();
+            }
+
+            UserEntity userEntity = userRepository.findByUserEmail(userEmail);
+            if(userEntity == null) {
+                return GetPlanMyMarkListResponseDto.notExistUser();
+            }
+
+            List<GetPlanMyNoteListItemDto> myNoteList = planEntity.stream()
+            .map(plan -> {
+                List<PlacesEntity> places = placesRepository.findByPlanId(plan.getPlanId());
+
+                List<String> notes = places.stream()
+                    .map(PlacesEntity::getNote)
+                    .collect(Collectors.toList());
+                
+                List<String> notes2 = places.stream()
+                    .map(PlacesEntity::getNote2)
+                    .collect(Collectors.toList());
+
+                return new GetPlanMyNoteListItemDto(
+                    plan.getPlanId(),
+                    plan.getPlanTitle(),
+                    notes,  
+                    notes2  
+                );
+            })
+            .collect(Collectors.toList());
+
+            return GetPlanMyNoteListResponseDto.success(myNoteList);
         } catch (Exception e) {
             e.printStackTrace();
             ResponseDto.databaseError();
