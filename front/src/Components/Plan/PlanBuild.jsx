@@ -1,12 +1,12 @@
 import { motion } from "framer-motion";
 
-import NaverMap from "../NaverMap.js";
+import NaverMapWithMarkers from "../NaverMapWithMarkers.js";
 import PlanSearch from "./PlanSearch";
 import PlanMySelect from "./PlanMySelect";
 import { FaAngleLeft } from "react-icons/fa6";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { planList } from "../../state/planState.js";
+import { planList, mapDisplayPlansState } from "../../state/planState.js";
 import { alertState } from "../../state/alertState.js";
 
 const PlanBuild = ({
@@ -22,8 +22,16 @@ const PlanBuild = ({
 }) => {
   const [plans, setPlans] = useRecoilState(planList);
   const [message, setMessage] = useRecoilState(alertState);
-  const lat = "37.8228";
-  const lng = "128.1555";
+  const [mapDisplayPlans, setMapDisplayPlans] =
+    useRecoilState(mapDisplayPlansState);
+
+  const markerColors = [
+    { marker: "#1E3A8A", text: "#FFFFFF" }, // Navy Blue
+    { marker: "#B22222", text: "#FFFFFF" }, // Brick Red
+    { marker: "#FFD700", text: "#000000" }, // Golden Yellow
+    { marker: "#228B22", text: "#FFFFFF" }, // Forest Green
+    { marker: "#6A0DAD", text: "#FFFFFF" }, // Royal Purple
+  ];
 
   const foldVariants = {
     fold: { width: "0px", paddingLeft: 0 },
@@ -83,11 +91,11 @@ const PlanBuild = ({
         </div>
       </motion.div>
       <div className={`absolute top-0 left-[120px]`}>
-        <NaverMap
-          lat={lat}
-          lng={lng}
+        <NaverMapWithMarkers
           width={"calc(100vw - 130px)"}
           height={"100vh"}
+          locations={mapDisplayPlans}
+          markerColors={markerColors}
         />
       </div>
     </div>

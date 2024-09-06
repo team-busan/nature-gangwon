@@ -20,3 +20,9 @@ export const planPhotoAccordianItemState = atom({
   key: "planPhotoAccordianItem",
   default: 0,
 });
+
+export const mapDisplayPlansState = atom({
+  key: "mapDisplayPlans",
+  default: [],
+  dangerouslyAllowMutability: true,
+});

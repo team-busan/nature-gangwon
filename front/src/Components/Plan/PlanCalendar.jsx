@@ -10,7 +10,12 @@ import {
   isSameDay,
   addDays,
   differenceInDays,
+  subDays,
 } from "date-fns";
+import {
+  getShortWeatherIcon,
+  getMidWeatherIcon,
+} from "../../Utils/getWeatherIcon.js";
 import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
 import { motion } from "framer-motion";
 
@@ -20,6 +25,8 @@ import PlanAlert from "./PlanAlert.jsx";
 import { alertState } from "../../state/alertState.js";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
+
+import { WiDaySunny, WiCloudy, WiRain, WiSleet, WiSnow } from "react-icons/wi";
 
 const CalendarHeader = ({ curMon, prevMon, nextMon }) => {
   return (
@@ -34,25 +41,59 @@ const CalendarHeader = ({ curMon, prevMon, nextMon }) => {
 };
 
 const CaledarBody = ({ curMon, dates, onDateClick, rangeState }) => {
+  const [weather, setWeather] = useState(
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+  );
   const today = format(new Date(), "yyyyMMdd");
-  const getWeather = async () => {
+  const todayDate = subDays(new Date(), 1);
+  const days10After = addDays(todayDate, 10);
+  const geShortWeather = async () => {
     const res = await axios.get(
       `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=${process.env.REACT_APP_WEATHER_API_KEY}&numOfRows=9999&dataType=JSON&pageNo=1&base_date=${today}&base_time=0500&nx=84&ny=132`
     );
     return res.data;
   };
 
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["weather"],
-    queryFn: getWeather,
+  const getMidWeather = async () => {
+    const res = await axios.get(
+      `https://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst?serviceKey=${process.env.REACT_APP_WEATHER_API_KEY}&numOfRows=9999&pageNo=1&dataType=JSON&regId=11D10000&tmFc=${today}0600`
+    );
+    return res.data;
+  };
+
+  const {
+    data: shortData,
+    error: shortError,
+    isLoading: shortIsLoading,
+  } = useQuery({
+    queryKey: ["shortWeather"],
+    queryFn: geShortWeather,
+  });
+
+  const {
+    data: midData,
+    error: midError,
+    isLoading: midIsLoading,
+  } = useQuery({
+    queryKey: ["midWeather"],
+    queryFn: getMidWeather,
   });
 
   useEffect(() => {
-    if (data) {
-      if (data.response) {
-        if (data.response.body) {
-          if (data.response.body.items) {
-            if (data.response.body.items.item) {
+    if (shortData) {
+      if (shortData.response) {
+        if (shortData.response.body) {
+          if (shortData.response.body.items) {
+            if (shortData.response.body.items.item) {
               function getMode(arr) {
                 const frequencyMap = {};
                 arr.forEach((value) => {
@@ -102,14 +143,60 @@ const CaledarBody = ({ curMon, dates, onDateClick, rangeState }) => {
                 return result;
               }
 
-              const result = processWeatherData(data.response.body.items.item);
-              console.log(result);
+              const result = processWeatherData(
+                shortData.response.body.items.item
+              );
+              getShortWeatherIcon(result, weather, setWeather);
             }
           }
         }
       }
     }
-  }, [data]);
+  }, [shortData]);
+
+  useEffect(() => {
+    if (midData) {
+      if (midData.response) {
+        if (midData.response.body) {
+          if (midData.response.body.items) {
+            if (midData.response.body.items.item) {
+              const data = midData.response.body.items.item[0];
+              const result = [
+                data.wf3Pm,
+                data.wf4Pm,
+                data.wf5Pm,
+                data.wf6Pm,
+                data.wf7Pm,
+                data.wf8,
+                data.wf9,
+                data.wf10,
+              ];
+              getMidWeatherIcon(result, weather, setWeather);
+            }
+          }
+        }
+      }
+    }
+  }, [midData]);
+
+  const renderIcon = (day) => {
+    if (weather[0] && day >= todayDate && day <= days10After) {
+      const idx = differenceInDays(day, todayDate);
+      if (weather[idx] === "clear") {
+        return <WiDaySunny className="text-2xl text-yellow-400" />;
+      } else if (weather[idx] === "cloudy" || weather[idx] === "overcast") {
+        return <WiCloudy className="text-2xl" />;
+      } else if (weather[idx] === "rain") {
+        return <WiRain className="text-2xl text-blue-400" />;
+      } else if (weather[idx] === "sleet ") {
+        return <WiSleet className="text-2xl text-blue-400" />;
+      } else if (weather[idx] === "snow") {
+        return <WiSnow className="text-2xl" />;
+      } else {
+        return <div className="py-2"></div>;
+      }
+    }
+  };
 
   const weeks = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -163,7 +250,9 @@ const CaledarBody = ({ curMon, dates, onDateClick, rangeState }) => {
           return (
             <motion.div
               variants={item}
-              className={`py-6 px-10 cursor-pointer w-full ${
+              className={`${
+                weather[0] ? "py-4" : "py-6"
+              } px-10 cursor-pointer w-full flex flex-col items-center ${
                 format(curMon, "M") !== format(day, "M")
                   ? "text-gray-300"
                   : "text-black"
@@ -179,6 +268,7 @@ const CaledarBody = ({ curMon, dates, onDateClick, rangeState }) => {
               onClick={() => onDateClick(day)}
             >
               {format(day, "d")}
+              {renderIcon(day)}
             </motion.div>
           );
         })}
