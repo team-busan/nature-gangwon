@@ -19,6 +19,9 @@ import com.example.back.dto.request.plan.PostPlanCommentRequestDto;
 import com.example.back.dto.request.plan.PostPlanMarkRequestDto;
 import com.example.back.dto.request.plan.PostPlanRequestDto;
 import com.example.back.dto.response.plan.GetPlanListResponseDto;
+import com.example.back.dto.response.plan.GetPlanMyListResponseDto;
+import com.example.back.dto.response.plan.GetPlanMyMarkListResponseDto;
+import com.example.back.dto.response.plan.GetPlanMyNoteListResponseDto;
 import com.example.back.dto.response.plan.DeletePlanCommentResponseDto;
 import com.example.back.dto.response.plan.DeletePlanResponseDto;
 import com.example.back.dto.response.plan.GetPlanResponseDto;
@@ -144,6 +147,33 @@ public class PlanController {
     @GetMapping("/top3")
     public ResponseEntity<? super GetPlanTop3ListResponseDto> getPlanTop3List() {
         ResponseEntity<? super GetPlanTop3ListResponseDto> response = planService.getPlanTop3List();
+        return response;
+    }
+
+    //? 자신이 작성한 계획 리스트
+    @GetMapping("/my-list")
+    public ResponseEntity<? super GetPlanMyListResponseDto> getPlanMyList(
+        @AuthenticationPrincipal String userEmail
+    ) {
+        ResponseEntity<? super GetPlanMyListResponseDto> response = planService.getPlanMyList(userEmail);
+        return response;
+    }
+
+    //? 자신이 마크한 계획 리스트
+    @GetMapping("/mark-list")
+    public ResponseEntity<? super GetPlanMyMarkListResponseDto> getPlanMyMarkList(
+        @AuthenticationPrincipal String userEmail
+    ) {
+        ResponseEntity<? super GetPlanMyMarkListResponseDto> response = planService.getPlanMyMarkList(userEmail);
+        return response;
+    }
+
+    //? 자신이 작성한 게시물의 메모 리스트
+    @GetMapping("/note-list")
+    public ResponseEntity<? super GetPlanMyNoteListResponseDto> getPlanMyNoteList(
+        @AuthenticationPrincipal String userEmail
+    ) {
+        ResponseEntity<? super GetPlanMyNoteListResponseDto> response = planService.getPlanMyNoteList(userEmail);
         return response;
     }
 }
