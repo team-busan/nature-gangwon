@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import NicknameInput from "../SignUp/NicknameInput";
 import { Link } from "react-router-dom";
+import DefaultImage from "../../img/profile.jpg";
 
 const EditProfile = () => {
   const [user, setUser] = useRecoilState(userState);
@@ -49,6 +50,7 @@ const EditProfile = () => {
   });
 
   const handleSubmit = () => {};
+  console.log(user);
 
   return (
     <div className="w-3/4 mx-auto py-24 px-32 border-[1px] border-gray-200 rounded-xl shadow-lg flex flex-col gap-20">
@@ -57,7 +59,7 @@ const EditProfile = () => {
       </div>
       <div className="flex flex-col gap-20">
         <img
-          src={profileImg}
+          src={profileImg === "/image/profile.jpg" ? DefaultImage : profileImg}
           alt="사용자 프로필 이미지"
           onClick={() => profileImgRef.current?.click()}
           className="rounded-full bg-random bg-cover w-[150px] h-[150px] mx-auto cursor-pointer"

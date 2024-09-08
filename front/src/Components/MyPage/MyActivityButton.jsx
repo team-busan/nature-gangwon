@@ -1,15 +1,7 @@
 import { motion } from "framer-motion";
 
-const MyActivityButton = ({
-  Icon,
-  title,
-  notifCounter,
-  selected,
-  setContentNum,
-}) => {
+const MyActivityButton = ({ Icon, title, selected, setContentNum }) => {
   const handleClick = setContentNum;
-
-  const animationArray = notifCounter === 0 ? [0] : [0, -5, 0];
 
   return (
     <motion.div
@@ -25,16 +17,8 @@ const MyActivityButton = ({
         <Icon className="text-5xl" />
       </motion.div>
       <p>{title}</p>
-      <motion.div
-        animate={{ translateY: animationArray }}
-        transition={{ repeat: Infinity, duration: 0.8 }}
-        className="text-white flex items-center justify-center absolute bg-paleGreen w-[25px] h-[25px] rounded-full right-0 top-0"
-      >
-        {notifCounter}
-      </motion.div>
       {selected ? (
         <motion.div
-          layout
           layoutId="selected"
           className="bg-paleGreen w-2 h-2 rounded-full"
         ></motion.div>

@@ -1,5 +1,9 @@
 import { useRecoilState } from "recoil";
-import { planList, planTitleState } from "../../state/planState.js";
+import {
+  mapDisplayPlansState,
+  planList,
+  planTitleState,
+} from "../../state/planState.js";
 import { alertState } from "../../state/alertState.js";
 
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
@@ -13,6 +17,8 @@ const PlanMySelect = ({ setPlanStage }) => {
   const [plans, setPlans] = useRecoilState(planList);
   const [message, setMessage] = useRecoilState(alertState);
   const [planTitle, setPlanTitle] = useRecoilState(planTitleState);
+  const [mapDisplayPlans, setMapDisplayPlans] =
+    useRecoilState(mapDisplayPlansState);
   const [text, setText] = useState("");
 
   const onDragEnd = ({ destination, source }) => {
@@ -52,7 +58,20 @@ const PlanMySelect = ({ setPlanStage }) => {
       plansCopy.splice(sourceIdx, 1, sourceDayCopy);
       plansCopy.splice(destinationIdx, 1, destinationDayCopy);
     }
-
+    let mapDisplayPlansCopy = [...mapDisplayPlans];
+    mapDisplayPlansCopy.splice(sourceIdx * 5 + sourceItemIdx, 1);
+    const mapDisplayObject = {
+      mapx: sourceItem.locationMapx,
+      mapy: sourceItem.locationMapy,
+      title: sourceItem.locationTitle,
+      photoUrls: [sourceItem.locationFirstimage],
+    };
+    mapDisplayPlansCopy.splice(
+      destinationIdx * 5 + destinationItemIdx,
+      0,
+      mapDisplayObject
+    );
+    setMapDisplayPlans(mapDisplayPlansCopy);
     setPlans(plansCopy);
   };
 
@@ -72,6 +91,9 @@ const PlanMySelect = ({ setPlanStage }) => {
     let dayCopy = [...plansCopy[listIdx]];
     dayCopy.splice(idx, 1);
     plansCopy.splice(listIdx, 1, dayCopy);
+    let mapDisplayPlansCopy = [...mapDisplayPlans];
+    mapDisplayPlansCopy.splice(listIdx * 5 + idx, 1);
+    setMapDisplayPlans(mapDisplayPlansCopy);
     setPlans(plansCopy);
   };
 

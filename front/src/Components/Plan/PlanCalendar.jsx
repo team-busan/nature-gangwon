@@ -20,7 +20,7 @@ import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
 import { motion } from "framer-motion";
 
 import { useRecoilState } from "recoil";
-import { planList } from "../../state/planState.js";
+import { mapDisplayPlansState, planList } from "../../state/planState.js";
 import PlanAlert from "./PlanAlert.jsx";
 import { alertState } from "../../state/alertState.js";
 import axios from "axios";
@@ -284,6 +284,8 @@ const PlanCalendar = ({ setPlanStage, dates, setDates, setFoldStage }) => {
   const nextMon = () => setCurMon(addMonths(curMon, 1));
   const [rangeState, setRangeState] = useState(false);
   const [message, setMessage] = useRecoilState(alertState);
+  const [mapDisplayPlans, setMapDisplayPlans] =
+    useRecoilState(mapDisplayPlansState);
 
   const onDateClick = (date) => {
     if (rangeState === false) {
@@ -310,6 +312,7 @@ const PlanCalendar = ({ setPlanStage, dates, setDates, setFoldStage }) => {
       emptyList.push([]);
     }
     setPlans(emptyList);
+    setMapDisplayPlans([]);
   }, [dates]);
 
   return (

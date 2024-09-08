@@ -21,13 +21,13 @@ import { userState } from "../state/userState";
 import { useNavigate } from "react-router-dom";
 
 const Plan = () => {
-  const navigate = useNavigate();
-  const [user, setUser] = useRecoilState(userState);
-  useEffect(() => {
-    if (!user) {
-      navigate("/Login");
-    }
-  }, []);
+  // const navigate = useNavigate();
+  // const [user, setUser] = useRecoilState(userState);
+  // useEffect(() => {
+  //   if (!user) {
+  //     navigate("/Login");
+  //   }
+  // }, []);
 
   const [planStage, setPlanStage] = useState(0);
   const [dates, setDates] = useState([new Date(), new Date()]);

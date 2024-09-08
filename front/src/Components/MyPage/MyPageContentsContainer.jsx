@@ -2,7 +2,7 @@ import MyPageContent from "./MyPageContent";
 
 import { useEffect, useState } from "react";
 
-const MyPageContentsContainer = ({ contentNum, data, plan, samplePhotos }) => {
+const MyPageContentsContainer = ({ contentNum }) => {
   const [title, setTitle] = useState("내 메모");
 
   useEffect(() => {
@@ -25,12 +25,7 @@ const MyPageContentsContainer = ({ contentNum, data, plan, samplePhotos }) => {
     <div className="mt-[50px]">
       <h4>{title}</h4>
       <hr className="bg-black h-[3px] mb-6" />
-      <MyPageContent
-        contentNum={contentNum}
-        data={data}
-        plan={plan}
-        samplePhotos={samplePhotos}
-      />
+      <MyPageContent contentNum={contentNum} />
     </div>
   );
 };
