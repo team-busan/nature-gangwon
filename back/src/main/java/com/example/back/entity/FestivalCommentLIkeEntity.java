@@ -5,6 +5,8 @@ import com.example.back.entity.primaryKey.FestivalLikePK;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,4 +24,13 @@ public class FestivalCommentLIkeEntity {
 
     @Id
     private int festivalCommentId;
+
+    @ManyToOne
+    @JoinColumn(name="festival_comment_id", insertable = false, updatable = false)
+    private FestivalCommentEntity festivalComment;
+
+    public FestivalCommentLIkeEntity(UserEntity userEntity, int festivalCommentId) {
+        this.userEmail = userEntity.getUserEmail();
+        this.festivalCommentId = festivalCommentId;
+    }
 }
