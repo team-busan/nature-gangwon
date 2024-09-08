@@ -8,18 +8,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.back.dto.ResponseDto;
+import com.example.back.dto.request.festival.PatchFestivalCommentRequestDto;
+import com.example.back.dto.request.festival.PostFestivalCommentLikeRequestDto;
 import com.example.back.dto.request.festival.PostFestivalCommentRequestDto;
+import com.example.back.dto.response.Festival.DeleteFestivalCommentResponseDto;
 import com.example.back.dto.response.Festival.GetFestivalListResponseDto;
 import com.example.back.dto.response.Festival.GetFestivalResponseDto;
+import com.example.back.dto.response.Festival.PatchFestivalCommentResponseDto;
+import com.example.back.dto.response.Festival.PostFestivalCommentLikeResponseDto;
 import com.example.back.dto.response.Festival.PostFestivalCommentResponseDto;
 import com.example.back.dto.response.Festival.Festivalfiled.GetFestivalCommentListItemDto;
 import com.example.back.dto.response.Festival.Festivalfiled.GetFestivalImageDto;
 import com.example.back.dto.response.Festival.Festivalfiled.GetFestivalListItemDto;
+import com.example.back.dto.response.plan.PostPlanCommentResponseDto;
 import com.example.back.entity.FestivalCommentEntity;
+import com.example.back.entity.FestivalCommentLIkeEntity;
 import com.example.back.entity.FestivalDescriptionEntity;
 import com.example.back.entity.FestivalEntity;
 import com.example.back.entity.FestivalImageEntity;
 import com.example.back.entity.UserEntity;
+import com.example.back.repository.FestivalCommentLikeRepository;
 import com.example.back.repository.FestivalCommentRepository;
 import com.example.back.repository.FestivalDescriptionRepository;
 import com.example.back.repository.FestivalImageRepository;
@@ -47,6 +55,7 @@ public class FestivalServiceImplement implements FestivalService {
     private final FestivalImageRepository festivalImageRepository;
     private final FestivalCommentRepository festivalCommentRepository;
     private final UserRepository userRepository;
+    private final FestivalCommentLikeRepository festivalCommentLikeRepository;
     //? 축제 리스트
     @Override
     public ResponseEntity<? super GetFestivalListResponseDto> getFestivalList(int page, int size){
@@ -87,26 +96,47 @@ public class FestivalServiceImplement implements FestivalService {
 
     //? 축제 상세
     @Override
-    public ResponseEntity<? super GetFestivalResponseDto> getFestival(int festivalId){
+    public ResponseEntity<? super GetFestivalResponseDto> getFestival(int festivalId, String sortOrder) {
         try {
             FestivalEntity festivalEntity = festivalRepository.findByFestivalId(festivalId);
-            if(festivalEntity == null){
+            if (festivalEntity == null) {
                 return GetFestivalResponseDto.getFestivalFail();
             }
 
             FestivalDescriptionEntity festivalDescriptionEntity = festivalDescriptionRepository.findByFestivalId(festivalId);
-            if(festivalDescriptionEntity == null){
+            if (festivalDescriptionEntity == null) {
                 return GetFestivalResponseDto.getFestivalFail();
             }
 
             FestivalImageEntity festivalImageEntity = festivalImageRepository.findByFestivalId(festivalId);
             GetFestivalImageDto festivalImageDto = null;
-            if(festivalImageEntity != null){
+            if (festivalImageEntity != null) {
                 festivalImageDto = new GetFestivalImageDto(festivalEntity, festivalImageEntity);
             }
-            List<FestivalCommentEntity> festivalCommentEntity = festivalCommentRepository.findByFestivalIdOrderByFestivalUploadDateDesc(festivalId);
+
+            List<FestivalCommentEntity> festivalCommentEntities;
+            if ("likes".equals(sortOrder)) {
+                festivalCommentEntities = festivalCommentRepository.findByFestivalIdOrderByLikeCountDesc(festivalId);
+            } else {
+                festivalCommentEntities = festivalCommentRepository.findByFestivalIdOrderByFestivalUploadDateDesc(festivalId);
+            }
+
             List<GetFestivalCommentListItemDto> festivalCommentList = new ArrayList<>();
-            
+            for (FestivalCommentEntity comment : festivalCommentEntities) {
+                int likeCount = comment.getLikeCount();
+                GetFestivalCommentListItemDto festivalCommentDto = new GetFestivalCommentListItemDto();
+                festivalCommentDto.setFestivalCommentId(comment.getFestivalCommentId());
+                festivalCommentDto.setFestivalId(comment.getFestivalId());
+                festivalCommentDto.setUserEmail(comment.getUserEmail());
+                festivalCommentDto.setUserNickname(comment.getUserNickname());
+                festivalCommentDto.setUserProfile(comment.getUserProfile());
+                festivalCommentDto.setFestivalContent(comment.getFestivalContent());
+                festivalCommentDto.setScore(comment.getScore());
+                festivalCommentDto.setFestivalUploadDate(comment.getFestivalUploadDate());
+                festivalCommentDto.setLikeCount(likeCount);
+
+                festivalCommentList.add(festivalCommentDto);
+            }
 
             GetFestivalResponseDto responseDto = new GetFestivalResponseDto(festivalEntity, festivalDescriptionEntity, festivalImageDto, festivalCommentList);
             festivalEntity.increaseViewCount();
@@ -157,5 +187,91 @@ public class FestivalServiceImplement implements FestivalService {
             return PostFestivalCommentResponseDto.databaseError();
        }
        return PostFestivalCommentResponseDto.success();
+    }
+    //? 댓글 좋아요
+    @Override
+    public ResponseEntity<? super PostFestivalCommentLikeResponseDto> postFestivalCommentLike(String userEmail, PostFestivalCommentLikeRequestDto dto){
+        int festivalCommentId = dto.getFestivalCommentId();
+        try{
+            UserEntity userEntity = userRepository.findByUserEmail(userEmail);
+            if(userEntity == null) {
+                return PostPlanCommentResponseDto.notExistUser();
+            }
+
+            FestivalEntity festivalEntity = festivalRepository.findByFestivalId(dto.getFestivalId());
+            if(festivalEntity == null){
+                return PostFestivalCommentLikeResponseDto.notExistFestival();
+            }
+
+            FestivalCommentEntity festivalCommentEntity = festivalCommentRepository.findByFestivalCommentId(festivalCommentId);
+            if(festivalCommentEntity == null) {
+                return PostFestivalCommentLikeResponseDto.festivalCommentLikeFail();
+            }
+
+            FestivalCommentLIkeEntity festivalCommentLIkeEntity = festivalCommentLikeRepository.findByUserEmailAndFestivalCommentId(userEmail, festivalCommentId);
+            if(festivalCommentLIkeEntity == null) {
+                festivalCommentLIkeEntity = new FestivalCommentLIkeEntity(userEntity, festivalCommentId);
+                festivalCommentLikeRepository.save(festivalCommentLIkeEntity);
+            } else {
+                festivalCommentLikeRepository.delete(festivalCommentLIkeEntity);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseDto.databaseError();
+        }
+        return PostFestivalCommentLikeResponseDto.success();
+    }
+
+    //? 댓글 삭제
+    @Override
+    public ResponseEntity<? super DeleteFestivalCommentResponseDto> deleteFestivalComment(String userEmail, int festivalCommentId){
+        try {
+            FestivalCommentEntity festivalCommentEntity = festivalCommentRepository.findByFestivalCommentId(festivalCommentId);
+            if(festivalCommentEntity == null){
+                return DeleteFestivalCommentResponseDto.deleteCommentFail();
+            }
+
+            boolean isEqualWriter = userEmail.equals(festivalCommentEntity.getUserEmail());
+            if(!isEqualWriter) {
+                return DeleteFestivalCommentResponseDto.existuser();
+            }
+
+            festivalCommentLikeRepository.deleteByFestivalCommentId(festivalCommentId);
+            festivalCommentRepository.deleteByFestivalCommentId(festivalCommentId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return DeleteFestivalCommentResponseDto.success();
+    }
+
+    //? 댓글 수정
+    @Override
+    public ResponseEntity<? super PatchFestivalCommentResponseDto> patchFestivalComment(String userEamil, PatchFestivalCommentRequestDto dto){
+        try{
+            FestivalEntity festivalEntity = festivalRepository.findByFestivalId(dto.getFestivalId());
+            if(festivalEntity == null){
+                PatchFestivalCommentResponseDto.existFestival();
+            }
+            
+            FestivalCommentEntity festivalCommentEntity = festivalCommentRepository.findByFestivalCommentId(dto.getFestivalCommentId());
+            if(festivalCommentEntity == null){
+                return PatchFestivalCommentResponseDto.patchFail();
+            }
+
+            boolean isEqualUserEmail = userEamil.equals(festivalCommentEntity.getUserEmail());
+            if(!isEqualUserEmail){
+                return PatchFestivalCommentResponseDto.existUser();
+            }
+
+            festivalCommentEntity.patch(dto);
+            festivalCommentRepository.save(festivalCommentEntity);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return PatchFestivalCommentResponseDto.success();
     }
 }

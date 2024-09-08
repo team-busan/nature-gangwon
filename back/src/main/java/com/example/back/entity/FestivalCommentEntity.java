@@ -1,9 +1,11 @@
 package com.example.back.entity;
 
+import com.example.back.dto.request.festival.PatchFestivalCommentRequestDto;
 import com.example.back.dto.request.festival.PostFestivalCommentRequestDto;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,6 +13,7 @@ import lombok.NoArgsConstructor;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,6 +39,18 @@ public class FestivalCommentEntity {
         this.userNickname = userEntity.getUserNickname();
         this.userProfile = userEntity.getUserProfile();
         this.festivalContent = dto.getFestivalContent();
+        this.score = dto.getScore();
         this.festivalUploadDate = simpleDateFormat.format(now);
+    }
+
+    public void patch(PatchFestivalCommentRequestDto dto) {
+        this.festivalContent = dto.getFestivalContent();
+        this.score = dto.getScore();
+    }
+    @OneToMany(mappedBy = "userEmail")
+    private List<FestivalCommentLIkeEntity> likes;
+
+    public int getLikeCount() {
+        return likes == null ? 0 : likes.size();
     }
 }

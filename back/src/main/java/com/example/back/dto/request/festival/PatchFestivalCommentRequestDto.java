@@ -7,13 +7,16 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data
-public class PostFestivalCommentRequestDto {
+public class PatchFestivalCommentRequestDto {
     @Min(1)
     private int festivalId;
 
-    @NotBlank
-    private String festivalContent;
+    @Min(1)
+    private int festivalCommentId;
 
     @Min(1)
     private int score;
+
+    @NotBlank
+    private String festivalContent;
 }
