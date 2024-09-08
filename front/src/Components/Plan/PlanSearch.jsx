@@ -6,7 +6,7 @@ import PlanItem from "./PlanItem.jsx";
 import { MdOutlineSearch, MdOutlineAddCircle } from "react-icons/md";
 
 import { useRecoilState } from "recoil";
-import { planList } from "../../state/planState.js";
+import { mapDisplayPlansState, planList } from "../../state/planState.js";
 import { alertState } from "../../state/alertState.js";
 import PlanSelect from "./PlanSelect.jsx";
 import {
@@ -102,6 +102,8 @@ const SearchList = ({ data, setFoldStage, observeRef, curData, refetch }) => {
   const [plans, setPlans] = useRecoilState(planList);
   const [message, setMessage] = useRecoilState(alertState);
   const [isScroll, setIsScroll] = useRecoilState(isScrollState);
+  const [mapdisplayPlans, setMapdisplayPlans] =
+    useRecoilState(mapDisplayPlansState);
 
   // 이중 배열 state 컨트롤
   const deepCopy = (obj) => {
@@ -142,6 +144,14 @@ const SearchList = ({ data, setFoldStage, observeRef, curData, refetch }) => {
         plansCopy.splice(i, 1, plansDayCopy);
         setPlans(plansCopy);
         setFoldStage(2);
+
+        const displayObject = {
+          mapx: item.locationMapx,
+          mapy: item.locationMapy,
+          title: item.locationTitle,
+          photoUrls: [item.locationFirstimage],
+        };
+        setMapdisplayPlans([...mapdisplayPlans, displayObject]);
         return;
       }
     }

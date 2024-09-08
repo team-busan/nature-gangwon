@@ -10,6 +10,8 @@ import {
   MdOutlineRemoveCircleOutline,
 } from "react-icons/md";
 
+import DefaultImage from "../DefaultImage";
+
 const PlanDraggableItem = ({ item, idx, idx2, handleDelete }) => {
   const [plans, setPlans] = useRecoilState(planList);
   const [isMemoOpen, setIsMemoOpen] = useState(0);
@@ -32,6 +34,18 @@ const PlanDraggableItem = ({ item, idx, idx2, handleDelete }) => {
     type = "축제";
     color = "#B1ECFF";
   }
+
+  const handleChange = (e, isMemoOpen) => {
+    if (e.currentTarget.value.length > 150) {
+      return;
+    } else {
+      if (isMemoOpen === 1) {
+        setMemo(e.currentTarget.value);
+      } else {
+        setMemo2(e.currentTarget.value);
+      }
+    }
+  };
 
   const handleWriteMemo = (idx, idx2) => {
     const plansCopy = [...plans];
@@ -64,8 +78,8 @@ const PlanDraggableItem = ({ item, idx, idx2, handleDelete }) => {
               <MdOutlineDragIndicator className="text-2xl" />
             </div>
             {item.locationFirstimage === "" ? (
-              <div className="w-28 h-28 rounded-lg flex justify-center items-center bg-gray-300 shrink-0">
-                이미지 준비중
+              <div className="w-28 h-28 rounded-lg shrink-0">
+                <DefaultImage />
               </div>
             ) : (
               <img
@@ -112,7 +126,7 @@ const PlanDraggableItem = ({ item, idx, idx2, handleDelete }) => {
                 }}
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                className={`absolute top-0 w-full h-56 rounded-lg p-4 flex flex-col gap-4 overflow-y-scroll bg-lightGreen z-10 ${
+                className={`absolute top-0 w-full h-56 rounded-lg p-4 flex flex-col gap-4 overflow-y-scroll bg-lightGreen bg-paper bg-cover z-10 ${
                   isMemoOpen === 1 ? "origin-top-left" : "origin-top-right"
                 }`}
               >
@@ -124,14 +138,10 @@ const PlanDraggableItem = ({ item, idx, idx2, handleDelete }) => {
                   />
                 </div>
                 <textarea
-                  placeholder="메모를 입력하세요"
+                  placeholder="메모를 입력하세요 (최대 150자)"
                   className="bg-transparent outline-none w-full h-full resize-none"
                   value={isMemoOpen === 1 ? memo : memo2}
-                  onChange={(e) =>
-                    isMemoOpen === 1
-                      ? setMemo(e.currentTarget.value)
-                      : setMemo2(e.currentTarget.value)
-                  }
+                  onChange={(e) => handleChange(e, isMemoOpen)}
                 />
                 <div className="flex justify-end">
                   <button

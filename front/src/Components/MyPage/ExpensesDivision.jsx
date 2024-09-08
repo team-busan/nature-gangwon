@@ -20,7 +20,7 @@ const Expense = ({ item, idx, handleChange }) => {
 
 const ExpensesDivision = () => {
   const [expense, setExpense] = useState([0]);
-  const [people, setPeople] = useState();
+  const [people, setPeople] = useState(0);
 
   const handleChange = (e, idx) => {
     const expenseCopy = [...expense];

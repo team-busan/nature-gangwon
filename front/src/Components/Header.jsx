@@ -7,6 +7,7 @@ import { useRecoilState } from "recoil";
 import { userState } from "../state/userState";
 import axios from "axios";
 import { CiLogin } from "react-icons/ci";
+import Logo from "../img/logo.png";
 
 const Header = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
@@ -48,7 +49,7 @@ const Header = () => {
       <div className="w-1420 flex h-20 p-3 items-center">
         <div className="text-black w-2/12">
           <Link to="/">
-            <h1>Nature</h1>
+            <img src={Logo} alt="Nature Logo" />
           </Link>
         </div>
         <nav className="w-3/12">

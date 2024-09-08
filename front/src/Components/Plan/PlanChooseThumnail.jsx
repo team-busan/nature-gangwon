@@ -1,11 +1,22 @@
 import { useRecoilState } from "recoil";
 import { planList } from "../../state/planState";
+import { MdAddPhotoAlternate } from "react-icons/md";
+import { useState } from "react";
 
 const PlanChooseThumnail = ({ setPlanStage }) => {
   const [plans, setPlans] = useRecoilState(planList);
+  const [selectedIndex, setSelectedIndex] = useState({
+    i: -1,
+    j: -1,
+    k: -1,
+  });
 
   const handleAddPhoto = () => {
     setPlanStage(2);
+  };
+
+  const handleChoosePhoto = (i, j, k) => {
+    setSelectedIndex({ i: i, j: j, k: k });
   };
 
   const handleSavePlan = () => {};
@@ -15,7 +26,14 @@ const PlanChooseThumnail = ({ setPlanStage }) => {
     result.push(
       <div
         key="sample"
-        className="w-52 h-52 rounded-lg bg-green cursor-pointer shadow"
+        onClick={() => setSelectedIndex({ i: -1, j: -1, k: -1 })}
+        className={`w-52 h-52 rounded-lg bg-green cursor-pointer border-4 ${
+          selectedIndex.i === -1 &&
+          selectedIndex.j === -1 &&
+          selectedIndex.k === -1
+            ? "border-green"
+            : "border-transparent"
+        }`}
       >
         샘플 이미지로
       </div>
@@ -26,8 +44,16 @@ const PlanChooseThumnail = ({ setPlanStage }) => {
           result.push(
             <img
               src={plans[i][j].photoUrls[k]}
-              className="w-52 h-52 rounded-lg object-cover cursor-pointer shadow"
+              alt="여행 이미지"
               key={i.toString() + j + k}
+              onClick={() => handleChoosePhoto(i, j, k)}
+              className={`w-52 h-52 rounded-lg object-cover cursor-pointer border-4 ${
+                i === selectedIndex.i &&
+                j === selectedIndex.j &&
+                k === selectedIndex.k
+                  ? "border-green"
+                  : "border-transparent"
+              }`}
             />
           );
         }
@@ -37,10 +63,10 @@ const PlanChooseThumnail = ({ setPlanStage }) => {
       result.push(
         <div
           onClick={handleAddPhoto}
-          className="w-52 h-52 rounded-lg bg-gray-400 cursor-pointer shadow"
+          className="w-52 h-52 rounded-lg bg-gray-400 cursor-pointer flex items-center justify-center"
           key="plus"
         >
-          사진 추가 ㄱㄱ
+          <MdAddPhotoAlternate className="text-6xl text-white" />
         </div>
       );
     }

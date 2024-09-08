@@ -5,7 +5,6 @@ import defaultImage from "../../img/profile.jpg";
 
 const ProfileCard = () => {
   const [user, setUser] = useRecoilState(userState);
-  console.log(user);
 
   return (
     <div className="w-[350px] h-[500px] py-10 rounded-lg bg-random bg-cover flex flex-col items-center justify-between">

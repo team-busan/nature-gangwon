@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import DefaultImage from "../DefaultImage";
 
 const PlanItem = ({ item, handleClick }) => {
   let type = "";
@@ -27,8 +28,8 @@ const PlanItem = ({ item, handleClick }) => {
       className="w-full flex gap-4 cursor-pointer p-2 rounded-lg shadow-md border-[1px] border-gray-200"
     >
       {item.locationFirstimage === "" ? (
-        <div className="w-28 h-28 rounded-lg flex justify-center items-center bg-gray-300 shrink-0">
-          이미지 준비중
+        <div className="w-28 h-28 rounded-lg shrink-0">
+          <DefaultImage />
         </div>
       ) : (
         <img

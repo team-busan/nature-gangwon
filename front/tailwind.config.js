@@ -4,8 +4,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        smLightGreen : "#F0FDF0",
-        veryLightGreen : "#E3FBE3",
+        smLightGreen: "#F0FDF0",
+        veryLightGreen: "#E3FBE3",
         primary: "#8c7ae6",
         lightGreen: "#C7F7C6",
         paleGreen: "#3BF17C",
@@ -13,7 +13,7 @@ export default {
         green: "#00A05B",
         darkGreen: "#00704A",
         deepGreen: "#1E3932",
-        tomato : "#ff6347"
+        tomato: "#ff6347",
       },
       width: {
         1420: "1420px",
@@ -37,6 +37,7 @@ export default {
       },
       backgroundImage: {
         random: "url('https://picsum.photos/350/500')",
+        paper: "url(./img/paper.jpg)",
       },
       boxShadow: {
         content: "rgba(0, 0, 0, 0.15) 0px 5px 15px 0px",

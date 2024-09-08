@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import DefaultImage from "../DefaultImage";
 
 const MotionLink = motion(Link);
 
@@ -36,8 +37,8 @@ const Content = ({ content }) => {
             alt={`${content.locationTitle} 이미지`}
           />
         ) : (
-          <div className="bg-gray-300 w-40 h-40 rounded-xl flex justify-center items-center shrink-0">
-            이미지 준비중
+          <div className="w-40 h-40 rounded-lg shrink-0">
+            <DefaultImage />
           </div>
         )}
         <div className="flex flex-col gap-6 w-full">

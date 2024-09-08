@@ -73,7 +73,21 @@ const PlanStatusBar = ({
         <motion.div
           animate={control4}
           variants={variants}
-          onClick={() => setPlanStage(3)}
+          onClick={() => {
+            for (let i = 0; i < plan.length; i++) {
+              if (plan[i].length === 0) {
+                setMessage("하루에 최소 한 곳 이상의 여행지를 추가해주세요.");
+                setPlanStage(1);
+                return;
+              }
+            }
+            if (!planTitle) {
+              setMessage("여행 제목을 입력해주세요.");
+              setPlanStage(1);
+              return;
+            }
+            setPlanStage(3);
+          }}
           className={`cursor-pointer p-6 w-full  ${
             planStage === 3 ? "text-paleGreen" : "text-gray-400"
           }`}
