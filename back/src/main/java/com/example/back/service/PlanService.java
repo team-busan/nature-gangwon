@@ -10,6 +10,7 @@ import com.example.back.dto.request.plan.PostPlanMarkRequestDto;
 import com.example.back.dto.request.plan.PostPlanRequestDto;
 import com.example.back.dto.response.plan.DeletePlanCommentResponseDto;
 import com.example.back.dto.response.plan.DeletePlanResponseDto;
+import com.example.back.dto.response.plan.GetPlanCommentListResponseDto;
 import com.example.back.dto.response.plan.GetPlanResponseDto;
 import com.example.back.dto.response.plan.GetPlanTop3ListResponseDto;
 import com.example.back.dto.response.plan.GetPlanListResponseDto;
@@ -38,4 +39,5 @@ public interface PlanService {
     ResponseEntity<? super GetPlanMyListResponseDto> getPlanMyList(String userEmail);
     ResponseEntity<? super GetPlanMyMarkListResponseDto> getPlanMyMarkList(String userEmail);
     ResponseEntity<? super GetPlanMyNoteListResponseDto> getPlanMyNoteList(String userEmail);
+    ResponseEntity<? super GetPlanCommentListResponseDto> getPlanCommentList(int planId, String sortType);
 }

@@ -19,6 +19,7 @@ import com.example.back.dto.request.plan.PostPlanMarkRequestDto;
 import com.example.back.dto.request.plan.PostPlanRequestDto.PostPlanPlaceRequestDto;
 import com.example.back.dto.response.plan.DeletePlanCommentResponseDto;
 import com.example.back.dto.response.plan.DeletePlanResponseDto;
+import com.example.back.dto.response.plan.GetPlanCommentListResponseDto;
 import com.example.back.dto.response.plan.GetPlanResponseDto;
 import com.example.back.dto.response.plan.GetPlanTop3ListResponseDto;
 import com.example.back.dto.response.plan.GetPlanListResponseDto;
@@ -171,28 +172,28 @@ public class PlanServiceImplement implements PlanService{
                 placeList.add(placeDto);
             }
 
-            List<PlanCommentEntity> planCommentEntity = planCommentRepository.findByPlanIdOrderByPlanUploadDateDesc(planId);
-            List<GetPlanCommentListItemDto> planCommentList = new ArrayList<>();
+            // List<PlanCommentEntity> planCommentEntity = planCommentRepository.findByPlanIdOrderByPlanUploadDateDesc(planId);
+            // List<GetPlanCommentListItemDto> planCommentList = new ArrayList<>();
 
-            for(PlanCommentEntity comment : planCommentEntity) {
-                int likeCount = (int) planCommentLikeRepository.countLikesByPlanCommentId(comment.getPlanCommentId());
-                GetPlanCommentListItemDto planCommentDto = new GetPlanCommentListItemDto();
-                planCommentDto.setPlanCommentId(comment.getPlanCommentId());
-                planCommentDto.setPlanId(comment.getPlanId());
-                planCommentDto.setUserEmail(comment.getUserEmail());
-                planCommentDto.setUserNickname(comment.getUserNickname());
-                planCommentDto.setUserProfile(comment.getUserProfile());
-                planCommentDto.setPlanContent(comment.getPlanContent());
-                planCommentDto.setPlanUploadDate(comment.getPlanUploadDate());
-                planCommentDto.setLikeCount((int) likeCount);
+            // for(PlanCommentEntity comment : planCommentEntity) {
+            //     int likeCount = (int) planCommentLikeRepository.countLikesByPlanCommentId(comment.getPlanCommentId());
+            //     GetPlanCommentListItemDto planCommentDto = new GetPlanCommentListItemDto();
+            //     planCommentDto.setPlanCommentId(comment.getPlanCommentId());
+            //     planCommentDto.setPlanId(comment.getPlanId());
+            //     planCommentDto.setUserEmail(comment.getUserEmail());
+            //     planCommentDto.setUserNickname(comment.getUserNickname());
+            //     planCommentDto.setUserProfile(comment.getUserProfile());
+            //     planCommentDto.setPlanContent(comment.getPlanContent());
+            //     planCommentDto.setPlanUploadDate(comment.getPlanUploadDate());
+            //     planCommentDto.setLikeCount((int) likeCount);
 
-                planCommentList.add(planCommentDto);
-            }
+            //     planCommentList.add(planCommentDto);
+            // }
 
 
             planEntity.increasePlanCount();
             planRepository.save(planEntity);
-            return GetPlanResponseDto.success(planEntity, placeList, planCommentList);
+            return GetPlanResponseDto.success(planEntity, placeList/*, planCommentList*/);
         } catch (Exception e) {
             e.printStackTrace();
             ResponseDto.databaseError();
@@ -655,6 +656,7 @@ public class PlanServiceImplement implements PlanService{
         return null;
     }
 
+    //? 자신이 게획에 작성한 메모 리스트 가져오기
     @Override
     public ResponseEntity<? super GetPlanMyNoteListResponseDto> getPlanMyNoteList(String userEmail) {
         try {
@@ -690,6 +692,49 @@ public class PlanServiceImplement implements PlanService{
             .collect(Collectors.toList());
 
             return GetPlanMyNoteListResponseDto.success(myNoteList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseDto.databaseError();
+        }
+        return null;
+    }
+
+    //? 특정 계획 댓글 리스트
+    @Override
+    public ResponseEntity<? super GetPlanCommentListResponseDto> getPlanCommentList(int planId, String sortType) {
+        try {
+            PlanEntity planEntity = planRepository.findByPlanId(planId);
+            if (planEntity == null) {
+                return GetPlanCommentListResponseDto.notExistPlan();
+            }
+
+            List<PlanCommentEntity> comments = planCommentRepository.findByPlanIdOrderByPlanUploadDateDesc(planId);
+            if (comments.isEmpty()) {
+                return GetPlanCommentListResponseDto.notExistComment();
+            }
+
+            List<GetPlanCommentListItemDto> commentDtos = comments.stream().map(comment -> {
+                int likeCount = (int) planCommentLikeRepository.countLikesByPlanCommentId(comment.getPlanCommentId());
+
+                return new GetPlanCommentListItemDto(
+                    comment.getPlanCommentId(),
+                    comment.getUserEmail(),
+                    comment.getPlanId(),
+                    comment.getUserNickname(),
+                    comment.getUserProfile(),
+                    comment.getPlanContent(),
+                    comment.getPlanUploadDate().toString(),
+                    likeCount
+                );
+            }).collect(Collectors.toList());
+
+            if (sortType == null || sortType.isEmpty() || "인기순".equals(sortType)) {
+                commentDtos.sort(Comparator.comparingInt(GetPlanCommentListItemDto::getLikeCount).reversed());
+            } else if ("최신순".equals(sortType)) {
+                commentDtos.sort(Comparator.comparing(GetPlanCommentListItemDto::getPlanUploadDate).reversed());
+            }
+
+            return GetPlanCommentListResponseDto.success(commentDtos);
         } catch (Exception e) {
             e.printStackTrace();
             ResponseDto.databaseError();
