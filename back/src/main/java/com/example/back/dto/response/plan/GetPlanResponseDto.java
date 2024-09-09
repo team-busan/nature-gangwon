@@ -22,17 +22,17 @@ public class GetPlanResponseDto extends ResponseDto {
 
     private List<GetPlaceListItemDto> getPlaceListItemDto;
 
-    private List<GetPlanCommentListItemDto> getPlanCommentList;
+    //private List<GetPlanCommentListItemDto> getPlanCommentList;
 
     private GetPlanResponseDto() {
         super();
     }
 
-    public static ResponseEntity<GetPlanResponseDto> success(PlanEntity planEntity, List<GetPlaceListItemDto> getPlaceListItemDto, List<GetPlanCommentListItemDto> getPlanCommentList) {
+    public static ResponseEntity<GetPlanResponseDto> success(PlanEntity planEntity, List<GetPlaceListItemDto> getPlaceListItemDto/*, List<GetPlanCommentListItemDto> getPlanCommentList*/) {
         GetPlanResponseDto responseBody = new GetPlanResponseDto();
         responseBody.setPlanEntity(planEntity);
         responseBody.setGetPlaceListItemDto(getPlaceListItemDto);
-        responseBody.setGetPlanCommentList(getPlanCommentList);
+        //responseBody.setGetPlanCommentList(getPlanCommentList);
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 

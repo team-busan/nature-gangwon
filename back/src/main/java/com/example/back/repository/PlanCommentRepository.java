@@ -14,4 +14,5 @@ public interface PlanCommentRepository extends JpaRepository<PlanCommentEntity, 
     int countByPlanId(int planId);
     @Transactional
     public void deleteByPlanCommentId(int planCommentId);
+    
 }

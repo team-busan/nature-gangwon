@@ -24,6 +24,7 @@ import com.example.back.dto.response.plan.GetPlanMyMarkListResponseDto;
 import com.example.back.dto.response.plan.GetPlanMyNoteListResponseDto;
 import com.example.back.dto.response.plan.DeletePlanCommentResponseDto;
 import com.example.back.dto.response.plan.DeletePlanResponseDto;
+import com.example.back.dto.response.plan.GetPlanCommentListResponseDto;
 import com.example.back.dto.response.plan.GetPlanResponseDto;
 import com.example.back.dto.response.plan.GetPlanTop3ListResponseDto;
 import com.example.back.dto.response.plan.PatchPlanCommentResponseDto;
@@ -101,6 +102,7 @@ public class PlanController {
         return response;
     }
 
+    //? 게획에 마크(즐겨찾기) 하기
     @PostMapping("/mark")
     public ResponseEntity<? super PostPlanMarkResponseDto> postPlanMark(
         @AuthenticationPrincipal String userEmail,
@@ -174,6 +176,15 @@ public class PlanController {
         @AuthenticationPrincipal String userEmail
     ) {
         ResponseEntity<? super GetPlanMyNoteListResponseDto> response = planService.getPlanMyNoteList(userEmail);
+        return response;
+    }
+
+    @GetMapping("/comment/{planId}")
+    public ResponseEntity<? super GetPlanCommentListResponseDto> getPlanCommentList(
+        @PathVariable(name = "planId") int planId,
+        @RequestParam(value = "sort", defaultValue = "like") String sortType
+    ) {
+        ResponseEntity<? super GetPlanCommentListResponseDto> response = planService.getPlanCommentList(planId, sortType);
         return response;
     }
 }
