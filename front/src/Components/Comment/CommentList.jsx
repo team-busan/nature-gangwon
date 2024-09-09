@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { CommentItem } from "./CommentItem";
 
-export function CommentList({ comments, onLike, formRef }) {
+export function CommentList({ comments, onLike, formRef, title}) {
   const [visibleCount, setVisibleCount] = useState(5);
 
   const handleLoadMore = () => {
@@ -17,10 +17,11 @@ export function CommentList({ comments, onLike, formRef }) {
       <ul className="">
         {comments.slice(0, visibleCount).map((comment) => (
           <CommentItem
-            key={comment.detailCommentId}
+            key={comment.id}
             comment={comment}
             onLike={onLike}
             formRef = {formRef}
+            title = {title}
           />
         ))}
       </ul>

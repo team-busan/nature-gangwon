@@ -62,7 +62,7 @@ export default function PlanDetailHeader({
   };
 
   return (
-    <section className="w-1420 mb-2">
+    <section className="w-1420">
       <div className="flex mt-3 justify-between items-center p-2 border-b-2">
         <div className="flex">
           <span className="w-20 h-20">

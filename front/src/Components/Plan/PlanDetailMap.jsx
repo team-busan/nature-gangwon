@@ -3,6 +3,7 @@ import NaverMapWithMarkers from "../NaverMapWithMarkers";
 import PlanDetailMemo from "./PlanDetailMemo";
 
 export default function PlanDetailMap({
+  markerColors,
   planHeader,
   selectedDay,
   availableDays,
@@ -10,17 +11,11 @@ export default function PlanDetailMap({
   locations,
   writer,
 }) {
-  const markerColors = [
-    { marker: "#1E3A8A", text: "#FFFFFF" }, // Navy Blue
-    { marker: "#B22222", text: "#FFFFFF" }, // Brick Red
-    { marker: "#FFD700", text: "#000000" }, // Golden Yellow
-    { marker: "#228B22", text: "#FFFFFF" }, // Forest Green
-    { marker: "#6A0DAD", text: "#FFFFFF" }, // Royal Purple
-  ];
+
 
   return (
-    <div className="">
-      <section className="w-1420">
+    <div className="border-b-2">
+      <section className="w-1420 p-2">
         <div className="flex justify-between items-center ">
           <div className="w-8/12">
             <h2>{planHeader.userNickname}님의 여행 루트가 준비됐어요! 🗺️</h2>
@@ -55,14 +50,14 @@ export default function PlanDetailMap({
             {locations.map((place, index) => (
               <li
                 key={index}
-                className="w-full h-40 mb-2 flex items-center border-2"
+                className="w-full h-40 mb-2 flex items-center border-2 rounded-lg"
               >
-                <div className="relative w-56 h-full flex items-center justify-center bg-gray-100">
+                <div className="relative w-56 h-full flex items-center justify-center bg-gray-100 rounded-lg">
                   {place.locationFirstimage ? (
                     <img
                       src={place.locationFirstimage}
                       alt="장소 이미지"
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover rounded-lg"
                     />
                   ) : (
                     <div className="text-gray-500">이미지 없음</div>

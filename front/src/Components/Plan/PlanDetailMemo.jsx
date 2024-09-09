@@ -2,9 +2,9 @@ import React from "react";
 
 export default function PlanDetailMemo({ filteredPlaces, writer, markerColors }) {
   return (
-    <div className="w-1420 mt-5">
+    <div className="w-1420 p-2">
       <h3>일정을 위한 메모를 확인해보세요📒</h3>
-      <div className="flex flex-wrap gap-5 mt-5">
+      <div className="flex flex-wrap gap-5 mt-2 mb-5">
         {filteredPlaces.map((place, index) => (
           <div
             key={place.placeId}
