@@ -11,7 +11,6 @@ const NaverMapWithMarkers = ({ width, height, locations = [], markerColors = [] 
     script.async = true; // 스크립트 비동기적으로 로드되게
     script.onload = () => {
       const { naver } = window; // 파일 로드 한 부분을 naver로 저장
-      console.log(naver);
       if (mapRef.current /* ref 가 참조하고 있는 dom 요소 */ && naver) { // 네이버 지도 초기화, 생성
         const initialPosition = new naver.maps.LatLng( 
           parseFloat(locations[0]?.mapy || 37.5665), 

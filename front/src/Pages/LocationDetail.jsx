@@ -10,9 +10,9 @@ import DetailComment from './../Components/LocationDetail/DetailComment';
 export default function LocationDetail() {
   const { id } = useParams();
   const detailId = Number(id);
+  const url = API_URL.LocationDetail.replace(':id', detailId);
 
   const fetchLocationDetail = async () => {
-    const url = API_URL.LocationDetail.replace(':id', detailId);
     const response = await axiosInstance.get(url);
     return response.data;
   };
@@ -67,6 +67,8 @@ export default function LocationDetail() {
       <DetailComment
         comments={destination.detailCommentList}
         refetchComments={refetch}
+        apiEndPoint = {url}
+        title = "관광지"
       />
     </>
   );

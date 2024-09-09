@@ -18,6 +18,11 @@ const API_URL = {
   PlanDetail : "/plan/:id",
   MyPage: "/myPage",
   Plan: "/plan",
+  PlanComment: "/plan/patch-comment",
+  FestivalComment: "/festival/patch-comment",
+  DetailComment: "/detail/patch-comment",
+  PlanCommentDelete : "/plan/delete-comment",
+  PlanCommentLike : "/plan/comment-like",
 };
 
 export { axiosInstance, API_URL };

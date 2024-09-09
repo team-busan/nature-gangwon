@@ -6,14 +6,16 @@ import PlanDetailHeader from "../Components/Plan/PlanDetailHeader";
 import PlanDetailMap from "../Components/Plan/PlanDetailMap";
 import { userState } from "../state/userState";
 import { useRecoilState } from "recoil";
+import PlanDetailPhoto from "../Components/Plan/PlanDetailPhoto";
+import DetailComment from "../Components/LocationDetail/DetailComment";
 
 export default function PlanDetail() {
   const [user] = useRecoilState(userState);
   const { id } = useParams();
   const planId = Number(id);
+  const url = API_URL.PlanDetail.replace(":id", planId);
 
   const fetchPlanDetail = async () => {
-    const url = API_URL.PlanDetail.replace(":id", planId);
     const response = await axiosInstance.get(url);
     return response.data;
   };
@@ -22,11 +24,20 @@ export default function PlanDetail() {
     data: planDetail,
     isLoading,
     isError,
+    refetch
   } = useQuery({
     queryKey: ["planDetail", planId],
     queryFn: fetchPlanDetail,
     enabled: !!planId,
   });
+
+  const markerColors = [
+    { marker: "#1E3A8A", text: "#FFFFFF" },
+    { marker: "#B22222", text: "#FFFFFF" },
+    { marker: "#FFD700", text: "#000000" },
+    { marker: "#228B22", text: "#FFFFFF" },
+    { marker: "#6A0DAD", text: "#FFFFFF" }, 
+  ];
 
   const [selectedDay, setSelectedDay] = useState(1);
 
@@ -51,12 +62,24 @@ export default function PlanDetail() {
         planHeader={planHeader}
       />
       <PlanDetailMap
+        markerColors = {markerColors}
         planHeader={planHeader}
         selectedDay={selectedDay}
         availableDays={availableDays}
         setSelectedDay={setSelectedDay}
         locations={filteredPlaces}
         writer = {writer}
+      />
+      <PlanDetailPhoto
+        locations = {filteredPlaces}
+        planHeader = {planHeader}
+        markerColors = {markerColors}
+      />
+      <DetailComment
+        comments = {planDetail.getPlanCommentList}
+        refetchComments = {refetch}
+        apiEndPoint = {url}
+        title = "계획"
       />
     </>
   );
