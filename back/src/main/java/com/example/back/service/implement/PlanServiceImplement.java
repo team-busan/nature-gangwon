@@ -26,6 +26,7 @@ import com.example.back.dto.response.plan.GetPlanListResponseDto;
 import com.example.back.dto.response.plan.GetPlanMyListResponseDto;
 import com.example.back.dto.response.plan.GetPlanMyMarkListResponseDto;
 import com.example.back.dto.response.plan.GetPlanMyNoteListResponseDto;
+import com.example.back.dto.response.plan.GetPlanMyPhotoListResponseDto;
 import com.example.back.dto.response.plan.PatchPlanCommentResponseDto;
 import com.example.back.dto.response.plan.PatchPlanResponseDto;
 import com.example.back.dto.response.plan.PostPlanCommentLikeResponseDto;
@@ -37,6 +38,7 @@ import com.example.back.dto.response.plan.planfiled.GetPlanCommentListItemDto;
 import com.example.back.dto.response.plan.planfiled.GetPlanListItemDto;
 import com.example.back.dto.response.plan.planfiled.GetPlanMyListAndMarkItemDto;
 import com.example.back.dto.response.plan.planfiled.GetPlanMyNoteListItemDto;
+import com.example.back.dto.response.plan.planfiled.GetPlanMyPhotoListItemDto;
 import com.example.back.dto.response.plan.planfiled.GetTop3ListItemDto;
 import com.example.back.entity.LocationBasedEntity;
 import com.example.back.entity.PhotosEntity;
@@ -172,28 +174,9 @@ public class PlanServiceImplement implements PlanService{
                 placeList.add(placeDto);
             }
 
-            // List<PlanCommentEntity> planCommentEntity = planCommentRepository.findByPlanIdOrderByPlanUploadDateDesc(planId);
-            // List<GetPlanCommentListItemDto> planCommentList = new ArrayList<>();
-
-            // for(PlanCommentEntity comment : planCommentEntity) {
-            //     int likeCount = (int) planCommentLikeRepository.countLikesByPlanCommentId(comment.getPlanCommentId());
-            //     GetPlanCommentListItemDto planCommentDto = new GetPlanCommentListItemDto();
-            //     planCommentDto.setPlanCommentId(comment.getPlanCommentId());
-            //     planCommentDto.setPlanId(comment.getPlanId());
-            //     planCommentDto.setUserEmail(comment.getUserEmail());
-            //     planCommentDto.setUserNickname(comment.getUserNickname());
-            //     planCommentDto.setUserProfile(comment.getUserProfile());
-            //     planCommentDto.setPlanContent(comment.getPlanContent());
-            //     planCommentDto.setPlanUploadDate(comment.getPlanUploadDate());
-            //     planCommentDto.setLikeCount((int) likeCount);
-
-            //     planCommentList.add(planCommentDto);
-            // }
-
-
             planEntity.increasePlanCount();
             planRepository.save(planEntity);
-            return GetPlanResponseDto.success(planEntity, placeList/*, planCommentList*/);
+            return GetPlanResponseDto.success(planEntity, placeList);
         } catch (Exception e) {
             e.printStackTrace();
             ResponseDto.databaseError();
@@ -735,6 +718,47 @@ public class PlanServiceImplement implements PlanService{
             }
 
             return GetPlanCommentListResponseDto.success(commentDtos);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseDto.databaseError();
+        }
+        return null;
+    }
+
+    //? 내가 작성한 계획의 사진 리스트
+    @Override
+    public ResponseEntity<? super GetPlanMyPhotoListResponseDto> getPlanMyPhotoList(String userEmail) {
+        try {
+            UserEntity userEntity = userRepository.findByUserEmail(userEmail);
+            if (userEntity == null) {
+                return GetPlanMyPhotoListResponseDto.notExistUser();
+            }
+
+            List<PlanEntity> planEntities = planRepository.findByUserEmailOrderByPlanId(userEmail);
+            if (planEntities == null) {
+                return GetPlanMyPhotoListResponseDto.notExistPlan();
+            }
+
+            List<GetPlanMyPhotoListItemDto> photoListItems = new ArrayList<>();
+
+            for (PlanEntity planEntity : planEntities) {
+                List<PlacesEntity> places = placesRepository.findByPlanId(planEntity.getPlanId());
+
+                List<String> photoUrls = places.stream()
+                    .flatMap(place -> photosRepository.findByPlacesId(place.getPlacesId()).stream())
+                    .map(PhotosEntity::getPhotoUrl)
+                    .collect(Collectors.toList());
+
+                GetPlanMyPhotoListItemDto photoList = new GetPlanMyPhotoListItemDto(
+                    planEntity.getPlanId(),
+                    planEntity.getPlanTitle(),
+                    photoUrls
+                );
+
+                photoListItems.add(photoList);
+            }
+
+            return GetPlanMyPhotoListResponseDto.success(photoListItems);
         } catch (Exception e) {
             e.printStackTrace();
             ResponseDto.databaseError();

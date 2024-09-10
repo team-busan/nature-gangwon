@@ -22,8 +22,6 @@ public class GetPlanResponseDto extends ResponseDto {
 
     private List<GetPlaceListItemDto> getPlaceListItemDto;
 
-    //private List<GetPlanCommentListItemDto> getPlanCommentList;
-
     private GetPlanResponseDto() {
         super();
     }
@@ -32,7 +30,6 @@ public class GetPlanResponseDto extends ResponseDto {
         GetPlanResponseDto responseBody = new GetPlanResponseDto();
         responseBody.setPlanEntity(planEntity);
         responseBody.setGetPlaceListItemDto(getPlaceListItemDto);
-        //responseBody.setGetPlanCommentList(getPlanCommentList);
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 
