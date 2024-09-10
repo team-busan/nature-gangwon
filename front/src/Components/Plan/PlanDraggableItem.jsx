@@ -108,13 +108,13 @@ const PlanDraggableItem = ({ item, idx, idx2, handleDelete }) => {
           <div className="flex gap-4 items-center justify-between relative">
             <div
               onClick={() => setIsMemoOpen(1)}
-              className="w-1/2 h-10 bg-blue-200 rounded-lg flex items-center justify-center cursor-pointer shadow"
+              className="w-1/2 h-10 bg-lightGreen rounded-lg flex items-center justify-center cursor-pointer shadow"
             >
               공유 메모 추가
             </div>
             <div
               onClick={() => setIsMemoOpen(2)}
-              className="w-1/2 h-10 bg-blue-200 rounded-lg flex items-center justify-center cursor-pointer shadow"
+              className="w-1/2 h-10 bg-lightGreen rounded-lg flex items-center justify-center cursor-pointer shadow"
             >
               개인 메모 추가
             </div>

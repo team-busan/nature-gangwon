@@ -15,8 +15,13 @@ import FestivalInfo from "./Pages/FestivalInfo.jsx";
 import FestivalDetail from "./Pages/FestivalDetail.jsx";
 import PlanInfo from "./Pages/PlanInfo.jsx";
 import PlanDetail from "./Pages/PlanDetail.jsx";
+import Landing from "./Pages/Landing.jsx";
 
 const router = createBrowserRouter([
+  {
+    path: "/landing",
+    element: <Landing />,
+  },
   {
     path: "/",
     element: <Root />,
@@ -34,8 +39,8 @@ const router = createBrowserRouter([
         element: <LocationInfo />,
       },
       {
-        path : "/festival/list",
-        element : <FestivalInfo/>,
+        path: "/festival/list",
+        element: <FestivalInfo />,
       },
       {
         path: "/destination/:id",
@@ -46,12 +51,12 @@ const router = createBrowserRouter([
         element: <FestivalDetail />,
       },
       {
-        path : "/plan/list",
-        element : <PlanInfo/>,
+        path: "/plan/list",
+        element: <PlanInfo />,
       },
       {
-        path : "/plan/:id",
-        element : <PlanDetail/>,
+        path: "/plan/:id",
+        element: <PlanDetail />,
       },
       {
         path: "/myPage/:id",
