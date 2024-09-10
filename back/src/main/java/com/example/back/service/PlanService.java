@@ -17,6 +17,7 @@ import com.example.back.dto.response.plan.GetPlanListResponseDto;
 import com.example.back.dto.response.plan.GetPlanMyListResponseDto;
 import com.example.back.dto.response.plan.GetPlanMyMarkListResponseDto;
 import com.example.back.dto.response.plan.GetPlanMyNoteListResponseDto;
+import com.example.back.dto.response.plan.GetPlanMyPhotoListResponseDto;
 import com.example.back.dto.response.plan.PatchPlanCommentResponseDto;
 import com.example.back.dto.response.plan.PatchPlanResponseDto;
 import com.example.back.dto.response.plan.PostPlanCommentLikeResponseDto;
@@ -40,4 +41,5 @@ public interface PlanService {
     ResponseEntity<? super GetPlanMyMarkListResponseDto> getPlanMyMarkList(String userEmail);
     ResponseEntity<? super GetPlanMyNoteListResponseDto> getPlanMyNoteList(String userEmail);
     ResponseEntity<? super GetPlanCommentListResponseDto> getPlanCommentList(int planId, String sortType);
+    ResponseEntity<? super GetPlanMyPhotoListResponseDto> getPlanMyPhotoList(String userEmail);
 }

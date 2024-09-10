@@ -22,6 +22,7 @@ import com.example.back.dto.response.plan.GetPlanListResponseDto;
 import com.example.back.dto.response.plan.GetPlanMyListResponseDto;
 import com.example.back.dto.response.plan.GetPlanMyMarkListResponseDto;
 import com.example.back.dto.response.plan.GetPlanMyNoteListResponseDto;
+import com.example.back.dto.response.plan.GetPlanMyPhotoListResponseDto;
 import com.example.back.dto.response.plan.DeletePlanCommentResponseDto;
 import com.example.back.dto.response.plan.DeletePlanResponseDto;
 import com.example.back.dto.response.plan.GetPlanCommentListResponseDto;
@@ -179,12 +180,22 @@ public class PlanController {
         return response;
     }
 
+    //? 계획에 작성된 댓글 리스트
     @GetMapping("/comment/{planId}")
     public ResponseEntity<? super GetPlanCommentListResponseDto> getPlanCommentList(
         @PathVariable(name = "planId") int planId,
         @RequestParam(value = "sort", defaultValue = "like") String sortType
     ) {
         ResponseEntity<? super GetPlanCommentListResponseDto> response = planService.getPlanCommentList(planId, sortType);
+        return response;
+    }
+
+    //? 자신이 작성한 게획의 사진 리스트
+    @GetMapping("/photo-list")
+    public ResponseEntity<? super GetPlanMyPhotoListResponseDto> getPlanMyPhotoList(
+        @AuthenticationPrincipal String userEmail
+    ) {
+        ResponseEntity<? super GetPlanMyPhotoListResponseDto> response = planService.getPlanMyPhotoList(userEmail);
         return response;
     }
 }
