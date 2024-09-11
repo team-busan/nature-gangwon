@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import MarkedPlans from "./MarkedPlans";
+import MarkedLocations from "./MarkedLocations";
+import MarkedFestivals from "./MarkedFestivals";
 
 const ContentSelect = ({ title, contentNum, setContentNum }) => {
   return (
@@ -23,25 +26,31 @@ const ContentSelect = ({ title, contentNum, setContentNum }) => {
 const MarkedContents = () => {
   const [contentNum, setContentNum] = useState("계획");
 
+  const render = () => {
+    if (contentNum === "계획") {
+      return <MarkedPlans />;
+    } else if (contentNum === "관광지") {
+      return <MarkedLocations />;
+    } else if (contentNum === "축제") {
+      return <MarkedFestivals />;
+    }
+  };
+
+  const selectList = ["계획", "관광지", "축제"];
+
   return (
-    <div>
+    <div className="flex flex-col">
       <div className="grid grid-cols-3">
-        <ContentSelect
-          title="계획"
-          contentNum={contentNum}
-          setContentNum={setContentNum}
-        />
-        <ContentSelect
-          title="관광지"
-          contentNum={contentNum}
-          setContentNum={setContentNum}
-        />
-        <ContentSelect
-          title="축제"
-          contentNum={contentNum}
-          setContentNum={setContentNum}
-        />
+        {selectList.map((item, idx) => (
+          <ContentSelect
+            key={idx}
+            title={item}
+            contentNum={contentNum}
+            setContentNum={setContentNum}
+          />
+        ))}
       </div>
+      <div className="mt-6">{render()}</div>
     </div>
   );
 };
