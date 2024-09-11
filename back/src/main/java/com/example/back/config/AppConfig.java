@@ -27,9 +27,17 @@ public class AppConfig {
                     .load();
             String apiKey = dotenv.get("TOURISM_API_KEY");
             String mailKey = dotenv.get("GMAIL_PASSWORD");
-            if (apiKey != null || mailKey != null) {
+            String kakaoOauth2Key = dotenv.get("KAKAO_OAUTH_KEY");
+            String kakaoOauthSecretKey = dotenv.get("KAKAO_OAUTH_SECRET_KEY");
+            String naverOauth2Key = dotenv.get("NAVER_OAUTH_KEY");
+            String naverOauthSecretKey = dotenv.get("NAVER_OAUTH_SECRET_KEY");
+            if (apiKey != null || mailKey != null || kakaoOauth2Key != null || kakaoOauthSecretKey != null || naverOauth2Key != null || naverOauthSecretKey != null) {
                 System.setProperty("TOURISM_API_KEY", apiKey);
                 System.setProperty("GMAIL_PASSWORD", mailKey);
+                System.setProperty("KAKAO_OAUTH_KEY", kakaoOauth2Key);
+                System.setProperty("KAKAO_OAUTH_SECRET_KEY", kakaoOauthSecretKey);
+                System.setProperty("NAVER_OAUTH_KEY", naverOauth2Key);
+                System.setProperty("NAVER_OAUTH_SECRET_KEY", naverOauthSecretKey);
             } else {
                 throw new RuntimeException("API key not found in .env file");
             }

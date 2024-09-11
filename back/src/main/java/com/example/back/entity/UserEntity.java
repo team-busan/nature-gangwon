@@ -1,5 +1,7 @@
 package com.example.back.entity;
 
+import java.util.Random;
+
 import com.example.back.dto.request.auth.SignUpRequestDto;
 
 import jakarta.persistence.Entity;
@@ -28,6 +30,19 @@ public class UserEntity {
         this.userNickname = dto.getUserNickname();
         this.userProfile = getDefaultProfileUrl();
         this.type = "App";
+    }
+
+    public UserEntity(String userId, String type) {
+        this.userEmail = userId;
+        this.userPassword = "!q2W3e#r";
+        this.userNickname = generateRandomNickname();
+        this.userProfile = getDefaultProfileUrl();
+        this.type = type;
+    }
+
+    private String generateRandomNickname() {
+        Random random = new Random();
+        return "user" + String.format("%04d", random.nextInt(10000));
     }
 
     private String getDefaultProfileUrl() {
