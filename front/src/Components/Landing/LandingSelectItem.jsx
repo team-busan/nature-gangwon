@@ -1,14 +1,25 @@
 import { motion } from "framer-motion";
 
-const LandingSelectItem = () => {
+const LandingSelectItem = ({ item, setWorldCupIndex }) => {
+  const handleClick = () => {
+    setWorldCupIndex((prev) => prev + 1);
+  };
+
   return (
     <motion.div
       initial={{ scale: 1 }}
       whileHover={{ scale: 1.1 }}
+      onClick={handleClick}
       className="w-[460px] h-[510px] rounded-xl shadow-content p-8 gap-6 flex flex-col cursor-pointer"
     >
-      <div className="bg-gray-200 h-3/4 rounded-xl">사진</div>
-      <div className="bg-gray-200 h-1/4 rounded-xl">글자</div>
+      <img
+        src={item.image}
+        alt={item.text}
+        className="bg-gray-200 h-3/4 rounded-xl"
+      />
+      <div className="bg-gray-200 h-1/4 rounded-xl flex items-center justify-center">
+        {item.text}
+      </div>
     </motion.div>
   );
 };

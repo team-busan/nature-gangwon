@@ -3,10 +3,19 @@ import PlanCard from "../Components/Home/PlanCard";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import LocationCard from "../Components/Home/LocationCard";
+import { useNavigate } from "react-router-dom";
+import { useCookie, useCookies } from "react-cookie";
 
 const Home = () => {
+  const navigate = useNavigate();
+  const [cookie, setCookie] = useCookies(["landing"]);
   const [plans, setPlans] = useState([]);
   const [locations, setLocations] = useState([]);
+
+  const handleWorldCup = () => {
+    setCookie("landing", false, { path: "/" });
+    navigate("/landing");
+  };
 
   const getTop3Plans = async () => {
     const res = await axios.get("http://localhost:8000/plan/top3");
@@ -33,6 +42,12 @@ const Home = () => {
     queryKey: ["random3Location"],
     queryFn: getRandom3Location,
   });
+
+  useEffect(() => {
+    if (cookie.landing === undefined) {
+      navigate("/landing");
+    }
+  }, []);
 
   return (
     <div className="w-[1420px] flex flex-col gap-10">
@@ -64,6 +79,13 @@ const Home = () => {
           <LocationCard key={idx} location={location} />
         ))}
       </div>
+
+      <button
+        onClick={handleWorldCup}
+        className="w-fit self-center bg-darkGreen text-white rounded-lg py-2 px-3"
+      >
+        관광지 월드컵 하러 가기
+      </button>
     </div>
   );
 };

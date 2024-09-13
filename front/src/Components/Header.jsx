@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosSearch } from "react-icons/io";
 import { FaRegCircleUser } from "react-icons/fa6";
-import { Link, useLocation } from "react-router-dom"; // useLocation 추가
+import { Link, useLocation, useNavigate } from "react-router-dom"; // useLocation 추가
 import { useCookies } from "react-cookie";
 import { useRecoilState } from "recoil";
 import { userState } from "../state/userState";
@@ -13,6 +13,8 @@ const Header = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const [user, setUser] = useRecoilState(userState);
   const location = useLocation(); // 현재 경로를 가져오는 useLocation 사용
+  const [searchValue, setSearchValue] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -42,6 +44,10 @@ const Header = () => {
     removeCookie("token", { path: "/" });
     setUser(null);
     window.location.reload();
+  };
+
+  const handleSearch = () => {
+    navigate(`/search?query=${searchValue}`);
   };
 
   return (
@@ -89,8 +95,18 @@ const Header = () => {
               type="text"
               placeholder="찾으시는 여행지가 있으신가요?"
               className="w-120 p-2 border-2 border-gray-400 rounded-lg"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearch();
+                }
+              }}
             />
-            <IoIosSearch className="text-2xl cursor-pointer absolute right-1 top-2" />
+            <IoIosSearch
+              className="text-2xl cursor-pointer absolute right-1 top-2"
+              onClick={handleSearch}
+            />
           </div>
         </div>
         <div className="w-4/12 flex justify-end items-center">

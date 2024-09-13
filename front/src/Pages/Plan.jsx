@@ -147,7 +147,7 @@ const Plan = () => {
     } else if (planStage === 2) {
       return <PlanPhotos setPlanStage={setPlanStage} />;
     } else {
-      return <PlanChooseThumnail setPlanStage={setPlanStage} />;
+      return <PlanChooseThumnail setPlanStage={setPlanStage} dates={dates} />;
     }
   };
 
