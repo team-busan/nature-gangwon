@@ -36,6 +36,7 @@ const PlanViewPhotos = () => {
       itemCopy.photoUrls = photoUrlsCopy;
       dayCopy[arrcodianItemState] = itemCopy;
       planCopy[arrcodianState] = dayCopy;
+
       const formData = new FormData();
       formData.append("file", inputRef.current?.files[0]);
       axios

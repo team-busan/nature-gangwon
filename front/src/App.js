@@ -16,6 +16,7 @@ import FestivalDetail from "./Pages/FestivalDetail.jsx";
 import PlanInfo from "./Pages/PlanInfo.jsx";
 import PlanDetail from "./Pages/PlanDetail.jsx";
 import Landing from "./Pages/Landing.jsx";
+import OAuth from "./Pages/OAuth.jsx";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Home />,
+      },
+      {
+        path: "auth/oauth-response/:token/:expirationTime",
+        element: <OAuth />,
       },
       {
         path: "/search",

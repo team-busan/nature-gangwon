@@ -51,18 +51,20 @@ const PlanChooseThumnail = ({ setPlanStage, dates }) => {
       postPlanList: postPlans,
     };
 
-    axios
-      .post("http://localhost:8000/plan/post", plan, {
-        headers: {
-          Authorization: `Bearer ${cookies.token}`,
-        },
-      })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    console.log(plan);
+
+    // axios
+    //   .post("http://localhost:8000/plan/post", plan, {
+    //     headers: {
+    //       Authorization: `Bearer ${cookies.token}`,
+    //     },
+    //   })
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   const rendering = () => {

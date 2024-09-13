@@ -36,8 +36,8 @@ export default function Login() {
     onSuccess: async (data) => {
       if (data.code === "SU") {
         setCookie("token", data.token, {
-            path: "/"/* 전역에서 쿠키접근 가능 */,
-            maxAge: data.expirationTime/* 쿠키 유효기간 설정 */
+          path: "/" /* 전역에서 쿠키접근 가능 */,
+          maxAge: data.expirationTime /* 쿠키 유효기간 설정 */,
         });
         try {
           const userData = await fetchUserData(data.token); // 토큰 보내면 유저 정보 받아서 저장
@@ -47,11 +47,11 @@ export default function Login() {
             userProfile: userData.userProfile,
           });
           Swal.fire({
-            title: '로그인 성공!',
-            icon: 'success',
-            confirmButtonText: '확인',
-            confirmButtonColor: 'green'
-        });
+            title: "로그인 성공!",
+            icon: "success",
+            confirmButtonText: "확인",
+            confirmButtonColor: "green",
+          });
           queryClient.invalidateQueries("user");
           console.log(data.token);
           navigate("/");
@@ -143,6 +143,8 @@ export default function Login() {
             </Link>
           </p>
         </div>
+        <Link to="http://localhost:8000/auth/oauth2/kakao">카카오</Link>
+        <Link to="http://localhost:8000/auth/oauth2/naver">네이버</Link>
       </div>
     </div>
   );

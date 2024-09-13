@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -18,6 +19,11 @@ const MyPhotos = () => {
     return res.data;
   };
 
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["photoList"],
+    queryFn: getMyPhotos,
+  });
+
   useEffect(() => {
     console.log(photos);
   }, [photos]);
@@ -25,7 +31,7 @@ const MyPhotos = () => {
   return (
     <ul className="grid grid-cols-4 justify-between gap-6">
       {photos.map((item, idx) => {
-        item.map((photo, idx2) => {
+        item?.map((photo, idx2) => {
           return (
             <motion.li
               initial={{ translateY: 0 }}
