@@ -1,6 +1,6 @@
 import Plans from "./Plans";
 import Memos from "./Memos";
-import Photos from "./Photos";
+import MyPhotos from "./MyPhotos";
 import ExpensesDivision from "./ExpensesDivision";
 import EditProfile from "./EditProfile";
 import MarkedContents from "./MarkedContents";
@@ -13,7 +13,7 @@ const MyPageContent = ({ contentNum }) => {
   } else if (contentNum === 2) {
     return <MarkedContents />;
   } else if (contentNum === 3) {
-    // return <Photos samplePhotos={samplePhotos} />;
+    return <MyPhotos />;
   } else if (contentNum === 4) {
     return <ExpensesDivision />;
   } else if (contentNum === 5) {

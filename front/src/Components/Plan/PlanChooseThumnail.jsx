@@ -1,9 +1,13 @@
 import { useRecoilState } from "recoil";
-import { planList } from "../../state/planState";
+import { planList, planTitleState } from "../../state/planState";
 import { MdAddPhotoAlternate } from "react-icons/md";
 import { useState } from "react";
+import axios from "axios";
+import { useCookies } from "react-cookie";
 
-const PlanChooseThumnail = ({ setPlanStage }) => {
+const PlanChooseThumnail = ({ setPlanStage, dates }) => {
+  const [cookies, setCookies] = useCookies(["token"]);
+  const [planTitle, setPlanTitle] = useRecoilState(planTitleState);
   const [plans, setPlans] = useRecoilState(planList);
   const [selectedIndex, setSelectedIndex] = useState({
     i: -1,
@@ -19,7 +23,47 @@ const PlanChooseThumnail = ({ setPlanStage }) => {
     setSelectedIndex({ i: i, j: j, k: k });
   };
 
-  const handleSavePlan = () => {};
+  const handleSavePlan = () => {
+    const postPlans = [];
+    for (let i = 0; i < plans.length; i++) {
+      for (let j = 0; j < plans[i].length; j++) {
+        const postItem = {
+          locationBasedId: plans[i][j].locationBasedId,
+          dayNumber: i + 1,
+          note: plans[i][j].memo,
+          note2: plans[i][j].memo2,
+          photoUrls: plans[i][j].photoUrls,
+        };
+        postPlans.push(postItem);
+      }
+    }
+
+    const plan = {
+      startDate: dates[0],
+      endDate: dates[1],
+      planTitle: planTitle,
+      PlanImage:
+        selectedIndex.i === -1 &&
+        selectedIndex.j === -1 &&
+        selectedIndex.k === -1
+          ? null
+          : plans[selectedIndex.i][selectedIndex.j].photoUrls[selectedIndex.k],
+      postPlanList: postPlans,
+    };
+
+    axios
+      .post("http://localhost:8000/plan/post", plan, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const rendering = () => {
     const result = [];

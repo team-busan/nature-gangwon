@@ -7,6 +7,7 @@ import {
 } from "../../state/planState";
 
 import { FaTrash } from "react-icons/fa6";
+import axios from "axios";
 
 const PlanViewPhotos = () => {
   const [plans, setPlans] = useRecoilState(planList);
@@ -23,7 +24,7 @@ const PlanViewPhotos = () => {
     inputRef.current?.click();
   };
 
-  const handleUploadPhoto = () => {
+  const handleUploadPhoto = async () => {
     if (inputRef.current?.files !== null) {
       const planCopy = [...plans];
       const dayCopy = [...plans[arrcodianState]];
@@ -35,6 +36,20 @@ const PlanViewPhotos = () => {
       itemCopy.photoUrls = photoUrlsCopy;
       dayCopy[arrcodianItemState] = itemCopy;
       planCopy[arrcodianState] = dayCopy;
+      const formData = new FormData();
+      formData.append("file", inputRef.current?.files[0]);
+      axios
+        .post("http://localhost:8000/file/upload", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       setPlans(planCopy);
     }
   };
