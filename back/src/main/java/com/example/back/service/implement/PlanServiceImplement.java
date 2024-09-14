@@ -151,6 +151,11 @@ public class PlanServiceImplement implements PlanService{
             planEntity.setUserProfile(userProfile);
             planEntity.setMarkCount(markCount);
 
+            List<PlanMarkEntity> planMarkEntities = planMarkRepository.findByPlanId(planId);
+            List<String> markedUserEmails = planMarkEntities.stream()
+                .map(PlanMarkEntity::getUserEmail)
+                .collect(Collectors.toList());
+
             List<PlacesEntity> placesEntity = placesRepository.findByPlanId(planId);
             List<GetPlaceListItemDto> placeList = new ArrayList<>();
 
@@ -176,7 +181,7 @@ public class PlanServiceImplement implements PlanService{
 
             planEntity.increasePlanCount();
             planRepository.save(planEntity);
-            return GetPlanResponseDto.success(planEntity, placeList);
+            return GetPlanResponseDto.success(planEntity, placeList, markedUserEmails);
         } catch (Exception e) {
             e.printStackTrace();
             ResponseDto.databaseError();
@@ -699,6 +704,11 @@ public class PlanServiceImplement implements PlanService{
             List<GetPlanCommentListItemDto> commentDtos = comments.stream().map(comment -> {
                 int likeCount = (int) planCommentLikeRepository.countLikesByPlanCommentId(comment.getPlanCommentId());
 
+                List<String> likedUserEmails = planCommentLikeRepository.findByPlanCommentId(comment.getPlanCommentId())
+                .stream()
+                .map(PlanCommentLikeEntity::getUserEmail)
+                .collect(Collectors.toList());
+
                 return new GetPlanCommentListItemDto(
                     comment.getPlanCommentId(),
                     comment.getUserEmail(),
@@ -707,7 +717,8 @@ public class PlanServiceImplement implements PlanService{
                     comment.getUserProfile(),
                     comment.getPlanContent(),
                     comment.getPlanUploadDate().toString(),
-                    likeCount
+                    likeCount,
+                    likedUserEmails
                 );
             }).collect(Collectors.toList());
 

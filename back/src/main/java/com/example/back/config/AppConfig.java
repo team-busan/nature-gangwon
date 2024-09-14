@@ -31,13 +31,24 @@ public class AppConfig {
             String kakaoOauthSecretKey = dotenv.get("KAKAO_OAUTH_SECRET_KEY");
             String naverOauth2Key = dotenv.get("NAVER_OAUTH_KEY");
             String naverOauthSecretKey = dotenv.get("NAVER_OAUTH_SECRET_KEY");
-            if (apiKey != null || mailKey != null || kakaoOauth2Key != null || kakaoOauthSecretKey != null || naverOauth2Key != null || naverOauthSecretKey != null) {
+            String googleOauth2Key = dotenv.get("GOOGLE_OAUTH_KEY");
+            String googleOauthSecretKey = dotenv.get("GOOGLE_OAUTH_SECRET_KEY");
+            if (apiKey != null || 
+                mailKey != null || 
+                kakaoOauth2Key != null || 
+                kakaoOauthSecretKey != null || 
+                naverOauth2Key != null || 
+                naverOauthSecretKey != null ||
+                googleOauth2Key != null ||
+                googleOauthSecretKey != null) {
                 System.setProperty("TOURISM_API_KEY", apiKey);
                 System.setProperty("GMAIL_PASSWORD", mailKey);
                 System.setProperty("KAKAO_OAUTH_KEY", kakaoOauth2Key);
                 System.setProperty("KAKAO_OAUTH_SECRET_KEY", kakaoOauthSecretKey);
                 System.setProperty("NAVER_OAUTH_KEY", naverOauth2Key);
                 System.setProperty("NAVER_OAUTH_SECRET_KEY", naverOauthSecretKey);
+                System.setProperty("GOOGLE_OAUTH_KEY", googleOauth2Key);
+                System.setProperty("GOOGLE_OAUTH_SECRET_KEY", googleOauthSecretKey);
             } else {
                 throw new RuntimeException("API key not found in .env file");
             }

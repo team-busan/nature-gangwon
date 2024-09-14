@@ -1,5 +1,7 @@
 package com.example.back.dto.response.plan.planfiled;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,4 +18,5 @@ public class GetPlanCommentListItemDto {
     private String planContent;
     private String planUploadDate;
     private int likeCount;
+    private List<String> likedUserEmails;
 }

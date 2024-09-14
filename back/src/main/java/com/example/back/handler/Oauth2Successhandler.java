@@ -21,14 +21,14 @@ public class Oauth2Successhandler extends SimpleUrlAuthenticationSuccessHandler 
 
     @Override
 	public void onAuthenticationSuccess(
-        HttpServletRequest request, 
-        HttpServletResponse response,
-		Authentication authentication
+      HttpServletRequest request, 
+      HttpServletResponse response,
+      Authentication authentication
     ) throws IOException, ServletException {
 		CustomOauth2User oauth2User = (CustomOauth2User) authentication.getPrincipal();
-        String userId = oauth2User.getName();
-        String token = jwtProvider.create(userId);
+      String userId = oauth2User.getName();
+      String token = jwtProvider.create(userId);
 
-        response.sendRedirect("http://localhost:3000/auth/oauth-response/" + token + "/3600");
+      response.sendRedirect("http://localhost:3000/auth/oauth-response/" + token + "/3600");
 	}
 }
