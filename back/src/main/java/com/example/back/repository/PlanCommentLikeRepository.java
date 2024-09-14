@@ -1,5 +1,7 @@
 package com.example.back.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,4 +16,5 @@ public interface PlanCommentLikeRepository extends JpaRepository<PlanCommentLike
     long countLikesByPlanCommentId(@Param("planCommentId") int planCommentId);
     @Transactional
     public void deleteByPlanCommentId(int planCommentId);
+    List<PlanCommentLikeEntity> findByPlanCommentId(int planCommentId);
 }

@@ -11,6 +11,7 @@ import java.util.List;
 public interface PlanMarkRepository extends JpaRepository<PlanMarkEntity, PlanMarkPK>{
     PlanMarkEntity findByUserEmailAndPlanId(String userEmail, int planId);
     List<PlanMarkEntity> findByUserEmail(String userEmail);
+    List<PlanMarkEntity> findByPlanId(int planId);
     int countByPlanId(int planId);
     @Transactional
     public void deleteByPlanId(int planId);
