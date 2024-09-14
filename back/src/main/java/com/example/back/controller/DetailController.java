@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.back.dto.request.detail.PostDetailCommentLikeRequestDto;
 import com.example.back.dto.request.detail.PostDetailCommentRequsetDto;
+import com.example.back.dto.request.detail.PostDetailMarkRequestDto;
 import com.example.back.dto.response.detail.PostDetailCommentResponseDto;
+import com.example.back.dto.response.detail.PostDetailMarkResponseDto;
 import com.example.back.dto.response.detail.GetDetailListResponseDto;
+import com.example.back.dto.response.detail.GetDetailMyMarkListResponseDto;
 import com.example.back.dto.response.detail.GetDetailRandom3ListResponseDto;
 import com.example.back.dto.response.detail.GetDetailResponseDto;
 import com.example.back.dto.response.detail.PostDetailCommentLikeResponseDto;
@@ -89,6 +92,24 @@ public class DetailController {
     public ResponseEntity<? super GetDetailRandom3ListResponseDto> getRandom3List()
     {
         ResponseEntity<? super GetDetailRandom3ListResponseDto> response = detailService.getRandom3List();
+        return response;
+    }
+
+    //? 관광지 즐겨찾기
+    @PostMapping("/mark")
+    public ResponseEntity<? super PostDetailMarkResponseDto> postDetailMark(
+        @AuthenticationPrincipal String userEmail,
+        @Valid @RequestBody PostDetailMarkRequestDto requestBody
+    ){
+        ResponseEntity<? super PostDetailMarkResponseDto> response = detailService.postDetailMark(userEmail, requestBody);
+        return response;
+    }
+
+    @GetMapping("/mark-list")
+    public ResponseEntity<? super GetDetailMyMarkListResponseDto> getDetailMarkList(
+        @AuthenticationPrincipal String userEamil
+    ){
+        ResponseEntity <? super GetDetailMyMarkListResponseDto> response = detailService.getDetailMarkList(userEamil);
         return response;
     }
 }
