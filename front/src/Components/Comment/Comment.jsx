@@ -36,28 +36,26 @@ export default function Comment({ comment, formRef, title }) {
     }
   }, [edit]);
 
-  // 좋아요 url 함수
   const getLikeCommentUrl = () => {
     switch (title) {
-      case "계획" :
+      case "plan" :
         return `${API_URL.PlanCommentLike}`;
-      case "관광지" :
+      case "destination" :
         return null;
-      case "축제" : 
+      case "festival" : 
         return null;
       default :
         throw new Error("잘못된 title 값입니다.");
     }
   }
 
-  // 삭제 url 함수
   const getDeleteCommentUrl = (commentId) => {
     switch (title) {
-      case "계획":
+      case "plan":
         return `${API_URL.PlanCommentDelete}/${commentId}`;
-      case "관광지":
+      case "destination":
         return `${API_URL.TouristSpotComment}/${commentId}`;
-      case "축제":
+      case "festival":
         return `${API_URL.FestivalComment}/${commentId}`;
       default:
         throw new Error("잘못된 title 값입니다.");
@@ -83,7 +81,7 @@ export default function Comment({ comment, formRef, title }) {
     },
     onSuccess: async () => {
       // 댓글 목록을 다시 불러오기 위해 캐시 무효화
-      await queryClient.invalidateQueries([`${title}Detail`, detailId]);
+      await queryClient.invalidateQueries(["planComments", detailId]);
     },
     onError: (error) => {
       Swal.fire("오류 발생", "로그인 후 이용해주세요", "error");
@@ -95,7 +93,6 @@ export default function Comment({ comment, formRef, title }) {
     mutationKey: ["commentDelete", comment.id],
     mutationFn: (commentId) => {
       const url = getDeleteCommentUrl(commentId);
-      console.log(url);
       return axiosInstance.delete(url, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
@@ -104,7 +101,7 @@ export default function Comment({ comment, formRef, title }) {
     },
     onSuccess: async () => {
       // 댓글 목록을 다시 불러오기 위해 캐시 무효화
-      await queryClient.invalidateQueries([`${title}Detail`, detailId]);
+      await queryClient.invalidateQueries(["planComments", detailId]);
       Swal.fire("삭제 완료!", "댓글이 성공적으로 삭제되었습니다.", "success");
     },
     onError: (error) => {
@@ -112,7 +109,6 @@ export default function Comment({ comment, formRef, title }) {
     },
   });
 
-  // 삭제 확인 및 요청
   const handleDelete = (id) => {
     Swal.fire({
       title: '정말로 삭제하시겠습니까?',
@@ -134,7 +130,6 @@ export default function Comment({ comment, formRef, title }) {
   const handleOnLike = (commentId) => {
     likeMutation.mutate(commentId);
   }
-  // 댓글 수정
   const handleModify = (id, content) => {
     if (edit && isWritingComment) {
       setIsWritingComment(false);
