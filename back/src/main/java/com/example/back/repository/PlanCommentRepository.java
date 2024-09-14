@@ -10,6 +10,7 @@ import java.util.List;
 public interface PlanCommentRepository extends JpaRepository<PlanCommentEntity, Integer> {
     PlanCommentEntity findByPlanCommentId(int planCommentId);
     List<PlanCommentEntity> findByPlanIdOrderByPlanUploadDateDesc(int planId);
+    List<PlanCommentEntity> findByUserEmail(String userEmail);
     PlanCommentEntity findByPlanId(int planId);
     int countByPlanId(int planId);
     @Transactional

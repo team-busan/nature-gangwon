@@ -48,4 +48,12 @@ public class UserEntity {
     private String getDefaultProfileUrl() {
         return "/image/profile.jpg";
     }
+
+    public void patchNickname(String userNickname) {
+        this.userNickname = userNickname;
+    }
+
+    public void patchProfle(String userProfile) {
+        this.userProfile = userProfile;
+    }
 }

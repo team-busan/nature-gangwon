@@ -379,7 +379,7 @@ public class PlanServiceImplement implements PlanService{
 
         } catch (Exception e) {
             e.printStackTrace();
-            ResponseDto.databaseError();
+            return ResponseDto.databaseError();
         }
         return PostPlanMarkResponseDto.success();
     }
@@ -437,7 +437,7 @@ public class PlanServiceImplement implements PlanService{
             planRepository.deleteByPlanId(planId);
         } catch (Exception e) {
             e.printStackTrace();
-            ResponseDto.databaseError();
+            return ResponseDto.databaseError();
         }
         return DeletePlanResponseDto.success();
     }
@@ -603,9 +603,8 @@ public class PlanServiceImplement implements PlanService{
         return GetPlanMyListResponseDto.success(myPlan);
         } catch (Exception e) {
             e.printStackTrace();
-            ResponseDto.databaseError();
+            return ResponseDto.databaseError();
         }
-        return null;
     }
 
     //? 자신이 마크한 계획 가져오기
@@ -639,9 +638,8 @@ public class PlanServiceImplement implements PlanService{
             return GetPlanMyMarkListResponseDto.success(markedPlanDtos);
         } catch (Exception e) {
             e.printStackTrace();
-            ResponseDto.databaseError();
+            return ResponseDto.databaseError();
         }
-        return null;
     }
 
     //? 자신이 게획에 작성한 메모 리스트 가져오기
@@ -682,9 +680,8 @@ public class PlanServiceImplement implements PlanService{
             return GetPlanMyNoteListResponseDto.success(myNoteList);
         } catch (Exception e) {
             e.printStackTrace();
-            ResponseDto.databaseError();
+            return ResponseDto.databaseError();
         }
-        return null;
     }
 
     //? 특정 계획 댓글 리스트
@@ -731,9 +728,8 @@ public class PlanServiceImplement implements PlanService{
             return GetPlanCommentListResponseDto.success(commentDtos);
         } catch (Exception e) {
             e.printStackTrace();
-            ResponseDto.databaseError();
+            return ResponseDto.databaseError();
         }
-        return null;
     }
 
     //? 내가 작성한 계획의 사진 리스트
@@ -772,8 +768,7 @@ public class PlanServiceImplement implements PlanService{
             return GetPlanMyPhotoListResponseDto.success(photoListItems);
         } catch (Exception e) {
             e.printStackTrace();
-            ResponseDto.databaseError();
+            return ResponseDto.databaseError();
         }
-        return null;
     }
 }
