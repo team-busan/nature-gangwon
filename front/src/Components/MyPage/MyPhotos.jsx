@@ -31,7 +31,7 @@ const MyPhotos = () => {
   return (
     <ul className="grid grid-cols-4 justify-between gap-6">
       {photos.map((item, idx) => {
-        item?.map((photo, idx2) => {
+        return item?.photoUrls.map((photo, idx2) => {
           return (
             <motion.li
               initial={{ translateY: 0 }}
@@ -40,11 +40,7 @@ const MyPhotos = () => {
               key={idx.toString() + idx2.toString()}
             >
               <Link to={`/plan/${item.planId}`}>
-                <div className="bg-random w-full h-full object-cover rounded-xl">
-                  <div className="absolute left-0 top-0 w-full h-full rounded-xl bg-black/40 p-5 flex flex-col justify-between text-white">
-                    <p className="text-lg">{photo.planTitle}</p>
-                  </div>
-                </div>
+                <img src={photo} alt="여행 이미지" />
               </Link>
             </motion.li>
           );

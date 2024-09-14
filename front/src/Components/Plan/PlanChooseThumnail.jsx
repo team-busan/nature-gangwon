@@ -4,8 +4,12 @@ import { MdAddPhotoAlternate } from "react-icons/md";
 import { useState } from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import { format, set } from "date-fns";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const PlanChooseThumnail = ({ setPlanStage, dates }) => {
+  const navigate = useNavigate();
   const [cookies, setCookies] = useCookies(["token"]);
   const [planTitle, setPlanTitle] = useRecoilState(planTitleState);
   const [plans, setPlans] = useRecoilState(planList);
@@ -32,39 +36,51 @@ const PlanChooseThumnail = ({ setPlanStage, dates }) => {
           dayNumber: i + 1,
           note: plans[i][j].memo,
           note2: plans[i][j].memo2,
-          photoUrls: plans[i][j].photoUrls,
+          photoUrls: plans[i][j].photoUrls.map((url) => url.substring(5)),
         };
         postPlans.push(postItem);
       }
     }
 
     const plan = {
-      startDate: dates[0],
-      endDate: dates[1],
+      startDate: format(dates[0], "yyyy-MM-dd"),
+      endDate: format(dates[1], "yyyy-MM-dd"),
       planTitle: planTitle,
       PlanImage:
         selectedIndex.i === -1 &&
         selectedIndex.j === -1 &&
         selectedIndex.k === -1
           ? null
-          : plans[selectedIndex.i][selectedIndex.j].photoUrls[selectedIndex.k],
+          : plans[selectedIndex.i][selectedIndex.j].photoUrls[
+              selectedIndex.k
+            ].substring(5),
       postPlanList: postPlans,
     };
 
-    console.log(plan);
-
-    // axios
-    //   .post("http://localhost:8000/plan/post", plan, {
-    //     headers: {
-    //       Authorization: `Bearer ${cookies.token}`,
-    //     },
-    //   })
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    axios
+      .post("http://localhost:8000/plan/post", plan, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+        },
+      })
+      .then((res) => {
+        Swal.fire({
+          icon: "success",
+          title: "계획이 저장되었습니다!",
+          showConfirmButton: false,
+          timer: 3000,
+        });
+        setPlanTitle("");
+        navigate("/plan/list");
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "계획 저장에 실패했습니다.",
+          showConfirmButton: false,
+          timer: 3000,
+        });
+      });
   };
 
   const rendering = () => {
