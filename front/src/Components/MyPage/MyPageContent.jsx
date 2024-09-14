@@ -1,4 +1,4 @@
-import Plans from "./Plans";
+import MyPlans from "./MyPlans";
 import Memos from "./Memos";
 import MyPhotos from "./MyPhotos";
 import ExpensesDivision from "./ExpensesDivision";
@@ -7,7 +7,7 @@ import MarkedContents from "./MarkedContents";
 
 const MyPageContent = ({ contentNum }) => {
   if (contentNum === 0) {
-    return <Plans />;
+    return <MyPlans />;
   } else if (contentNum === 1) {
     return <Memos />;
   } else if (contentNum === 2) {

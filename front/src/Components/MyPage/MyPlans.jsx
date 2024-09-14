@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { useQuery } from "@tanstack/react-query";
 import MyPagePlan from "./MyPagePlan";
 
-const Plans = () => {
+const MyPlans = () => {
   const [plans, setPlans] = useState([]);
 
   const [cookies, setCookie] = useCookies(["token"]);
@@ -20,6 +20,10 @@ const Plans = () => {
     setPlans(res.data.myList);
     return res.data;
   };
+
+  useEffect(() => {
+    console.log(plans);
+  }, [plans]);
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["plans"],
@@ -35,4 +39,4 @@ const Plans = () => {
   );
 };
 
-export default Plans;
+export default MyPlans;
