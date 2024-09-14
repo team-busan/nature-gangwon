@@ -52,7 +52,7 @@ const Header = () => {
 
   return (
     <header className="w-full mb-1 flex justify-center bg-white shadow-md">
-      <div className="w-1420 flex h-20 p-3 items-center">
+      <div className="w-1420 flex h-20 py-3 items-center">
         <div className="text-black w-2/12">
           <Link to="/" className="inline-block">
             <img src={Logo} alt="Nature Logo" />

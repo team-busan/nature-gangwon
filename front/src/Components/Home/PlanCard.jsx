@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import PlanDefaultImage from "../PlanDefaultImage";
 
 const PlanCard = ({ plan }) => {
   return (
@@ -12,7 +13,9 @@ const PlanCard = ({ plan }) => {
           alt="여행 계획 대표 사진"
           className="absolute w-[430px] h-[430px] top-0 left-0 rounded-lg"
         />
-      ) : null}
+      ) : (
+        <PlanDefaultImage />
+      )}
       <div className="text-lg text-white bg-black/50 z-10 rounded-lg py-2 px-4 w-fit">
         <p>{plan.planTitle}</p>
         <p>{plan.planUploadDate.substring(0, 10)}</p>
