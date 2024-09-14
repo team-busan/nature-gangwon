@@ -11,26 +11,32 @@ import com.example.back.dto.ResponseDto;
 import com.example.back.dto.request.festival.PatchFestivalCommentRequestDto;
 import com.example.back.dto.request.festival.PostFestivalCommentLikeRequestDto;
 import com.example.back.dto.request.festival.PostFestivalCommentRequestDto;
+import com.example.back.dto.request.festival.PostFestivalMarkRequestDto;
 import com.example.back.dto.response.Festival.DeleteFestivalCommentResponseDto;
 import com.example.back.dto.response.Festival.GetFestivalListResponseDto;
+import com.example.back.dto.response.Festival.GetFestivalMarkListResponseDto;
 import com.example.back.dto.response.Festival.GetFestivalResponseDto;
 import com.example.back.dto.response.Festival.PatchFestivalCommentResponseDto;
 import com.example.back.dto.response.Festival.PostFestivalCommentLikeResponseDto;
 import com.example.back.dto.response.Festival.PostFestivalCommentResponseDto;
+import com.example.back.dto.response.Festival.PostFestivalMarkResponseDto;
 import com.example.back.dto.response.Festival.Festivalfiled.GetFestivalCommentListItemDto;
 import com.example.back.dto.response.Festival.Festivalfiled.GetFestivalImageDto;
 import com.example.back.dto.response.Festival.Festivalfiled.GetFestivalListItemDto;
+import com.example.back.dto.response.Festival.Festivalfiled.GetFestivalMarkListItemDto;
 import com.example.back.dto.response.plan.PostPlanCommentResponseDto;
 import com.example.back.entity.FestivalCommentEntity;
 import com.example.back.entity.FestivalCommentLIkeEntity;
 import com.example.back.entity.FestivalDescriptionEntity;
 import com.example.back.entity.FestivalEntity;
 import com.example.back.entity.FestivalImageEntity;
+import com.example.back.entity.FestivalMarkEntity;
 import com.example.back.entity.UserEntity;
 import com.example.back.repository.FestivalCommentLikeRepository;
 import com.example.back.repository.FestivalCommentRepository;
 import com.example.back.repository.FestivalDescriptionRepository;
 import com.example.back.repository.FestivalImageRepository;
+import com.example.back.repository.FestivalMarkRepository;
 import com.example.back.repository.FestivalRepository;
 import com.example.back.repository.UserRepository;
 import com.example.back.service.FestivalService;
@@ -38,6 +44,7 @@ import com.example.back.service.FestivalService;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.ArrayList;
 
 import java.math.BigDecimal;
@@ -56,6 +63,7 @@ public class FestivalServiceImplement implements FestivalService {
     private final FestivalCommentRepository festivalCommentRepository;
     private final UserRepository userRepository;
     private final FestivalCommentLikeRepository festivalCommentLikeRepository;
+    private final FestivalMarkRepository festivalMarkRepository;
     //? 축제 리스트
     @Override
     public ResponseEntity<? super GetFestivalListResponseDto> getFestivalList(int page, int size){
@@ -273,5 +281,72 @@ public class FestivalServiceImplement implements FestivalService {
             return ResponseDto.databaseError();
         }
         return PatchFestivalCommentResponseDto.success();
+    }
+
+    //? 축제 즐겨찾기
+    @Override
+    public ResponseEntity<? super PostFestivalMarkResponseDto> postFestivalMark(String userEmail, PostFestivalMarkRequestDto dto){
+        try{
+            UserEntity userEntity = userRepository.findByUserEmail(userEmail);
+            if(userEntity == null){
+                return PostFestivalMarkResponseDto.notExistUser();
+            }
+
+            FestivalEntity festivalEntity = festivalRepository.findByFestivalId(dto.getFestivalId());
+            if(festivalEntity == null){
+                return PostFestivalMarkResponseDto.notExistFestival();
+            }
+
+            FestivalMarkEntity festivalMarkEntity = festivalMarkRepository.findByUserEmailAndFestivalId(userEmail, dto.getFestivalId());
+            if (festivalMarkEntity == null) {
+                festivalMarkEntity = new FestivalMarkEntity(userEntity, dto.getFestivalId());
+                festivalMarkRepository.save(festivalMarkEntity);
+            }else{
+                festivalMarkRepository.delete(festivalMarkEntity);
+            }
+        
+        } catch (Exception e){
+            e.printStackTrace();
+            ResponseDto.databaseError();
+        }
+        return PostFestivalMarkResponseDto.success();
+    }
+
+    //? 축제 즐겨찾기 리스트 가져오기
+    @Override
+    public ResponseEntity<? super GetFestivalMarkListResponseDto> getFestivalMarkList(String userEmail){
+        try{
+            List<FestivalMarkEntity> festivalMarkList = festivalMarkRepository.findByUserEmail(userEmail);
+            if(festivalMarkList == null){
+                return GetFestivalMarkListResponseDto.notExistFestival();
+            }
+
+            UserEntity userEntity = userRepository.findByUserEmail(userEmail);
+            if(userEntity == null){
+                return GetFestivalMarkListResponseDto.notExistUser();
+            }
+
+            List<GetFestivalMarkListItemDto> markList = festivalMarkList.stream()
+            .map(mark -> {
+                FestivalEntity festival = festivalRepository.findByFestivalId(mark.getFestivalId());
+                FestivalImageEntity image = festivalImageRepository.findByFestivalId(mark.getFestivalId());
+                if(festival == null) return null;
+                return new GetFestivalMarkListItemDto(
+                    festival.getFestivalId(),
+                    festival.getFestivalTitle(),
+                    festival.getFestivalStartDate(),
+                    festival.getFestivalEndDate(),
+                    festival.getFestivalFirstimage(),
+                    image != null ? image.getFestivalImage3() : null
+
+                );
+            })
+            .collect(Collectors.toList());
+            return GetFestivalMarkListResponseDto.success(markList);
+        } catch (Exception e){
+            e.printStackTrace();
+            ResponseDto.databaseError();
+        }
+        return null;
     }
 }

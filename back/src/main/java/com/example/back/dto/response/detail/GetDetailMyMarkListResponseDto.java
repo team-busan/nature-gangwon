@@ -1,23 +1,27 @@
 package com.example.back.dto.response.detail;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.example.back.common.ResponseCode;
 import com.example.back.common.ResponseMessage;
 import com.example.back.dto.ResponseDto;
+import com.example.back.dto.response.detail.Detailfiled.GetDetailMarkListItemDto;
 
 import lombok.Getter;
 
-//? 추후 작업하겠습니다. 리포지토리, 컨트롤러, dto필드 서비스 로직 필요
 @Getter
 public class GetDetailMyMarkListResponseDto extends ResponseDto {
-    private GetDetailMyMarkListResponseDto() {
+    private List<GetDetailMarkListItemDto> markList;
+    private GetDetailMyMarkListResponseDto(List<GetDetailMarkListItemDto> markList) {
         super();
+        this.markList = markList;
     }
 
-    public static ResponseEntity<GetDetailMyMarkListResponseDto> success() {
-        GetDetailMyMarkListResponseDto responseBody = new GetDetailMyMarkListResponseDto();
+    public static ResponseEntity<GetDetailMyMarkListResponseDto> success(List<GetDetailMarkListItemDto> markList) {
+        GetDetailMyMarkListResponseDto responseBody = new GetDetailMyMarkListResponseDto(markList);
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 

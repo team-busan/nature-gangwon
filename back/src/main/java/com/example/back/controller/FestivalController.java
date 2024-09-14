@@ -15,12 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.back.dto.request.festival.PatchFestivalCommentRequestDto;
 import com.example.back.dto.request.festival.PostFestivalCommentLikeRequestDto;
 import com.example.back.dto.request.festival.PostFestivalCommentRequestDto;
+import com.example.back.dto.request.festival.PostFestivalMarkRequestDto;
 import com.example.back.dto.response.Festival.DeleteFestivalCommentResponseDto;
 import com.example.back.dto.response.Festival.GetFestivalListResponseDto;
+import com.example.back.dto.response.Festival.GetFestivalMarkListResponseDto;
 import com.example.back.dto.response.Festival.GetFestivalResponseDto;
 import com.example.back.dto.response.Festival.PatchFestivalCommentResponseDto;
 import com.example.back.dto.response.Festival.PostFestivalCommentLikeResponseDto;
 import com.example.back.dto.response.Festival.PostFestivalCommentResponseDto;
+import com.example.back.dto.response.Festival.PostFestivalMarkResponseDto;
 import com.example.back.service.FestivalService;
 
 import jakarta.validation.Valid;
@@ -46,7 +49,7 @@ public class FestivalController {
     @GetMapping("/{festivalId}")
     public ResponseEntity<? super GetFestivalResponseDto> getFestival(
         @PathVariable(name = "festivalId") int festivalId,
-        @RequestParam(name = "sortOrder", defaultValue = "latest") String sortOrder
+        @RequestParam(name = "sort", defaultValue = "latest") String sortOrder
     ) {
     return festivalService.getFestival(festivalId, sortOrder);
     }
@@ -90,4 +93,20 @@ public class FestivalController {
         return response;
     }
 
+    @PostMapping("/mark")
+    public ResponseEntity<? super PostFestivalMarkResponseDto> postFesitvalMark(
+        @AuthenticationPrincipal String userEmail,
+        @Valid @RequestBody PostFestivalMarkRequestDto requestBody
+    ) {
+        ResponseEntity<? super PostFestivalMarkResponseDto> response = festivalService.postFestivalMark(userEmail, requestBody);
+        return response;
+    }
+
+    @GetMapping("/mark-list")
+    public ResponseEntity<? super GetFestivalMarkListResponseDto> getFestialMarkList(
+        @AuthenticationPrincipal String userEmail
+    ){
+        ResponseEntity <? super GetFestivalMarkListResponseDto> response = festivalService.getFestivalMarkList(userEmail);
+        return response;
+    }
 }

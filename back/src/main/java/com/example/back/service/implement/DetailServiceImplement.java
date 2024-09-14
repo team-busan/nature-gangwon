@@ -21,25 +21,31 @@ import org.springframework.stereotype.Service;
 import com.example.back.dto.ResponseDto;
 import com.example.back.dto.request.detail.PostDetailCommentLikeRequestDto;
 import com.example.back.dto.request.detail.PostDetailCommentRequsetDto;
+import com.example.back.dto.request.detail.PostDetailMarkRequestDto;
 import com.example.back.dto.response.detail.PostDetailCommentResponseDto;
+import com.example.back.dto.response.detail.PostDetailMarkResponseDto;
 import com.example.back.dto.response.detail.DeleteDetailCommentResponseDto;
 import com.example.back.dto.response.detail.GetDetailListResponseDto;
+import com.example.back.dto.response.detail.GetDetailMyMarkListResponseDto;
 import com.example.back.dto.response.detail.GetDetailRandom3ListResponseDto;
 import com.example.back.dto.response.detail.GetDetailResponseDto;
 import com.example.back.dto.response.detail.PostDetailCommentLikeResponseDto;
 import com.example.back.dto.response.detail.Detailfiled.GetDetailImageDto;
 import com.example.back.dto.response.detail.Detailfiled.GetDetailListItemDto;
+import com.example.back.dto.response.detail.Detailfiled.GetDetailMarkListItemDto;
 import com.example.back.dto.response.detail.Detailfiled.GetDetailRandom3ListItemDto;
 import com.example.back.entity.DetailCommentEntity;
 import com.example.back.entity.DetailCommentLikeEntity;
 import com.example.back.entity.DetailDescriptionEntity;
 import com.example.back.entity.DetailEntity;
 import com.example.back.entity.DetailImageEntity;
+import com.example.back.entity.DetailMarkEntity;
 import com.example.back.entity.UserEntity;
 import com.example.back.repository.DetailCommentLikeRepository;
 import com.example.back.repository.DetailCommentRepository;
 import com.example.back.repository.DetailDescriptionRepository;
 import com.example.back.repository.DetailImageRepository;
+import com.example.back.repository.DetailMarkRepository;
 import com.example.back.repository.DetailRepository;
 import com.example.back.repository.UserRepository;
 import com.example.back.service.DetailService;
@@ -61,6 +67,8 @@ public class DetailServiceImplement implements DetailService{
     private final UserRepository userRepository;
 
     private final DetailCommentLikeRepository detailCommentLikeRepository;
+
+    private final DetailMarkRepository detailMarkRepository;
 
     private String mapSigungucode(String sigunguName) {
         Map sigunguMap = new HashMap<>();
@@ -292,6 +300,69 @@ public class DetailServiceImplement implements DetailService{
             e.printStackTrace();
             return ResponseDto.databaseError();
         }
+    }
+
+    //? 관광지 즐겨찾기
+    @Override
+    public ResponseEntity< ? super PostDetailMarkResponseDto> postDetailMark(String userEmail, PostDetailMarkRequestDto dto){
+        try{
+            UserEntity userEntity = userRepository.findByUserEmail(userEmail);
+            if(userEntity == null){
+                return PostDetailMarkResponseDto.notExistUser();
+            }
+
+            DetailEntity detailEntity = detailRepository.findByDetailId(dto.getDetailId());
+            if(detailEntity == null){
+                return PostDetailMarkResponseDto.notExistDetial();
+            }
+
+            DetailMarkEntity detailMarkEntity = detailMarkRepository.findByUserEmailAndDetailId(userEmail, dto.getDetailId());
+            if(detailMarkEntity == null){
+                detailMarkEntity = new DetailMarkEntity(userEntity, dto.getDetailId());
+                detailMarkRepository.save(detailMarkEntity);
+            }else{
+                detailMarkRepository.delete(detailMarkEntity);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            ResponseDto.databaseError();
+        }
+        return PostDetailMarkResponseDto.success();
+    }
+
+    //? 관광지 즐겨찾기 리스트 가져오기
+    @Override
+    public ResponseEntity<? super GetDetailMyMarkListResponseDto> getDetailMarkList(String userEmail){
+        try{
+            List<DetailMarkEntity> detailMarkList = detailMarkRepository.findByUserEmail(userEmail);
+            if(detailMarkList == null){
+                return GetDetailMyMarkListResponseDto.notExistDetail();
+            }
+             UserEntity userEntity = userRepository.findByUserEmail(userEmail);
+             if(userEntity == null){
+                return GetDetailMyMarkListResponseDto.notExistUser();
+             }
+
+             List<GetDetailMarkListItemDto> markList = detailMarkList.stream()
+             .map(mark -> {
+                DetailEntity detail = detailRepository.findByDetailId(mark.getDetailId());
+                DetailImageEntity image = detailImageRepository.findByDetailId(mark.getDetailId());
+                if(detail == null) return null;
+                return new GetDetailMarkListItemDto(
+                    detail.getDetailId(),
+                    detail.getDetailTitle(),
+                    detail.getDetailFirstimage(),
+                    image != null ? image.getDetailImage3() : null
+                );
+             })
+             .collect(Collectors.toList());
+             return GetDetailMyMarkListResponseDto.success(markList);
+        } catch (Exception e){
+            e.printStackTrace();
+            ResponseDto.databaseError();
+        }
+        return null;
+    
     }
 
 }
