@@ -1,24 +1,22 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { festival_detail } from '../Stores/mockData';
 import DetailHeader from '../Components/LocationDetail/DetailHeader';
 import DetailSlider from '../Components/LocationDetail/DetailSlider';
 import DetailDescription from '../Components/LocationDetail/DetailDescription';
 import DetailInformation from '../Components/LocationDetail/DetailInformation';
 import DetailComment from '../Components/LocationDetail/DetailComment';
+import FestivalDetailComponent from './FestivalDetail';
+import { API_URL, axiosInstance } from '../Stores/API';
 
 export default function FestivalDetail() {
   const { id } = useParams();
   const festivalId = Number(id);
+  const url = API_URL.FestivalDetails.replace(':id', festivalId);
   
   const fetchFestivalDetail = async () => {
-    // festivalEntity에서 festivalId를 필터링하여 반환
-    if (festival_detail.festivalEntity.festivalId === festivalId) {
-      return festival_detail;
-    } else {
-      throw new Error("Festival not found");
-    }
+    const response = await axiosInstance.get(url);
+    return response.data;
   };
 
   const { data: festival, isLoading, isError, refetch } = useQuery({

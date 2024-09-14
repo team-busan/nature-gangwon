@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { useCookies } from "react-cookie";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { API_URL, axiosInstance } from "../../Stores/API";
 import { useLocation, useParams } from "react-router-dom";
 import CommentForm from "../Comment/CommentForm";
@@ -12,17 +12,10 @@ import {
   isWritingCommentState,
   score,
 } from "../../state/comment";
-import { set } from "react-hook-form";
 import { CommentList } from "../Comment/CommentList";
 
-export default function DetailComment({
-  comments,
-  refetchComments,
-  apiEndPoint,
-  title,
-}) {
+export default function DetailComment({ apiEndPoint, title, typeId }) {
   const [cookies] = useCookies(["token"]);
-  const [commentFilter, setCommentFilter] = useState("default");
   const { id } = useParams();
   const detailId = Number(id);
   const [rating, setRating] = useRecoilState(score);
@@ -33,6 +26,7 @@ export default function DetailComment({
   const [edit, setEdit] = useRecoilState(commentEdit);
   const formRef = useRef(null);
   const location = useLocation();
+  const [commentSortOption, setCommentSortOption] = useState("인기순");
 
   useEffect(() => {
     return () => {
@@ -53,8 +47,32 @@ export default function DetailComment({
     },
   });
 
-  const calculateAverageScore = (comments) => {
-    // 평균 평점 계산하는 함수
+  const fetchPlanComments = async () => {
+    const commentUrl = `http://localhost:8000/plan/comment/${typeId}?sort=${commentSortOption}`;
+    try {
+      const response = await axiosInstance.get(commentUrl);
+      if (response.data && response.data.message === "It Doesn't Exist.") {
+        return [];
+      }
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+      return [];
+    }
+  };
+
+  const {
+    data: comments = [],
+    isLoading: isCommentLoading,
+    isError: isCommentError,
+    refetch: refetchComments,
+  } = useQuery({
+    queryKey: ["Comments", typeId, commentSortOption],
+    queryFn: fetchPlanComments,
+    enabled: !!typeId,
+  });
+
+  const calculateAverageScore = (comments = []) => {
     if (comments.length === 0) return 0;
     const totalScore = comments.reduce(
       (acc, comment) => acc + comment.score,
@@ -63,11 +81,11 @@ export default function DetailComment({
     return (totalScore / comments.length).toFixed(1);
   };
 
-  const averageScore = calculateAverageScore(comments); // 평균 평점
+  const averageScore = comments.length ? calculateAverageScore(comments) : 0;
 
   const handleAddComment = () => {
-    refetchComments(); // 댓글 목록 갱신
-    setIsWritingComment(false); // 작성 폼 숨기기
+    refetchComments();
+    setIsWritingComment(false);
   };
 
   const handleWriteCommentClick = () => {
@@ -78,14 +96,13 @@ export default function DetailComment({
     setEdit(false);
     setIsWritingComment(!isWritingComment);
     if (!isWritingComment) {
-      // 댓글 작성이 꺼져있는 상태면 메시지랑, 별점 초기화
       setRating(0);
       setCommentContent("");
     }
   };
 
   const handleFilter = (option) => {
-    setCommentFilter(option);
+    setCommentSortOption(option);
     if (option === "best") {
       mutation.mutate({
         filter: "best",
@@ -99,7 +116,7 @@ export default function DetailComment({
         <div className="flex items-center justify-between mb-3">
           <div className="flex gap-10 items-center">
             <h3 className="text-green">{title} 댓글</h3>
-            {title === "plan" ? (
+            {title === "plan" ? null : (
               <span className="flex items-center">
                 <span className="text-yellow-400">
                   <FaStar />
@@ -107,7 +124,7 @@ export default function DetailComment({
                 <p>{averageScore}</p>
                 <p>({comments.length})</p>
               </span>
-            ) : null}
+            )}
           </div>
           <div>
             <button
@@ -121,29 +138,33 @@ export default function DetailComment({
         <ul className="flex border-b-2 border-gray-300 pb-5">
           <li
             className={`mr-5 cursor-pointer ${
-              commentFilter === "default" ? "text-softGreen font-bold" : ""
+              commentSortOption === "인기순" ? "text-softGreen font-bold" : ""
             }`}
-            onClick={() => handleFilter("default")}
+            onClick={() => handleFilter("인기순")}
           >
-            최신순
+            인기순
           </li>
           <li
             className={`cursor-pointer ${
-              commentFilter !== "default" ? "text-softGreen font-bold" : ""
+              commentSortOption === "최신순" ? "text-softGreen font-bold" : ""
             }`}
-            onClick={() => handleFilter("best")}
+            onClick={() => handleFilter("최신순")}
           >
-            추천순
+            최신순
           </li>
         </ul>
       </div>
 
       <div>
         {isWritingComment && (
-          <CommentForm onSubmit={handleAddComment} title={title} apiEndPoint = {apiEndPoint}/>
+          <CommentForm
+            onSubmit={handleAddComment}
+            title={title}
+            apiEndPoint={apiEndPoint}
+          />
         )}
       </div>
-      <CommentList comments={comments} formRef = {formRef} title = {title} />
+      <CommentList comments={comments.planCommentList} formRef={formRef} title={title} />
     </section>
   );
 }

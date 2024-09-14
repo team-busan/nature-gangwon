@@ -8,7 +8,7 @@ export const getRequestData = (edit, detailId, commentContent, rating, title, ap
   
 
   switch (title) {
-    case "계획":
+    case "plan":
       url = edit ? `${axiosInstance.defaults.baseURL}/plan/patch-comment` : `${axiosInstance.defaults.baseURL}/plan/post-comment`;
       data = {
         planId: detailId,
@@ -17,7 +17,7 @@ export const getRequestData = (edit, detailId, commentContent, rating, title, ap
       };
       break;
 
-    case "관광지": // Tourist Spot
+    case "title": 
       url = edit ? `${axiosInstance.defaults.baseURL}/destination/${detailId}/patch-comment` : `${axiosInstance.defaults.baseURL}/destination/post-comment`;
       data = {
         detailId: detailId,
@@ -26,7 +26,7 @@ export const getRequestData = (edit, detailId, commentContent, rating, title, ap
       };
       break;
 
-    case "축제": // Festival
+    case "festival":
       url = edit ? `${apiEndPoint}/festival/${detailId}/edit-comment` : `${apiEndPoint}/festival/${detailId}/create-comment`;
       data = {
         festivalId: detailId,

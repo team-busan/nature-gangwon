@@ -10,7 +10,7 @@ export function CommentItem({ comment, onLike, formRef, title }) {
   // comment 데이터를 통일된 형태로 변환하는 함수
   const normalizeCommentData = (comment, title) => {
     switch (title) {
-      case "계획":
+      case "plan":
         return {
           id: comment.planCommentId,
           userEmail: comment.userEmail,
@@ -23,7 +23,7 @@ export function CommentItem({ comment, onLike, formRef, title }) {
           score: comment.score || 0, // 점수가 없을 경우 기본값 0
           like : comment.likeCount,
         };
-      case "축제":
+      case "festival":
         return {
           id: comment.festivalCommentId,
           userEmail: comment.userEmail,
@@ -35,7 +35,7 @@ export function CommentItem({ comment, onLike, formRef, title }) {
           uploadDate: comment.festivalUploadDate,
           score: comment.score || 0,
         };
-      case "관광지":
+      case "destination":
         return {
           id: comment.detailCommentId,
           userEmail: comment.userEmail,
@@ -67,7 +67,7 @@ export function CommentItem({ comment, onLike, formRef, title }) {
       <div className="w-44 flex-shrink-0">
         <p>{normalizedComment.userNickname}</p>
         <span className="flex items-center justify-between">
-          {title === "계획" ? null : (
+          {title === "plan" ? null : (
             <span className="flex items-center">
               <FaStar className="text-yellow-400" />
               <p className="ml-1">{normalizedComment.score.toFixed(1)}</p>

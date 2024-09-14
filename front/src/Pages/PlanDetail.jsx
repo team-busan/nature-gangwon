@@ -20,11 +20,12 @@ export default function PlanDetail() {
     return response.data;
   };
 
+
   const {
     data: planDetail,
-    isLoading,
-    isError,
-    refetch
+    isLoading: isPlanLoading,
+    isError: isPlanError,
+    refetch: refetchPlan,
   } = useQuery({
     queryKey: ["planDetail", planId],
     queryFn: fetchPlanDetail,
@@ -36,13 +37,13 @@ export default function PlanDetail() {
     { marker: "#B22222", text: "#FFFFFF" },
     { marker: "#FFD700", text: "#000000" },
     { marker: "#228B22", text: "#FFFFFF" },
-    { marker: "#6A0DAD", text: "#FFFFFF" }, 
+    { marker: "#6A0DAD", text: "#FFFFFF" },
   ];
 
   const [selectedDay, setSelectedDay] = useState(1);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error loading plan details.</div>;
+  if (isPlanLoading) return <div>Loading...</div>;
+  if (isPlanError) return <div>Error loading data.</div>;
 
   const places = planDetail.getPlaceListItemDto;
   const planHeader = planDetail.planEntity;
@@ -56,30 +57,28 @@ export default function PlanDetail() {
   const availableDays = [...new Set(places.map((place) => place.dayNumber))];
   const writer = user && planHeader && user.userEmail === planHeader.userEmail;
 
+
   return (
     <>
-      <PlanDetailHeader
-        planHeader={planHeader}
-      />
+      <PlanDetailHeader planHeader={planHeader} />
       <PlanDetailMap
-        markerColors = {markerColors}
+        markerColors={markerColors}
         planHeader={planHeader}
         selectedDay={selectedDay}
         availableDays={availableDays}
         setSelectedDay={setSelectedDay}
         locations={filteredPlaces}
-        writer = {writer}
+        writer={writer}
       />
       <PlanDetailPhoto
-        locations = {filteredPlaces}
-        planHeader = {planHeader}
-        markerColors = {markerColors}
+        locations={filteredPlaces}
+        planHeader={planHeader}
+        markerColors={markerColors}
       />
       <DetailComment
-        comments = {planDetail.getPlanCommentList}
-        refetchComments = {refetch}
-        apiEndPoint = {url}
-        title = "계획"
+        apiEndPoint={url}
+        title="plan"
+        typeId = {planId}
       />
     </>
   );
