@@ -70,6 +70,7 @@ export default function FestivalDetail() {
         comments = {festival.festivalCommentList}
         refetchComments={refetch}
       />
+      {/* test */}
     </>
   );
 }
