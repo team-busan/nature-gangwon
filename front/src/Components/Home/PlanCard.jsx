@@ -1,9 +1,14 @@
 import { Link } from "react-router-dom";
 import PlanDefaultImage from "../PlanDefaultImage";
+import { motion } from "framer-motion";
+
+const MotionLink = motion(Link);
 
 const PlanCard = ({ plan }) => {
   return (
-    <Link
+    <MotionLink
+      initial={{ translateY: 0 }}
+      whileHover={{ translateY: -10 }}
       to={`/plan/${plan.planId}`}
       className="w-[430px] h-[400px] rounded-lg shadow-xl bg-white flex flex-col justify-end p-4 relative"
     >
@@ -20,7 +25,7 @@ const PlanCard = ({ plan }) => {
         <p>{plan.planTitle}</p>
         <p>{plan.planUploadDate.substring(0, 10)}</p>
       </div>
-    </Link>
+    </MotionLink>
   );
 };
 
