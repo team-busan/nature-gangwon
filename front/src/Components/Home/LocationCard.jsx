@@ -1,9 +1,14 @@
 import { Link } from "react-router-dom";
 import DefaultImage from "../DefaultImage";
+import { motion } from "framer-motion";
+
+const MotionLink = motion(Link);
 
 const LocationCard = ({ location }) => {
   return (
-    <Link
+    <MotionLink
+      initial={{ translateY: 0 }}
+      whileHover={{ translateY: -10 }}
       to={`/destination/${location.detailId}`}
       className="w-[430px] h-[430px] rounded-lg shadow-xl bg-white flex flex-col justify-end p-4 relative"
     >
@@ -25,7 +30,7 @@ const LocationCard = ({ location }) => {
       <div className="bg-black/50 py-2 px-4 rounded-lg z-10 w-fit">
         <p className="text-lg text-white">{location.detailTitle}</p>
       </div>
-    </Link>
+    </MotionLink>
   );
 };
 

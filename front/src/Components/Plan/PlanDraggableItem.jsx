@@ -11,8 +11,9 @@ import {
 } from "react-icons/md";
 
 import DefaultImage from "../DefaultImage";
+import PlanDistance from "./PlanDistance";
 
-const PlanDraggableItem = ({ item, idx, idx2, handleDelete }) => {
+const PlanDraggableItem = ({ day, item, idx, idx2, handleDelete }) => {
   const [plans, setPlans] = useRecoilState(planList);
   const [isMemoOpen, setIsMemoOpen] = useState(0);
   const [memo, setMemo] = useState("");
@@ -157,6 +158,15 @@ const PlanDraggableItem = ({ item, idx, idx2, handleDelete }) => {
               </motion.div>
             )}
           </div>
+          {day[idx2 + 1] ? (
+            <PlanDistance
+              nextItem={day[idx2 + 1]}
+              x1={item.locationMapx}
+              y1={item.locationMapy}
+              x2={day[idx2 + 1].locationMapx}
+              y2={day[idx2 + 1].locationMapy}
+            />
+          ) : null}
           {provided.placeholder}
         </motion.li>
       )}

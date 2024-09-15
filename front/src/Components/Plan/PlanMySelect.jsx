@@ -137,14 +137,13 @@ const PlanMySelect = ({ setPlanStage }) => {
           </div>
         </div>
       )}
+      {/* 전체 선택 리스트 */}
       {enabled ? (
         <DragDropContext onDragEnd={onDragEnd}>
           {plans.map((day, idx) => (
-            <div key={idx} className="px-4 pb-4">
-              {idx === 0 ? null : (
-                <div className="w-full h-4 bg-gray-100 rounded mb-4"></div>
-              )}
+            <div key={idx} className="px-4 pb-4 mb-4">
               <h2 className="pb-2">{"Day " + (idx + 1)}</h2>
+              {/* 각 날짜별 선택 리스트 */}
               <Droppable droppableId={idx.toString()}>
                 {(provided) => (
                   <ul
@@ -152,9 +151,11 @@ const PlanMySelect = ({ setPlanStage }) => {
                     {...provided.droppableProps}
                     className="flex flex-col gap-4"
                   >
+                    {/* 리스트 아이템 */}
                     {day.map((item, idx2) => (
                       <PlanDraggableItem
                         key={idx2}
+                        day={day}
                         item={item}
                         idx={idx}
                         idx2={idx2}
@@ -169,7 +170,6 @@ const PlanMySelect = ({ setPlanStage }) => {
           ))}
 
           <div className="px-4">
-            <div className="w-full h-4 bg-gray-100 rounded mb-4"></div>
             <button
               onClick={() => handleToNext()}
               className="bg-darkGreen w-full py-2 text-white rounded-lg"
