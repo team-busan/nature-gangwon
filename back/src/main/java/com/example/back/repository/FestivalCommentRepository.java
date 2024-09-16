@@ -18,9 +18,9 @@ public interface FestivalCommentRepository extends JpaRepository<FestivalComment
     @Transactional
     public void deleteByFestivalCommentId(int festivalId);
     
-    @Query("SELECT fc FROM festival_comment fc WHERE fc.festivalId = :festivalId ORDER BY SIZE(fc.likes) DESC")
-    List<FestivalCommentEntity> findByFestivalIdOrderByLikeCountDesc(@Param("festivalId") int festivalId);
+    // @Query("SELECT fc FROM festival_comment fc WHERE fc.festivalId = :festivalId ORDER BY SIZE(fc.likes) DESC")
+    // List<FestivalCommentEntity> findByFestivalIdOrderByLikeCountDesc(@Param("festivalId") int festivalId);
 
-    @Query("SELECT fc FROM festival_comment fc WHERE fc.festivalId = :festivalId ORDER BY fc.festivalUploadDate DESC")
-    List<FestivalCommentEntity> findByFestivalIdOrderByUploadDateDesc(@Param("festivalId") int festivalId);
+    // @Query("SELECT fc FROM festival_comment fc WHERE fc.festivalId = :festivalId ORDER BY fc.festivalUploadDate DESC")
+    // List<FestivalCommentEntity> findByFestivalIdOrderByUploadDateDesc(@Param("festivalId") int festivalId);
 }

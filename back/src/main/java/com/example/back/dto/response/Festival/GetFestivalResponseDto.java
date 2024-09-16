@@ -22,22 +22,19 @@ public class GetFestivalResponseDto extends ResponseDto {
     private FestivalEntity festivalEntity;
     private FestivalDescriptionEntity festivalDescriptionEntity;
     private GetFestivalImageDto getFestivalImageDto;
-    private List<GetFestivalCommentListItemDto> festivalCommentList;
     
-    public GetFestivalResponseDto(FestivalEntity festivalEntity, FestivalDescriptionEntity festivalDescriptionEntity, GetFestivalImageDto festivalImageDto, List<GetFestivalCommentListItemDto> festivalCommentList){
+    public GetFestivalResponseDto(FestivalEntity festivalEntity, FestivalDescriptionEntity festivalDescriptionEntity, GetFestivalImageDto festivalImageDto){
         super();
         this.festivalEntity = festivalEntity;
         this.festivalDescriptionEntity = festivalDescriptionEntity;
         this.getFestivalImageDto = festivalImageDto;
-        this.festivalCommentList = festivalCommentList;
     }
 
-    public static ResponseEntity<GetFestivalResponseDto> success(FestivalEntity festivalEntity, FestivalDescriptionEntity festivalDescriptionEntity, GetFestivalImageDto festivalImageDto, List<GetFestivalCommentListItemDto> festivalCommentList){
+    public static ResponseEntity<GetFestivalResponseDto> success(FestivalEntity festivalEntity, FestivalDescriptionEntity festivalDescriptionEntity, GetFestivalImageDto festivalImageDto){
         GetFestivalResponseDto responseBody = new GetFestivalResponseDto();
         responseBody.setFestivalEntity(festivalEntity);
         responseBody.setFestivalDescriptionEntity(festivalDescriptionEntity);
         responseBody.setGetFestivalImageDto(festivalImageDto);
-        responseBody.setFestivalCommentList(festivalCommentList);
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
 
     }

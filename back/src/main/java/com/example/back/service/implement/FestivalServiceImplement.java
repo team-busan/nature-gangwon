@@ -13,6 +13,7 @@ import com.example.back.dto.request.festival.PostFestivalCommentLikeRequestDto;
 import com.example.back.dto.request.festival.PostFestivalCommentRequestDto;
 import com.example.back.dto.request.festival.PostFestivalMarkRequestDto;
 import com.example.back.dto.response.Festival.DeleteFestivalCommentResponseDto;
+import com.example.back.dto.response.Festival.GetFestivalCommentListResponseDto;
 import com.example.back.dto.response.Festival.GetFestivalListResponseDto;
 import com.example.back.dto.response.Festival.GetFestivalMarkListResponseDto;
 import com.example.back.dto.response.Festival.GetFestivalResponseDto;
@@ -46,6 +47,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
+import java.util.Comparator;
+
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -104,7 +107,7 @@ public class FestivalServiceImplement implements FestivalService {
 
     //? 축제 상세
     @Override
-    public ResponseEntity<? super GetFestivalResponseDto> getFestival(int festivalId, String sortOrder) {
+    public ResponseEntity<? super GetFestivalResponseDto> getFestival(int festivalId) {
         try {
             FestivalEntity festivalEntity = festivalRepository.findByFestivalId(festivalId);
             if (festivalEntity == null) {
@@ -122,31 +125,7 @@ public class FestivalServiceImplement implements FestivalService {
                 festivalImageDto = new GetFestivalImageDto(festivalEntity, festivalImageEntity);
             }
 
-            List<FestivalCommentEntity> festivalCommentEntities;
-            if ("likes".equals(sortOrder)) {
-                festivalCommentEntities = festivalCommentRepository.findByFestivalIdOrderByLikeCountDesc(festivalId);
-            } else {
-                festivalCommentEntities = festivalCommentRepository.findByFestivalIdOrderByFestivalUploadDateDesc(festivalId);
-            }
-
-            List<GetFestivalCommentListItemDto> festivalCommentList = new ArrayList<>();
-            for (FestivalCommentEntity comment : festivalCommentEntities) {
-                int likeCount = comment.getLikeCount();
-                GetFestivalCommentListItemDto festivalCommentDto = new GetFestivalCommentListItemDto();
-                festivalCommentDto.setFestivalCommentId(comment.getFestivalCommentId());
-                festivalCommentDto.setFestivalId(comment.getFestivalId());
-                festivalCommentDto.setUserEmail(comment.getUserEmail());
-                festivalCommentDto.setUserNickname(comment.getUserNickname());
-                festivalCommentDto.setUserProfile(comment.getUserProfile());
-                festivalCommentDto.setFestivalContent(comment.getFestivalContent());
-                festivalCommentDto.setScore(comment.getScore());
-                festivalCommentDto.setFestivalUploadDate(comment.getFestivalUploadDate());
-                festivalCommentDto.setLikeCount(likeCount);
-
-                festivalCommentList.add(festivalCommentDto);
-            }
-
-            GetFestivalResponseDto responseDto = new GetFestivalResponseDto(festivalEntity, festivalDescriptionEntity, festivalImageDto, festivalCommentList);
+            GetFestivalResponseDto responseDto = new GetFestivalResponseDto(festivalEntity, festivalDescriptionEntity, festivalImageDto);
             festivalEntity.increaseViewCount();
             festivalRepository.save(festivalEntity);
             return ResponseEntity.status(HttpStatus.OK).body(responseDto);
@@ -343,6 +322,56 @@ public class FestivalServiceImplement implements FestivalService {
             })
             .collect(Collectors.toList());
             return GetFestivalMarkListResponseDto.success(markList);
+        } catch (Exception e){
+            e.printStackTrace();
+            ResponseDto.databaseError();
+        }
+        return null;
+    }
+
+    //? 축제 댓글 리스트
+    @Override
+    public ResponseEntity<? super GetFestivalCommentListResponseDto> getFestivalCommentList(int festivalId, String sortType){
+        try{
+            FestivalEntity festivalEntity = festivalRepository.findByFestivalId(festivalId);
+            if(festivalEntity == null){
+                return GetFestivalCommentListResponseDto.notExistFestival();
+            }
+
+            List<FestivalCommentEntity> comments = festivalCommentRepository.findByFestivalIdOrderByFestivalUploadDateDesc(festivalId);
+            if(comments.isEmpty()){
+                return GetFestivalCommentListResponseDto.notExistCOmment();
+            }
+
+            List<GetFestivalCommentListItemDto> commetDtos = comments.stream().map(comment -> {
+                int likeCount = (int) festivalCommentLikeRepository.countLikesByFestivalCommentId(comment.getFestivalCommentId());
+
+                List<String> likedUserEmails = festivalCommentLikeRepository.findByFestivalCommentId(comment.getFestivalCommentId())
+                .stream()
+                .map(FestivalCommentLIkeEntity::getUserEmail)
+                .collect(Collectors.toList());
+
+                return new  GetFestivalCommentListItemDto(
+                    comment.getFestivalCommentId(),
+                    comment.getUserEmail(),
+                    comment.getFestivalId(),
+                    comment.getUserNickname(),
+                    comment.getUserProfile(),
+                    comment.getFestivalContent(),
+                    comment.getScore(),
+                    comment.getFestivalUploadDate().toString(),
+                    likeCount,
+                    likedUserEmails
+                );
+            }).collect(Collectors.toList());
+
+            if (sortType == null || sortType.isEmpty() || "인기순".equals(sortType)) {
+                commetDtos.sort(Comparator.comparingInt(GetFestivalCommentListItemDto::getLikeCount).reversed());          
+            }else if("최신순".equals(sortType)){
+                commetDtos.sort(Comparator.comparing(GetFestivalCommentListItemDto::getFestivalUploadDate));
+            }
+            
+            return GetFestivalCommentListResponseDto.success(commetDtos);
         } catch (Exception e){
             e.printStackTrace();
             ResponseDto.databaseError();

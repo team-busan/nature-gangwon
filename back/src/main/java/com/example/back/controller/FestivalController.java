@@ -17,6 +17,7 @@ import com.example.back.dto.request.festival.PostFestivalCommentLikeRequestDto;
 import com.example.back.dto.request.festival.PostFestivalCommentRequestDto;
 import com.example.back.dto.request.festival.PostFestivalMarkRequestDto;
 import com.example.back.dto.response.Festival.DeleteFestivalCommentResponseDto;
+import com.example.back.dto.response.Festival.GetFestivalCommentListResponseDto;
 import com.example.back.dto.response.Festival.GetFestivalListResponseDto;
 import com.example.back.dto.response.Festival.GetFestivalMarkListResponseDto;
 import com.example.back.dto.response.Festival.GetFestivalResponseDto;
@@ -48,10 +49,9 @@ public class FestivalController {
     //? 상세 가져오기
     @GetMapping("/{festivalId}")
     public ResponseEntity<? super GetFestivalResponseDto> getFestival(
-        @PathVariable(name = "festivalId") int festivalId,
-        @RequestParam(name = "sort", defaultValue = "latest") String sortOrder
+        @PathVariable(name = "festivalId") int festivalId
     ) {
-    return festivalService.getFestival(festivalId, sortOrder);
+    return festivalService.getFestival(festivalId);
     }
 
     //? 댓글작성
@@ -107,6 +107,15 @@ public class FestivalController {
         @AuthenticationPrincipal String userEmail
     ){
         ResponseEntity <? super GetFestivalMarkListResponseDto> response = festivalService.getFestivalMarkList(userEmail);
+        return response;
+    }
+    //? 축제 댓글 리스트
+    @GetMapping("/comment/{festivalId}")
+    public ResponseEntity<? super GetFestivalCommentListResponseDto> getFestivalCommentList(
+        @PathVariable(name = "festivalId") int festivalId,
+        @RequestParam(value = "sort", defaultValue = "like") String sortType
+    ){
+        ResponseEntity<? super GetFestivalCommentListResponseDto> response = festivalService.getFestivalCommentList(festivalId, sortType);
         return response;
     }
 }
