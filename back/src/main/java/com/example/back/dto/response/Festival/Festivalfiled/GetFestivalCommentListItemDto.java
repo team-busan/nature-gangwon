@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -17,4 +19,5 @@ public class GetFestivalCommentListItemDto {
     private int score;
     private String festivalUploadDate;
     private int likeCount;
+    private List<String> likedUserEmails;
 }
