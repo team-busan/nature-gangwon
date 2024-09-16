@@ -34,10 +34,15 @@ const PlanDistance = ({ nextItem, x1, y1, x2, y2 }) => {
   };
 
   useEffect(() => {
-    getResult(x1, y1, x2, y2).then((res) => {
-      setDistance(res.distance);
-      setMinute(res.duration);
-    });
+    console.log(x1, x2, y1, y2);
+    if (x1 !== x2 && y1 !== y2) {
+      console.log(x1 === x2);
+      console.log("get result");
+      getResult(x1, y1, x2, y2).then((res) => {
+        setDistance(res.distance);
+        setMinute(res.duration);
+      });
+    }
   }, [nextItem]);
 
   return (

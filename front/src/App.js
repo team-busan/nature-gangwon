@@ -17,6 +17,7 @@ import PlanInfo from "./Pages/PlanInfo.jsx";
 import PlanDetail from "./Pages/PlanDetail.jsx";
 import Landing from "./Pages/Landing.jsx";
 import OAuth from "./Pages/OAuth.jsx";
+import ProtectedRoute from "./ProtectedRoute.jsx";
 
 const router = createBrowserRouter([
   {
@@ -64,10 +65,6 @@ const router = createBrowserRouter([
         element: <PlanDetail />,
       },
       {
-        path: "/myPage/:id",
-        element: <MyPage />,
-      },
-      {
         path: "/Login",
         element: <Login />,
       },
@@ -76,8 +73,18 @@ const router = createBrowserRouter([
         element: <Signup />,
       },
       {
-        path: "/plan",
-        element: <Plan />,
+        path: "",
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: "/myPage/:id",
+            element: <MyPage />,
+          },
+          {
+            path: "/plan",
+            element: <Plan />,
+          },
+        ],
       },
     ],
     errorElement: <NotFound />,

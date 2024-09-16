@@ -1,7 +1,18 @@
 import { motion } from "framer-motion";
 
-const LandingSelectItem = ({ item, setWorldCupIndex }) => {
+const LandingSelectItem = ({
+  item,
+  index,
+  worldCupIndex,
+  setWorldCupIndex,
+  setUserSelectList,
+}) => {
   const handleClick = () => {
+    setUserSelectList((prev) => {
+      const userSelectListCopy = [...prev];
+      userSelectListCopy[worldCupIndex] = index;
+      return userSelectListCopy;
+    });
     setWorldCupIndex((prev) => prev + 1);
   };
 

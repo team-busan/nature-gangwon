@@ -7,6 +7,7 @@ import { useCookies } from "react-cookie";
 import { format, set } from "date-fns";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import PlanDefaultImage from "../PlanDefaultImage";
 
 const PlanChooseThumnail = ({ setPlanStage, dates }) => {
   const navigate = useNavigate();
@@ -89,7 +90,7 @@ const PlanChooseThumnail = ({ setPlanStage, dates }) => {
       <div
         key="sample"
         onClick={() => setSelectedIndex({ i: -1, j: -1, k: -1 })}
-        className={`w-52 h-52 rounded-lg bg-green cursor-pointer border-4 ${
+        className={`w-52 h-52 rounded-lg cursor-pointer border-4 ${
           selectedIndex.i === -1 &&
           selectedIndex.j === -1 &&
           selectedIndex.k === -1
@@ -97,7 +98,7 @@ const PlanChooseThumnail = ({ setPlanStage, dates }) => {
             : "border-transparent"
         }`}
       >
-        샘플 이미지로
+        <PlanDefaultImage />
       </div>
     );
     for (let i = 0; i < plans.length; i++) {

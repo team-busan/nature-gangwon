@@ -1,11 +1,10 @@
 import { Outlet, Navigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { userState } from "./state/userState";
+import { useCookies } from "react-cookie";
 
 const ProtectedRoute = () => {
-  const [user, setUser] = useRecoilState(userState);
+  const [cookie, setCookie] = useCookies(["token"]);
 
-  return user ? <Outlet /> : <Navigate to="/login" replace />;
+  return cookie.token ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 export default ProtectedRoute;
