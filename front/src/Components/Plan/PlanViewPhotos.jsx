@@ -39,18 +39,11 @@ const PlanViewPhotos = () => {
 
       const formData = new FormData();
       formData.append("file", inputRef.current?.files[0]);
-      axios
-        .post("http://localhost:8000/file/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      axios.post("http://localhost:8000/file/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       setPlans(planCopy);
     }
   };
