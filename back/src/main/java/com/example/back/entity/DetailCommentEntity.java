@@ -3,14 +3,18 @@ package com.example.back.entity;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.example.back.dto.request.detail.PatchDetailCommentRequestDto;
 import com.example.back.dto.request.detail.PostDetailCommentRequsetDto;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -41,5 +45,14 @@ public class DetailCommentEntity {
         this.detailUploadDate = simpleDateFormat.format(now);
     }
 
+    public void patch(PatchDetailCommentRequestDto dto){
+        this.detailContent = dto.getDetailContent();
+        this.score = dto.getScore();
+    }
+    @OneToMany(mappedBy = "userEmail")
+    private List<DetailCommentLikeEntity> likes;
 
+    public int getLikeCount(){
+        return likes == null ? 0 : likes.size();
+    }
 }

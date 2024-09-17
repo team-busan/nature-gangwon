@@ -84,6 +84,7 @@ public class FestivalController {
         return response;
     }
 
+    //? 댓글 수정
     @PatchMapping("/patch-comment")
     public ResponseEntity<? super PatchFestivalCommentResponseDto> patchFestivalComment(
         @AuthenticationPrincipal String userEmail,
@@ -93,6 +94,7 @@ public class FestivalController {
         return response;
     }
 
+    //? 축제 북마크
     @PostMapping("/mark")
     public ResponseEntity<? super PostFestivalMarkResponseDto> postFesitvalMark(
         @AuthenticationPrincipal String userEmail,
@@ -102,6 +104,7 @@ public class FestivalController {
         return response;
     }
 
+    //? 내가 즐겨찾기한 축제 리스트
     @GetMapping("/mark-list")
     public ResponseEntity<? super GetFestivalMarkListResponseDto> getFestialMarkList(
         @AuthenticationPrincipal String userEmail

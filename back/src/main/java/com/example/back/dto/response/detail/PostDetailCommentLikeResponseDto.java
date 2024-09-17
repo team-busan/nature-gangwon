@@ -1,6 +1,5 @@
 package com.example.back.dto.response.detail;
 
-import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,28 +7,17 @@ import org.springframework.http.ResponseEntity;
 import com.example.back.common.ResponseCode;
 import com.example.back.common.ResponseMessage;
 import com.example.back.dto.ResponseDto;
-import com.example.back.entity.DetailCommentEntity;
-import com.example.back.entity.DetailCommentLikeEntity;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 public class PostDetailCommentLikeResponseDto extends ResponseDto{
-
-    private DetailCommentEntity detailCommentEntity;
-
-    private List<DetailCommentLikeEntity> detailCommentLikeList;
-
     private PostDetailCommentLikeResponseDto(){
         super();
     }
 
-    public static ResponseEntity<PostDetailCommentLikeResponseDto> success(DetailCommentEntity detailCommentEntity, List<DetailCommentLikeEntity> detailCommentLikeList){
+    public static ResponseEntity<PostDetailCommentLikeResponseDto> success(){
         PostDetailCommentLikeResponseDto responseBody = new PostDetailCommentLikeResponseDto();
-        responseBody.setDetailCommentEntity(detailCommentEntity);
-        responseBody.setDetailCommentLikeList(detailCommentLikeList);
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 

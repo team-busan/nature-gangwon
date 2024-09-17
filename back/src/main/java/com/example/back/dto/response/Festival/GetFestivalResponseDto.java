@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import com.example.back.common.ResponseCode;
 import com.example.back.common.ResponseMessage;
 import com.example.back.dto.ResponseDto;
-import com.example.back.dto.response.Festival.Festivalfiled.GetFestivalCommentListItemDto;
 import com.example.back.dto.response.Festival.Festivalfiled.GetFestivalImageDto;
 import com.example.back.entity.FestivalDescriptionEntity;
 import com.example.back.entity.FestivalEntity;
@@ -14,7 +13,6 @@ import com.example.back.entity.FestivalEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 
 @Data
 @NoArgsConstructor

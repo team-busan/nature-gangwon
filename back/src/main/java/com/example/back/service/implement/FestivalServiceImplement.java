@@ -46,7 +46,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.ArrayList;
 import java.util.Comparator;
 
 
@@ -340,10 +339,10 @@ public class FestivalServiceImplement implements FestivalService {
 
             List<FestivalCommentEntity> comments = festivalCommentRepository.findByFestivalIdOrderByFestivalUploadDateDesc(festivalId);
             if(comments.isEmpty()){
-                return GetFestivalCommentListResponseDto.notExistCOmment();
+                return GetFestivalCommentListResponseDto.notExistComment();
             }
 
-            List<GetFestivalCommentListItemDto> commetDtos = comments.stream().map(comment -> {
+            List<GetFestivalCommentListItemDto> commentDtos = comments.stream().map(comment -> {
                 int likeCount = (int) festivalCommentLikeRepository.countLikesByFestivalCommentId(comment.getFestivalCommentId());
 
                 List<String> likedUserEmails = festivalCommentLikeRepository.findByFestivalCommentId(comment.getFestivalCommentId())
@@ -366,12 +365,12 @@ public class FestivalServiceImplement implements FestivalService {
             }).collect(Collectors.toList());
 
             if (sortType == null || sortType.isEmpty() || "인기순".equals(sortType)) {
-                commetDtos.sort(Comparator.comparingInt(GetFestivalCommentListItemDto::getLikeCount).reversed());          
+                commentDtos.sort(Comparator.comparingInt(GetFestivalCommentListItemDto::getLikeCount).reversed());          
             }else if("최신순".equals(sortType)){
-                commetDtos.sort(Comparator.comparing(GetFestivalCommentListItemDto::getFestivalUploadDate));
+                commentDtos.sort(Comparator.comparing(GetFestivalCommentListItemDto::getFestivalUploadDate));
             }
             
-            return GetFestivalCommentListResponseDto.success(commetDtos);
+            return GetFestivalCommentListResponseDto.success(commentDtos);
         } catch (Exception e){
             e.printStackTrace();
             ResponseDto.databaseError();

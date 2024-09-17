@@ -9,5 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PostDetailCommentLikeRequestDto {
     @Min(1)
-    private int commentId;
+    private int detailId;
+    @Min(1)
+    private int detailCommentId;
 }

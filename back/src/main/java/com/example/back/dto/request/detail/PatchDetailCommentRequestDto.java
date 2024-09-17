@@ -11,9 +11,13 @@ public class PatchDetailCommentRequestDto {
     @Min(1)
     private int detailId;
 
-    @NotBlank
-    private String detailContent;
+    @Min(1)
+    private int detailCommentId;
+   
 
     @Min(1)
     private int score;
+
+    @NotBlank
+    private String detailContent;
 }

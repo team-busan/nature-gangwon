@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Collections;
-
 import java.util.stream.Collectors;
+import java.util.Comparator;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -19,17 +19,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.back.dto.ResponseDto;
+import com.example.back.dto.request.detail.PatchDetailCommentRequestDto;
 import com.example.back.dto.request.detail.PostDetailCommentLikeRequestDto;
 import com.example.back.dto.request.detail.PostDetailCommentRequsetDto;
 import com.example.back.dto.request.detail.PostDetailMarkRequestDto;
 import com.example.back.dto.response.detail.PostDetailCommentResponseDto;
 import com.example.back.dto.response.detail.PostDetailMarkResponseDto;
 import com.example.back.dto.response.detail.DeleteDetailCommentResponseDto;
+import com.example.back.dto.response.detail.GetDetailCommentListResponseDto;
 import com.example.back.dto.response.detail.GetDetailListResponseDto;
 import com.example.back.dto.response.detail.GetDetailMyMarkListResponseDto;
 import com.example.back.dto.response.detail.GetDetailRandom3ListResponseDto;
 import com.example.back.dto.response.detail.GetDetailResponseDto;
+import com.example.back.dto.response.detail.PatchDetailCommentResponseDto;
 import com.example.back.dto.response.detail.PostDetailCommentLikeResponseDto;
+import com.example.back.dto.response.detail.Detailfiled.GetDetailCommentListItemDto;
 import com.example.back.dto.response.detail.Detailfiled.GetDetailImageDto;
 import com.example.back.dto.response.detail.Detailfiled.GetDetailListItemDto;
 import com.example.back.dto.response.detail.Detailfiled.GetDetailMarkListItemDto;
@@ -139,14 +143,11 @@ public class DetailServiceImplement implements DetailService{
             if (detailDescriptionEntity == null) {
                 return GetDetailResponseDto.getDetailFail();
             }
-            List<DetailCommentEntity> detailCommentList = detailCommentRepository.findByDetailIdOrderByDetailUploadDateDesc(detailId);
 
-
-            GetDetailResponseDto responseDto = new GetDetailResponseDto(detailEntity, detailImageDto, detailDescriptionEntity, detailCommentList );
+            GetDetailResponseDto responseDto = new GetDetailResponseDto(detailEntity, detailImageDto, detailDescriptionEntity);
             detailEntity.increaseViewCount();
             detailRepository.save(detailEntity);
             return ResponseEntity.status(HttpStatus.OK).body(responseDto);
-
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.databaseError();
@@ -197,36 +198,38 @@ public class DetailServiceImplement implements DetailService{
     //? 댓글 좋아요
     @Override
     public ResponseEntity<? super PostDetailCommentLikeResponseDto> postDetailCommentLike(String userEmail, PostDetailCommentLikeRequestDto dto) {
-        int detailCommentId = dto.getCommentId();
+        int detailCommentId = dto.getDetailCommentId();
         try{
             UserEntity userEntity = userRepository.findByUserEmail(userEmail);
             if(userEntity == null) {
                 return PostDetailCommentResponseDto.existUser();
             }
+            DetailEntity detailEntity = detailRepository.findByDetailId(dto.getDetailId());
+            if(detailEntity == null){
+                return PostDetailCommentLikeResponseDto.existDetail();
+            }
             DetailCommentEntity detailCommentEntity = detailCommentRepository.findByDetailCommentId(detailCommentId);
             if(detailCommentEntity == null ) {
-                return PostDetailCommentLikeResponseDto.existDetail();
+                return PostDetailCommentLikeResponseDto.DetailCommentLikeFail();
             }
 
             DetailCommentLikeEntity detailCommentLikeEntity = detailCommentLikeRepository.findByUserEmailAndDetailCommentId(userEmail, detailCommentId);
             if(detailCommentLikeEntity == null ){
-                detailCommentLikeEntity = new DetailCommentLikeEntity(userEmail, detailCommentId);
+                detailCommentLikeEntity = new DetailCommentLikeEntity(userEntity, detailCommentId);
                 detailCommentLikeRepository.save(detailCommentLikeEntity);
             }else{
                 detailCommentLikeRepository.delete(detailCommentLikeEntity);
             }
-
-            List<DetailCommentLikeEntity> detailCommentLikeList = detailCommentLikeRepository.findByDetailCommentId(detailCommentId);
-
-            return ResponseEntity.ok().body(PostDetailCommentLikeResponseDto.success(detailCommentEntity, detailCommentLikeList));
         } catch (Exception exception) {
             exception.printStackTrace();
-            return PostDetailCommentLikeResponseDto.DetailCommentLikeFail();
+            ResponseDto.databaseError();
         }
+        return PostDetailCommentLikeResponseDto.success();
     }
 
+    //? 댓글 삭제
     @Override
-    public ResponseEntity<? super DeleteDetailCommentResponseDto> deleteDetailComment(String userEmail, int detailCommentId, int detailId){
+    public ResponseEntity<? super DeleteDetailCommentResponseDto> deleteDetailComment(String userEmail, int detailCommentId){
         try{
             DetailCommentEntity detailCommentEntity = detailCommentRepository.findByDetailCommentId(detailCommentId);
             if(detailCommentEntity == null){
@@ -240,28 +243,11 @@ public class DetailServiceImplement implements DetailService{
 
             detailCommentLikeRepository.deleteByDetailCommentId(detailCommentId);
             detailCommentRepository.deleteByDetailCommentId(detailCommentId);
-
-            DetailEntity detailEntity = detailRepository.findByDetailId(detailId);
-
-            List<DetailCommentEntity> commentList = detailCommentRepository.findByDetailIdOrderByDetailUploadDateDesc(detailId);
-
-            BigDecimal totalScore = commentList.stream()
-            .map(comment -> new BigDecimal(comment.getScore()))
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-            //? 평균 점수
-            BigDecimal averageScore = BigDecimal.ZERO;
-            if (!commentList.isEmpty()) {
-                averageScore = totalScore.divide(new BigDecimal(commentList.size()), MathContext.DECIMAL64);
-                averageScore = averageScore.setScale(1, RoundingMode.HALF_UP);
-            }
-            detailEntity.setDetailTotalScore(averageScore);
-            detailRepository.save(detailEntity);
-            return DeleteDetailCommentResponseDto.success();
         } catch (Exception exception) {
             exception.printStackTrace();
             return ResponseDto.databaseError();
         }
+        return DeleteDetailCommentResponseDto.success();
     }
 
     //? 메인페이지 관광지 랜덤3개 리스트
@@ -301,6 +287,36 @@ public class DetailServiceImplement implements DetailService{
             return ResponseDto.databaseError();
         }
     }
+
+    //? 댓글 수정
+    @Override
+    public ResponseEntity<? super PatchDetailCommentResponseDto> patchDetailComment(String userEamil, PatchDetailCommentRequestDto dto){
+        try{
+            DetailEntity detailEntity = detailRepository.findByDetailId(dto.getDetailId());
+            if(detailEntity == null){
+                PatchDetailCommentResponseDto.existDetail();
+            }
+
+            DetailCommentEntity detailCommentEntity = detailCommentRepository.findByDetailCommentId(dto.getDetailCommentId());
+            if(detailCommentEntity == null){
+                return PatchDetailCommentResponseDto.patchFail();
+            }
+
+            boolean isEqualUserEmail = userEamil.equals(detailCommentEntity.getUserEmail());
+            if(!isEqualUserEmail){
+                return PatchDetailCommentResponseDto.existUser();
+            }
+
+            detailCommentEntity.patch(dto);
+            detailCommentRepository.save(detailCommentEntity);
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return PatchDetailCommentResponseDto.success();
+    }
+
+
 
     //? 관광지 즐겨찾기
     @Override
@@ -362,7 +378,55 @@ public class DetailServiceImplement implements DetailService{
             ResponseDto.databaseError();
         }
         return null;
-    
     }
 
+    //? 관광지 댓글 리스트
+    @Override
+    public ResponseEntity<? super GetDetailCommentListResponseDto> getDetailCommentList(int detailId, String sortType){
+        try{
+            DetailEntity detailEntity = detailRepository.findByDetailId(detailId);
+            if(detailEntity == null){
+                return GetDetailCommentListResponseDto.notExistDetail();
+            }
+            
+            List<DetailCommentEntity> comments =  detailCommentRepository.findByDetailIdOrderByDetailUploadDateDesc(detailId);
+            if(comments.isEmpty()){
+                return GetDetailCommentListResponseDto.notExistComment();
+            }
+
+            List<GetDetailCommentListItemDto> commentDtos = comments.stream().map(comment -> {
+                int likeCount = (int) detailCommentLikeRepository.countLikesByDetailCommentId(comment.getDetailCommentId());
+                List<String> likedUserEmails = detailCommentLikeRepository.findByDetailCommentId(comment.getDetailCommentId())
+                .stream()
+                .map(DetailCommentLikeEntity::getUserEmail)
+                .collect(Collectors.toList());
+
+                return new GetDetailCommentListItemDto(
+                    comment.getDetailCommentId(),
+                    comment.getUserEmail(),
+                    comment.getDetailId(),
+                    comment.getUserNickname(),
+                    comment.getUserProfile(),
+                    comment.getDetailContent(),
+                    comment.getScore(),
+                    comment.getDetailUploadDate(),
+                    likeCount,
+                    likedUserEmails
+                );
+            }).collect(Collectors.toList());
+            
+            if (sortType == null || sortType.isEmpty() || "인기순".equals(sortType)) {
+                commentDtos.sort(Comparator.comparingInt(GetDetailCommentListItemDto::getLikeCount).reversed());
+            }else if("최신순".equals(sortType)){
+                commentDtos.sort(Comparator.comparing(GetDetailCommentListItemDto::getDetailUploadDate));
+            }
+
+            return GetDetailCommentListResponseDto.success(commentDtos);
+
+        } catch (Exception e){
+            e.printStackTrace();
+            ResponseDto.databaseError();
+        }
+        return null;
+    }
 }
