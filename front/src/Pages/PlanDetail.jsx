@@ -47,6 +47,7 @@ export default function PlanDetail() {
 
   const places = planDetail.getPlaceListItemDto;
   const planHeader = planDetail.planEntity;
+  const planMarkUserEmails = planDetail.markedUserEmails;
 
   // 선택된 dayNumber에 해당하는 장소들만 필터링
   const filteredPlaces = places.filter(
@@ -60,7 +61,7 @@ export default function PlanDetail() {
 
   return (
     <>
-      <PlanDetailHeader planHeader={planHeader} />
+      <PlanDetailHeader planHeader={planHeader} planId = {planId} planMarkUserEmails = {planMarkUserEmails} />
       <PlanDetailMap
         markerColors={markerColors}
         planHeader={planHeader}
