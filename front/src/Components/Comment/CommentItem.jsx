@@ -20,8 +20,9 @@ export function CommentItem({ comment, onLike, formRef, title }) {
             "https://i.namu.wiki/i/Bge3xnYd4kRe_IKbm2uqxlhQJij2SngwNssjpjaOyOqoRhQlNwLrR2ZiK-JWJ2b99RGcSxDaZ2UCI7fiv4IDDQ.webp",
           content: comment.planContent,
           uploadDate: comment.planUploadDate,
-          score: comment.score || 0, // 점수가 없을 경우 기본값 0
+          score: comment.score || 0,
           like : comment.likeCount,
+          likedUserEmails : comment.likedUserEmails,
         };
       case "festival":
         return {

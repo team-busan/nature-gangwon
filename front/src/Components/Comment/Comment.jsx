@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaRegHeart } from "react-icons/fa6";
+import { FaRegHeart, FaHeart } from "react-icons/fa6";
 import { IoClose } from "react-icons/io5";
 import { MdModeEditOutline } from "react-icons/md";
 import { useRecoilState } from "recoil";
@@ -8,7 +8,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { API_URL, axiosInstance } from "../../Stores/API";
 import { useCookies } from "react-cookie";
 import { useParams } from "react-router-dom";
-import { commentContents, commentEdit, isWritingCommentState, score } from "../../state/comment";
+import {
+  commentContents,
+  commentEdit,
+  isWritingCommentState,
+  score,
+} from "../../state/comment";
 import Swal from "sweetalert2";
 
 export default function Comment({ comment, formRef, title }) {
@@ -19,7 +24,9 @@ export default function Comment({ comment, formRef, title }) {
   const { id } = useParams();
   const detailId = Number(id);
   const queryClient = useQueryClient();
-  const [isWritingComment, setIsWritingComment] = useRecoilState(isWritingCommentState);
+  const [isWritingComment, setIsWritingComment] = useRecoilState(
+    isWritingCommentState
+  );
   const [rating, setRating] = useRecoilState(score);
   const [commentContent, setCommentContent] = useRecoilState(commentContents);
   const [edit, setEdit] = useRecoilState(commentEdit);
@@ -38,16 +45,16 @@ export default function Comment({ comment, formRef, title }) {
 
   const getLikeCommentUrl = () => {
     switch (title) {
-      case "plan" :
+      case "plan":
         return `${API_URL.PlanCommentLike}`;
-      case "destination" :
+      case "destination":
         return null;
-      case "festival" : 
+      case "festival":
         return null;
-      default :
+      default:
         throw new Error("잘못된 title 값입니다.");
     }
-  }
+  };
 
   const getDeleteCommentUrl = (commentId) => {
     switch (title) {
@@ -70,14 +77,18 @@ export default function Comment({ comment, formRef, title }) {
       if (!url) {
         throw new Error("Invalid URL");
       }
-      return axiosInstance.post(url, {
-        planId: detailId,
-        planCommentId: commentId,
-      }, {
-        headers: {
-          Authorization: `Bearer ${cookies.token}`,
+      return axiosInstance.post(
+        url,
+        {
+          planId: detailId,
+          planCommentId: commentId,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
     },
     onSuccess: async () => {
       // 댓글 목록을 다시 불러오기 위해 캐시 무효화
@@ -105,20 +116,24 @@ export default function Comment({ comment, formRef, title }) {
       Swal.fire("삭제 완료!", "댓글이 성공적으로 삭제되었습니다.", "success");
     },
     onError: (error) => {
-      Swal.fire("오류 발생", "댓글 삭제 중 오류가 발생했습니다. 다시 시도해주세요.", "error");
+      Swal.fire(
+        "오류 발생",
+        "댓글 삭제 중 오류가 발생했습니다. 다시 시도해주세요.",
+        "error"
+      );
     },
   });
 
   const handleDelete = (id) => {
     Swal.fire({
-      title: '정말로 삭제하시겠습니까?',
+      title: "정말로 삭제하시겠습니까?",
       text: "이 작업은 되돌릴 수 없습니다!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: '삭제',
-      cancelButtonText: '취소'
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "삭제",
+      cancelButtonText: "취소",
     }).then((result) => {
       if (result.isConfirmed) {
         // 삭제 요청 실행
@@ -129,13 +144,13 @@ export default function Comment({ comment, formRef, title }) {
 
   const handleOnLike = (commentId) => {
     likeMutation.mutate(commentId);
-  }
+  };
   const handleModify = (id, content) => {
     if (edit && isWritingComment) {
       setIsWritingComment(false);
       setEdit(false);
       setRating(0);
-      setCommentContent('');
+      setCommentContent("");
     } else {
       setIsWritingComment(true);
       setEdit(id);
@@ -143,9 +158,17 @@ export default function Comment({ comment, formRef, title }) {
     }
   };
 
+  const isLikedByUser = comment.likedUserEmails && comment.likedUserEmails.includes(userEmail);
+ // 사용자가 댓글 좋아요 했는지 확인 여부
+
+
   return (
     <div className="w-full">
-      <p>{isExpanded ? comment.content : comment.content?.substring(0, maxLength)}</p>
+      <p>
+        {isExpanded
+          ? comment.content
+          : comment.content?.substring(0, maxLength)}
+      </p>
       {comment.content && comment.content.length > maxLength && (
         <button onClick={toggleExpanded} className="text-green">
           {isExpanded ? "간략히 보기" : "더보기"}
@@ -153,9 +176,18 @@ export default function Comment({ comment, formRef, title }) {
       )}
       <div className="flex items-center justify-between mt-3">
         <span className="flex items-center">
-          <FaRegHeart 
-            className="text-red-600 cursor-pointer"
-            onClick={() => handleOnLike(comment.id)} />
+          {isLikedByUser ? (
+            <FaHeart
+              className="text-red-600 cursor-pointer"
+              onClick={() => handleOnLike(comment.id)}
+            />
+          ) : (
+            <FaRegHeart
+              className="text-red-600 cursor-pointer"
+              onClick={() => handleOnLike(comment.id)}
+            />
+          )}
+
           <p className="ml-1">{comment.like}</p>
         </span>
         {comment.userEmail === userEmail && (
@@ -169,7 +201,7 @@ export default function Comment({ comment, formRef, title }) {
             </button>
             <button
               className="bg-tomato text-white p-1 rounded-lg w-16 h-10 flex items-center justify-center"
-              onClick={() => handleDelete(comment.id)} 
+              onClick={() => handleDelete(comment.id)}
             >
               삭제
               <IoClose />

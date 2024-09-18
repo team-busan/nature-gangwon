@@ -19,6 +19,7 @@ const API_URL = {
   PlanDetail : "/plan/:id",
   MyPage: "/myPage",
   Plan: "/plan",
+  PlanMark : "/plan/mark",
   PlanComment: "/plan/patch-comment",
   FestivalComment: "/festival/patch-comment",
   DetailComment: "/detail/patch-comment",

@@ -2,9 +2,14 @@ import React, { useState, useRef } from "react";
 import profile from "../../img/house.avif";
 import ShareModal from "../Comment/ShareModal";
 import { LuShare2 } from "react-icons/lu";
-import { IoHeartOutline } from "react-icons/io5";
+import { FaRegHeart, FaHeart } from "react-icons/fa6";
 import { PiEyesDuotone } from "react-icons/pi";
 import { FaRegComment } from "react-icons/fa6";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { API_URL, axiosInstance } from "../../Stores/API";
+import { useCookies } from "react-cookie";
+import { userState } from "../../state/userState";
+import { useRecoilState } from "recoil";
 
 const getTravelStatus = (startDate, endDate) => {
   const today = new Date();
@@ -34,32 +39,64 @@ const getBackgroundColorClass = (status) => {
 };
 
 export default function PlanDetailHeader({
-  planHeader,
+  planHeader, planId, planMarkUserEmails
 }) {
   const travelStatus = getTravelStatus(
     planHeader.startDate,
     planHeader.endDate
   );
   const backgroundColorClass = getBackgroundColorClass(travelStatus);
+  const [cookies] = useCookies(["token"]);
+  const [user] = useRecoilState(userState);
+  const queryClient = useQueryClient();
 
+  const userEmail = user ? user.userEmail : "";
 
   const formattedStartDate = planHeader.startDate.split(" ")[0];
   const formattedEndDate = planHeader.endDate.split(" ")[0];
 
-  // 모달 열림/닫힘 상태 관리
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const shareButtonRef = useRef(null);
 
-  // 모달을 여는 함수
   const toggleShareModal = () => {
     setIsShareModalOpen((prev) => !prev);
   };
+  
 
-  // 클립보드에 URL을 복사하는 함수
   const copyToClipboard = () => {
     navigator.clipboard.writeText(window.location.href);
     alert("링크가 복사되었습니다!");
   };
+
+  const markMutation = useMutation({
+    mutationKey : ["planMark", planId],
+    mutationFn : (planId) => {
+      const url = `${API_URL.PlanMark}`;
+      return axiosInstance.post(
+        url,
+        {
+          planId : planId,
+        },
+        {
+          headers : {
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess : async () => {
+      await queryClient.invalidateQueries(["planDetail", planId]);
+    },
+    onError : (error) => {
+      alert("실패");
+    }
+  })
+
+  const handleOnMark = (planId) => {
+    markMutation.mutate(planId);
+  }
+
+  const isMarkByUser = planMarkUserEmails && planMarkUserEmails.includes(userEmail);
 
   return (
     <section className="w-1420">
@@ -76,7 +113,6 @@ export default function PlanDetailHeader({
             <p>{planHeader.userNickname}</p>
             <p className="text-gray-400">{planHeader.planUploadDate}</p>
             <div className="flex items-center">
-              {/* 날짜 표시에서 시간 제거 */}
               <p className = "mr-2">
                 {formattedStartDate} ~ {formattedEndDate}
               </p>
@@ -90,8 +126,20 @@ export default function PlanDetailHeader({
         </div>
         <div className="flex flex-col items-end relative">
           <div className="flex items-center space-x-4 mb-2">
-            <button className="flex items-center">
-              <IoHeartOutline className="w-6 h-6 text-red-500" />
+            <button 
+              className="flex items-center"
+            >
+              {isMarkByUser ? (
+                <FaHeart
+                  className = "text-red-600 cursor-pointer"
+                  onClick = {() => handleOnMark(planId)}
+                />
+              ) : (
+                <FaRegHeart
+                className="text-red-600 cursor-pointer"
+                onClick={() => handleOnMark(planId)}
+              />
+              )}
               <p className="ml-1">({planHeader.markCount})</p>
             </button>
             <button
