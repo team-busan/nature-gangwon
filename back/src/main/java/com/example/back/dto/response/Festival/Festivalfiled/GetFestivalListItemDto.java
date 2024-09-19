@@ -1,6 +1,7 @@
 package com.example.back.dto.response.Festival.Festivalfiled;
 
 import com.example.back.entity.FestivalEntity;
+import com.example.back.repository.FestivalCommentRepository;
 
 import java.math.BigDecimal;
 
@@ -36,10 +37,13 @@ public class GetFestivalListItemDto {
         this.festivalTotalComment = festivalTotalComment;
     }
 
-    public static List<GetFestivalListItemDto> copyList(List<FestivalEntity> festivalEntityList){
+    public static List<GetFestivalListItemDto> copyList(List<FestivalEntity> festivalEntityList, FestivalCommentRepository festivalCommentRepository){
         List<GetFestivalListItemDto> list = new ArrayList<>();
         for(FestivalEntity festivalEntity : festivalEntityList){
-            GetFestivalListItemDto dto = new GetFestivalListItemDto(festivalEntity, 0);
+            long festivalTotalComment = festivalCommentRepository.countByFestivalId(festivalEntity.getFestivalId());
+
+            GetFestivalListItemDto dto = new GetFestivalListItemDto(festivalEntity, festivalTotalComment);
+
             list.add(dto);
         }
         return list;

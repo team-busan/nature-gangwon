@@ -1,5 +1,7 @@
 package com.example.back.dto.response.detail;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -23,19 +25,22 @@ public class GetDetailResponseDto extends ResponseDto {
     private DetailEntity detailEntity;
     private DetailDescriptionEntity detailDescriptionEntity;
     private GetDetailImageDto getDetailImageDto;
+    private List<String> markedUserEmails;
 
-    public GetDetailResponseDto(DetailEntity detailEntity, GetDetailImageDto detailImageDto, DetailDescriptionEntity detailDescriptionEntity){
+    public GetDetailResponseDto(DetailEntity detailEntity, GetDetailImageDto detailImageDto, DetailDescriptionEntity detailDescriptionEntity, List<String> markedUserEmails){
         super();
         this.detailEntity = detailEntity;
         this.getDetailImageDto = detailImageDto;
         this.detailDescriptionEntity = detailDescriptionEntity;
+        this.markedUserEmails = markedUserEmails;
     }
 
-    public static ResponseEntity<GetDetailResponseDto> success(DetailEntity detailEntity, DetailDescriptionEntity detailDescriptionEntity, GetDetailImageDto getDetailImageDto){
+    public static ResponseEntity<GetDetailResponseDto> success(DetailEntity detailEntity, DetailDescriptionEntity detailDescriptionEntity, GetDetailImageDto getDetailImageDto, List<String> markedUserEmails){
         GetDetailResponseDto responseBody = new GetDetailResponseDto();
         responseBody.setDetailEntity(detailEntity);
         responseBody.setDetailDescriptionEntity(detailDescriptionEntity);
         responseBody.setGetDetailImageDto(getDetailImageDto);
+        responseBody.setMarkedUserEmails(markedUserEmails);
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 

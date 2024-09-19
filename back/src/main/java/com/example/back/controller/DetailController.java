@@ -45,7 +45,7 @@ public class DetailController {
     @GetMapping("/list")
     public ResponseEntity<? super GetDetailListResponseDto> getDetailList(
         @RequestParam(name = "detailSigungucode", required = false) String detailSigungucode,
-        @RequestParam(name = "keword", required = false) String searchKeword,
+        @RequestParam(name = "keyword", required = false) String searchKeword,
         @RequestParam(name = "page", defaultValue = "0") int page,
         @RequestParam(name = "size", defaultValue = "16") int size
     ) {

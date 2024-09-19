@@ -1,5 +1,7 @@
 package com.example.back.dto.response.Festival;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -20,19 +22,22 @@ public class GetFestivalResponseDto extends ResponseDto {
     private FestivalEntity festivalEntity;
     private FestivalDescriptionEntity festivalDescriptionEntity;
     private GetFestivalImageDto getFestivalImageDto;
+    private List<String> markedUserEmails;
     
-    public GetFestivalResponseDto(FestivalEntity festivalEntity, FestivalDescriptionEntity festivalDescriptionEntity, GetFestivalImageDto festivalImageDto){
+    public GetFestivalResponseDto(FestivalEntity festivalEntity, FestivalDescriptionEntity festivalDescriptionEntity, GetFestivalImageDto festivalImageDto, List<String> markedUserEmails){
         super();
         this.festivalEntity = festivalEntity;
         this.festivalDescriptionEntity = festivalDescriptionEntity;
         this.getFestivalImageDto = festivalImageDto;
+        this.markedUserEmails = markedUserEmails;
     }
 
-    public static ResponseEntity<GetFestivalResponseDto> success(FestivalEntity festivalEntity, FestivalDescriptionEntity festivalDescriptionEntity, GetFestivalImageDto festivalImageDto){
+    public static ResponseEntity<GetFestivalResponseDto> success(FestivalEntity festivalEntity, FestivalDescriptionEntity festivalDescriptionEntity, GetFestivalImageDto festivalImageDto, List<String> markedUserEmails){
         GetFestivalResponseDto responseBody = new GetFestivalResponseDto();
         responseBody.setFestivalEntity(festivalEntity);
         responseBody.setFestivalDescriptionEntity(festivalDescriptionEntity);
         responseBody.setGetFestivalImageDto(festivalImageDto);
+        responseBody.setMarkedUserEmails(markedUserEmails);
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
 
     }

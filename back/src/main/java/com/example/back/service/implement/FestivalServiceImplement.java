@@ -26,6 +26,7 @@ import com.example.back.dto.response.Festival.Festivalfiled.GetFestivalImageDto;
 import com.example.back.dto.response.Festival.Festivalfiled.GetFestivalListItemDto;
 import com.example.back.dto.response.Festival.Festivalfiled.GetFestivalMarkListItemDto;
 import com.example.back.dto.response.plan.PostPlanCommentResponseDto;
+import com.example.back.entity.DetailMarkEntity;
 import com.example.back.entity.FestivalCommentEntity;
 import com.example.back.entity.FestivalCommentLIkeEntity;
 import com.example.back.entity.FestivalDescriptionEntity;
@@ -85,8 +86,8 @@ public class FestivalServiceImplement implements FestivalService {
                 .findByFestivalStartDateAfter(formattedCurrentDate, pageable);
     
             // DTO 변환
-            List<GetFestivalListItemDto> onGoingFestivalList = GetFestivalListItemDto.copyList(onGoingFestivals);
-            List<GetFestivalListItemDto> upComingFestivalList = GetFestivalListItemDto.copyList(upComingFestivalsPage.getContent());
+            List<GetFestivalListItemDto> onGoingFestivalList = GetFestivalListItemDto.copyList(onGoingFestivals, festivalCommentRepository);
+            List<GetFestivalListItemDto> upComingFestivalList = GetFestivalListItemDto.copyList(upComingFestivalsPage.getContent(), festivalCommentRepository);
     
             // 응답 객체 구성
             GetFestivalListResponseDto responseBody = new GetFestivalListResponseDto(
@@ -124,7 +125,12 @@ public class FestivalServiceImplement implements FestivalService {
                 festivalImageDto = new GetFestivalImageDto(festivalEntity, festivalImageEntity);
             }
 
-            GetFestivalResponseDto responseDto = new GetFestivalResponseDto(festivalEntity, festivalDescriptionEntity, festivalImageDto);
+            List<FestivalMarkEntity> festivalMarkEntities = festivalMarkRepository.findByFestivalId(festivalId);
+            List<String> markedUserEmails = festivalMarkEntities.stream()
+                .map(FestivalMarkEntity::getUserEmail)
+                .collect(Collectors.toList());
+            
+            GetFestivalResponseDto responseDto = new GetFestivalResponseDto(festivalEntity, festivalDescriptionEntity, festivalImageDto, markedUserEmails);
             festivalEntity.increaseViewCount();
             festivalRepository.save(festivalEntity);
             return ResponseEntity.status(HttpStatus.OK).body(responseDto);

@@ -44,6 +44,7 @@ import com.example.back.entity.DetailDescriptionEntity;
 import com.example.back.entity.DetailEntity;
 import com.example.back.entity.DetailImageEntity;
 import com.example.back.entity.DetailMarkEntity;
+import com.example.back.entity.PlanMarkEntity;
 import com.example.back.entity.UserEntity;
 import com.example.back.repository.DetailCommentLikeRepository;
 import com.example.back.repository.DetailCommentRepository;
@@ -152,7 +153,13 @@ public class DetailServiceImplement implements DetailService{
                 return GetDetailResponseDto.getDetailFail();
             }
 
-            GetDetailResponseDto responseDto = new GetDetailResponseDto(detailEntity, detailImageDto, detailDescriptionEntity);
+            List<DetailMarkEntity> detailMarkEntities = detailMarkRepository.findByDetailId(detailId);
+
+            List<String> markedUserEmails = detailMarkEntities.stream()
+                .map(DetailMarkEntity::getUserEmail)
+                .collect(Collectors.toList());
+
+            GetDetailResponseDto responseDto = new GetDetailResponseDto(detailEntity, detailImageDto, detailDescriptionEntity, markedUserEmails);
             detailEntity.increaseViewCount();
             detailRepository.save(detailEntity);
             return ResponseEntity.status(HttpStatus.OK).body(responseDto);
