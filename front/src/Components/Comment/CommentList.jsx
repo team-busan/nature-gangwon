@@ -8,7 +8,6 @@ export function CommentList({ comments, onLike, formRef, title }) {
     setVisibleCount((prevCount) => prevCount + 10);
   };
 
-  // comments가 배열인지 체크
   if (!Array.isArray(comments) || comments.length === 0) {
     return <li>후기를 남겨 주세요!</li>;
   }

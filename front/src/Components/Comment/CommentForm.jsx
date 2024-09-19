@@ -30,6 +30,8 @@ export default function CommentForm({ onSubmit, title, apiEndPoint }) {
         return;
       }
 
+      console.log(data);
+
       const response = await (edit ? axiosInstance.patch : axiosInstance.post)(
         url,
         data,

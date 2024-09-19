@@ -1,6 +1,7 @@
 import React from "react";
 import { FaStar } from "react-icons/fa";
 import Comment from "./Comment";
+import defaultImage from "../../img/profile.jpg"
 
 export function CommentItem({ comment, onLike, formRef, title }) {
   if (!comment) {
@@ -61,7 +62,11 @@ export function CommentItem({ comment, onLike, formRef, title }) {
       <div className="flex-shrink-0">
         <img
           className="w-20 h-20 rounded-full"
-          src={normalizedComment.userProfile}
+          src={
+            normalizedComment.userProfile === "/image/profile.jpg"
+              ? defaultImage
+              : normalizedComment.userProfile
+          }
           alt={`${normalizedComment.userEmail}'s profile`}
         />
       </div>

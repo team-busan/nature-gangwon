@@ -48,9 +48,9 @@ export default function Comment({ comment, formRef, title }) {
       case "plan":
         return `${API_URL.PlanCommentLike}`;
       case "destination":
-        return null;
+        return `${API_URL.DestinationCommentLike}`;
       case "festival":
-        return null;
+        return `${API_URL.FestivalCommentLike}`;
       default:
         throw new Error("잘못된 title 값입니다.");
     }
@@ -61,9 +61,9 @@ export default function Comment({ comment, formRef, title }) {
       case "plan":
         return `${API_URL.PlanCommentDelete}/${commentId}`;
       case "destination":
-        return `${API_URL.TouristSpotComment}/${commentId}`;
+        return `${API_URL.DestinationCommentDelete}/${commentId}`;
       case "festival":
-        return `${API_URL.FestivalComment}/${commentId}`;
+        return `${API_URL.FestivalCommentDelete}/${commentId}`;
       default:
         throw new Error("잘못된 title 값입니다.");
     }
@@ -77,12 +77,15 @@ export default function Comment({ comment, formRef, title }) {
       if (!url) {
         throw new Error("Invalid URL");
       }
+  
+      const data = {
+        [`${title === 'destination' ? 'detail' : title}Id`]: detailId,
+        [`${title}CommentId`]: commentId,
+      };
+  
       return axiosInstance.post(
         url,
-        {
-          planId: detailId,
-          planCommentId: commentId,
-        },
+        data,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -98,6 +101,7 @@ export default function Comment({ comment, formRef, title }) {
       Swal.fire("오류 발생", "로그인 후 이용해주세요", "error");
     },
   });
+  
 
   // 삭제 요청
   const mutation = useMutation({

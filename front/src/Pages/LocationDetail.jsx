@@ -65,10 +65,9 @@ export default function LocationDetail() {
       <DetailDescription description={description} />
       <DetailInformation information={information} />
       <DetailComment
-        comments={destination.detailCommentList}
-        refetchComments={refetch}
+        typeId = {detailId}
         apiEndPoint = {url}
-        title = "관광지"
+        title = "destination"
       />
     </>
   );
