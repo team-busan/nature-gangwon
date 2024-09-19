@@ -11,8 +11,12 @@ import com.example.back.dto.request.user.PatchUserProfileRequestDto;
 import com.example.back.dto.response.user.GetUserResponseDto;
 import com.example.back.dto.response.user.PatchUserNicknameResponseDto;
 import com.example.back.dto.response.user.PatchUserProfileResponseDto;
+import com.example.back.entity.DetailCommentEntity;
+import com.example.back.entity.FestivalCommentEntity;
 import com.example.back.entity.PlanCommentEntity;
 import com.example.back.entity.UserEntity;
+import com.example.back.repository.DetailCommentRepository;
+import com.example.back.repository.FestivalCommentRepository;
 import com.example.back.repository.PlanCommentRepository;
 import com.example.back.repository.UserRepository;
 import com.example.back.service.UserService;
@@ -26,6 +30,10 @@ public class UserServiceImplemet implements UserService{
     private final UserRepository userRepository;
 
     private final PlanCommentRepository planCommentRepository;
+
+    private final DetailCommentRepository detailCommentRepository;
+
+    private final FestivalCommentRepository festivalCommentRepository;
 
     //? 유저 정보 갖고오기
     @Override
@@ -60,7 +68,20 @@ public class UserServiceImplemet implements UserService{
             for (PlanCommentEntity comment : userComments) {
                 comment.setUserNickname(userNickname);
             }
+
+            List<DetailCommentEntity> userDetailComments = detailCommentRepository.findByUserEmail(userEmail);
+            for(DetailCommentEntity comment : userDetailComments) {
+                comment.setUserNickname(userNickname);
+            }
+
+            List<FestivalCommentEntity> userFestivalComments = festivalCommentRepository.findByUserEmail(userEmail);
+            for(FestivalCommentEntity comment : userFestivalComments) {
+                comment.setUserNickname(userNickname);
+            }
+
             planCommentRepository.saveAll(userComments);
+            detailCommentRepository.saveAll(userDetailComments);
+            festivalCommentRepository.saveAll(userFestivalComments);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.databaseError();
@@ -82,10 +103,23 @@ public class UserServiceImplemet implements UserService{
             userRepository.save(userEntity);
 
             List<PlanCommentEntity> userComments = planCommentRepository.findByUserEmail(userEmail);
-            for (PlanCommentEntity comment : userComments) {
-                comment.setUserProfile(userProfile);
+            for (PlanCommentEntity profile : userComments) {
+                profile.setUserProfile(userProfile);
             }
+
+            List<DetailCommentEntity> detailUserComments = detailCommentRepository.findByUserEmail(userEmail);
+            for(DetailCommentEntity profile : detailUserComments) {
+                profile.setUserProfile(userProfile);
+            }
+
+            List<FestivalCommentEntity> festivalUserComments = festivalCommentRepository.findByUserEmail(userEmail);
+            for(FestivalCommentEntity profile : festivalUserComments) {
+                profile.setUserProfile(userProfile);
+            }
+
             planCommentRepository.saveAll(userComments);
+            detailCommentRepository.saveAll(detailUserComments);
+            festivalCommentRepository.saveAll(festivalUserComments);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.databaseError();

@@ -11,6 +11,7 @@ import com.example.back.entity.FestivalCommentEntity;
 public interface FestivalCommentRepository extends JpaRepository<FestivalCommentEntity, Integer>{
     FestivalCommentEntity findByFestivalCommentId(int festivalCommentId);
     List<FestivalCommentEntity> findByFestivalIdOrderByFestivalUploadDateDesc(int festivalId);
+    List<FestivalCommentEntity> findByUserEmail(String userEmail);
     FestivalCommentEntity findByFestivalId(int festivalId);
     int countByFestivalId(int festivalId);
     @Transactional
