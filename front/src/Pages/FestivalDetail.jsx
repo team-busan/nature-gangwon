@@ -67,8 +67,9 @@ export default function FestivalDetail() {
       <DetailDescription description = {description} type = "festival"/>
       <DetailInformation information = {information} type = "festival"/>
       <DetailComment
-        comments = {festival.festivalCommentList}
-        refetchComments={refetch}
+        title = "festival"
+        apiEndPoint = {url}
+        typeId = {festivalId}
       />
       {/* test */}
     </>

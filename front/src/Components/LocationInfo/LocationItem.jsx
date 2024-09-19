@@ -4,7 +4,6 @@ import { FaRegComment } from "react-icons/fa6";
 import FestivalSchedule from "../FestivalInfo/FestivalSchedule";
 
 const LocationItem = ({ item, type = "" }) => {
-  // 타입에 따라 적절한 변수명을 매핑
   const title = type.includes("festival") ? item.festivalTitle : item.detailTitle;
   const address = type.includes("festival") ? item.festivalAddress : item.detailAddress;
   const image = type.includes("festival") ? item.festivalFirstimage : item.detailFirstimage;
