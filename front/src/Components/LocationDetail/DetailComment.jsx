@@ -47,8 +47,8 @@ export default function DetailComment({ apiEndPoint, title, typeId }) {
     },
   });
 
-  const fetchPlanComments = async () => {
-    const commentUrl = `http://localhost:8000/plan/comment/${typeId}?sort=${commentSortOption}`;
+  const fetchComments = async () => {
+    const commentUrl = `http://localhost:8000/${title}/comment/${typeId}?sort=${commentSortOption}`;
     try {
       const response = await axiosInstance.get(commentUrl);
       if (response.data && response.data.message === "It Doesn't Exist.") {
@@ -68,7 +68,7 @@ export default function DetailComment({ apiEndPoint, title, typeId }) {
     refetch: refetchComments,
   } = useQuery({
     queryKey: ["Comments", typeId, commentSortOption],
-    queryFn: fetchPlanComments,
+    queryFn: fetchComments,
     enabled: !!typeId,
   });
 
@@ -109,6 +109,23 @@ export default function DetailComment({ apiEndPoint, title, typeId }) {
       });
     }
   };
+
+  let filteredComments = comments;
+
+  switch (title) {
+    case "plan" :
+      filteredComments = comments.planCommentList;
+      break;
+    case "destination" :
+      filteredComments = comments.detailCommentList;
+      break;
+    case "festival" :
+      filteredComments = comments.festivalCommentList;
+      break;
+    default :
+      throw new Error("잘못된 값입니다");
+  }
+
 
   return (
     <section className="w-1420 p-3" ref={formRef}>
@@ -164,7 +181,7 @@ export default function DetailComment({ apiEndPoint, title, typeId }) {
           />
         )}
       </div>
-      <CommentList comments={comments.planCommentList} formRef={formRef} title={title} />
+      <CommentList comments={filteredComments} formRef={formRef} title={title} />
     </section>
   );
 }

@@ -23,8 +23,12 @@ const API_URL = {
   PlanComment: "/plan/patch-comment",
   FestivalComment: "/festival/patch-comment",
   DetailComment: "/detail/patch-comment",
+  DestinationCommentDelete : "/destination/delete-comment",
+  FestivalCommentDelete : "/festival/delete-comment",
   PlanCommentDelete : "/plan/delete-comment",
   PlanCommentLike : "/plan/comment-like",
+  DestinationCommentLike : "/destination/comment-like",
+  FestivalCommentLike : "/festival/comment-like"
 };
 
 export { axiosInstance, API_URL };

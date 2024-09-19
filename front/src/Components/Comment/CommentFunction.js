@@ -17,21 +17,23 @@ export const getRequestData = (edit, detailId, commentContent, rating, title, ap
       };
       break;
 
-    case "title": 
-      url = edit ? `${axiosInstance.defaults.baseURL}/destination/${detailId}/patch-comment` : `${axiosInstance.defaults.baseURL}/destination/post-comment`;
+    case "destination": 
+      url = edit ? `${axiosInstance.defaults.baseURL}/destination/patch-comment` : `${axiosInstance.defaults.baseURL}/destination/post-comment`;
       data = {
         detailId: detailId,
         detailContent: commentContent,
         score: rating,
+        ...(edit && { detailCommentId : edit})
       };
       break;
 
     case "festival":
-      url = edit ? `${apiEndPoint}/festival/${detailId}/edit-comment` : `${apiEndPoint}/festival/${detailId}/create-comment`;
+      url = edit ? `${axiosInstance.defaults.baseURL}/festival/patch-comment` : `${axiosInstance.defaults.baseURL}/festival/post-comment`;
       data = {
         festivalId: detailId,
-        content: commentContent,
+        festivalContent: commentContent,
         score: rating,
+        ...(edit && { festivalCommentId : edit})
       };
       break;
 

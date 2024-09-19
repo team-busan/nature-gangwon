@@ -49,12 +49,10 @@ export default function PlanDetail() {
   const planHeader = planDetail.planEntity;
   const planMarkUserEmails = planDetail.markedUserEmails;
 
-  // 선택된 dayNumber에 해당하는 장소들만 필터링
   const filteredPlaces = places.filter(
     (place) => place.dayNumber === selectedDay
   );
 
-  // 사용 가능한 dayNumber 리스트를 추출하고 중복 제거
   const availableDays = [...new Set(places.map((place) => place.dayNumber))];
   const writer = user && planHeader && user.userEmail === planHeader.userEmail;
 
