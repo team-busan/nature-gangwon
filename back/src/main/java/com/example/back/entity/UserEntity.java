@@ -56,4 +56,8 @@ public class UserEntity {
     public void patchProfle(String userProfile) {
         this.userProfile = userProfile;
     }
+
+    public void patchPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
 }

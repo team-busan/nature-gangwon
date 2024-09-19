@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class PatchUserProfileRequestDto {
+public class PatchUserPasswordRequestDto {
     @NotBlank
-    private String userProfile;
+    private String userPassword;
 }

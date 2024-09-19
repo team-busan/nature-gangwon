@@ -3,18 +3,24 @@ package com.example.back.service.implement;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.back.dto.ResponseDto;
 import com.example.back.dto.request.user.PatchUserNicknameRequestDto;
+import com.example.back.dto.request.user.PatchUserPasswordRequestDto;
 import com.example.back.dto.request.user.PatchUserProfileRequestDto;
 import com.example.back.dto.response.user.GetUserResponseDto;
 import com.example.back.dto.response.user.PatchUserNicknameResponseDto;
+import com.example.back.dto.response.user.PatchUserPasswordResponseDto;
 import com.example.back.dto.response.user.PatchUserProfileResponseDto;
 import com.example.back.entity.DetailCommentEntity;
 import com.example.back.entity.FestivalCommentEntity;
 import com.example.back.entity.PlanCommentEntity;
 import com.example.back.entity.UserEntity;
+import com.example.back.provider.EmailProvider;
+import com.example.back.repository.CertificationRepository;
 import com.example.back.repository.DetailCommentRepository;
 import com.example.back.repository.FestivalCommentRepository;
 import com.example.back.repository.PlanCommentRepository;
@@ -35,6 +41,10 @@ public class UserServiceImplemet implements UserService{
 
     private final FestivalCommentRepository festivalCommentRepository;
 
+    private final CertificationRepository certificationRepository;
+
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     //? 유저 정보 갖고오기
     @Override
     public ResponseEntity<? super GetUserResponseDto> getUser(String userEmail) {
@@ -51,7 +61,7 @@ public class UserServiceImplemet implements UserService{
         }
     }
 
-    //? 유저 닉네임 수정하기 (추후 디테일, 페스티벌 댓글도 set추가하기)
+    //? 유저 닉네임 수정하기
     @Override
     public ResponseEntity<? super PatchUserNicknameResponseDto> patchUserNickname(String userEmail, PatchUserNicknameRequestDto dto) {
         try {
@@ -89,7 +99,7 @@ public class UserServiceImplemet implements UserService{
         return PatchUserNicknameResponseDto.success();
     }
     
-    //? 유저 프로필 사진 변경 (추후 디테일, 페스티벌 댓글도 set추가하기)
+    //? 유저 프로필 사진 변경
     @Override
     public ResponseEntity<? super PatchUserProfileResponseDto> patchUserProfile(String userEmail, PatchUserProfileRequestDto dto) {
         try {
@@ -126,5 +136,27 @@ public class UserServiceImplemet implements UserService{
         }
         return PatchUserProfileResponseDto.success();
     }
-    
+
+    //? 유저 비밀번호 변경
+    @Override
+    public ResponseEntity<? super PatchUserPasswordResponseDto> patchUserPassword(String userEmail, PatchUserPasswordRequestDto dto) {
+        try {
+            UserEntity userEntity = userRepository.findByUserEmail(userEmail);
+            if (userEntity == null) {
+                return PatchUserPasswordResponseDto.getUserFail();
+            }
+
+            String encodedPassword = passwordEncoder.encode(dto.getUserPassword());
+
+            userEntity.patchPassword(encodedPassword);
+            userRepository.save(userEntity);
+            
+            certificationRepository.deleteByUserEmail(userEmail);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return PatchUserPasswordResponseDto.success();
+    }
+
 }

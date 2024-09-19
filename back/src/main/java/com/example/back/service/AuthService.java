@@ -11,6 +11,7 @@ import com.example.back.dto.request.auth.ValidateNicknameRequestDto;
 import com.example.back.dto.response.auth.CheckCertificationResponseDto;
 import com.example.back.dto.response.auth.EmailCertificationResponseDto;
 import com.example.back.dto.response.auth.EmailCheckResponseDto;
+import com.example.back.dto.response.auth.MemberEmailCertificationResponseDto;
 import com.example.back.dto.response.auth.SignInResponseDto;
 import com.example.back.dto.response.auth.SignUpResponseDto;
 import com.example.back.dto.response.auth.ValidateNicknameResponseDto;
@@ -22,4 +23,5 @@ public interface AuthService {
     ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto);
     ResponseEntity<? super ValidateNicknameResponseDto> nicknameCheck(ValidateNicknameRequestDto dto);
     ResponseEntity<? super CheckCertificationResponseDto> checkCertification(CheckCertificationRequestDto dto);
+    ResponseEntity<? super MemberEmailCertificationResponseDto> memberEmailCertification(EmailCertificationRequestDto dto);
 }

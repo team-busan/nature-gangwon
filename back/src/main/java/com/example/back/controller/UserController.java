@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.back.dto.request.user.PatchUserNicknameRequestDto;
+import com.example.back.dto.request.user.PatchUserPasswordRequestDto;
 import com.example.back.dto.request.user.PatchUserProfileRequestDto;
 import com.example.back.dto.response.user.GetUserResponseDto;
 import com.example.back.dto.response.user.PatchUserNicknameResponseDto;
+import com.example.back.dto.response.user.PatchUserPasswordResponseDto;
 import com.example.back.dto.response.user.PatchUserProfileResponseDto;
 import com.example.back.service.UserService;
 
@@ -49,6 +51,16 @@ public class UserController {
         @Valid @RequestBody PatchUserProfileRequestDto requestBody
     ) {
         ResponseEntity<? super PatchUserProfileResponseDto> response = userService.patchUserProfile(userEmail, requestBody);
+        return response;
+    }
+
+    //? 유저 비밀번호 변경
+    @PatchMapping("/password")
+    public ResponseEntity<? super PatchUserPasswordResponseDto>  patchUserPassword(
+        @AuthenticationPrincipal String userEmail,
+        @Valid @RequestBody PatchUserPasswordRequestDto requestBody
+    ) {
+        ResponseEntity<? super PatchUserPasswordResponseDto> response = userService.patchUserPassword(userEmail, requestBody);
         return response;
     }
 }

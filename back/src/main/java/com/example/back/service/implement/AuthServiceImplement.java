@@ -16,6 +16,7 @@ import com.example.back.dto.request.auth.ValidateNicknameRequestDto;
 import com.example.back.dto.response.auth.CheckCertificationResponseDto;
 import com.example.back.dto.response.auth.EmailCertificationResponseDto;
 import com.example.back.dto.response.auth.EmailCheckResponseDto;
+import com.example.back.dto.response.auth.MemberEmailCertificationResponseDto;
 import com.example.back.dto.response.auth.SignInResponseDto;
 import com.example.back.dto.response.auth.SignUpResponseDto;
 import com.example.back.dto.response.auth.ValidateNicknameResponseDto;
@@ -116,8 +117,6 @@ public class AuthServiceImplement implements AuthService {
     public ResponseEntity<? super EmailCertificationResponseDto> emailCertification(EmailCertificationRequestDto dto) {
         try {
             String userEmail = dto.getUserEmail();
-            // boolean isExistId = userRepository.existsByUserEmail(userEmail);
-            // if(isExistId) return EmailCertificationResponseDto.duplicateEmail();
 
             String certificationNumber = CertificationCode.getCertificationNumber();
 
@@ -126,7 +125,7 @@ public class AuthServiceImplement implements AuthService {
 
             CertificationEntity certificationEntity = new CertificationEntity(0, userEmail, certificationNumber);
             certificationRepository.save(certificationEntity);
-
+            
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.databaseError();
@@ -166,5 +165,31 @@ public class AuthServiceImplement implements AuthService {
             return ResponseDto.databaseError();
         }
         return CheckCertificationResponseDto.success();
+    }
+
+    //? 회원 인증메일
+    @Override
+    public ResponseEntity<? super MemberEmailCertificationResponseDto> memberEmailCertification(EmailCertificationRequestDto dto) {
+        try {
+            String userEmail = dto.getUserEmail();
+            boolean isExistId = userRepository.existsByUserEmail(dto.getUserEmail());
+            if(!isExistId) {
+                return MemberEmailCertificationResponseDto.duplicateEmail();
+            }
+
+            String certificationNumber = CertificationCode.getCertificationNumber();
+
+            boolean isSuccessed = emailProvider.sendCertificationMail(userEmail, certificationNumber);
+            if(!isSuccessed) {
+                return MemberEmailCertificationResponseDto.mailSendFail();
+            }    
+
+            CertificationEntity certificationEntity = new CertificationEntity(0, userEmail, certificationNumber);
+            certificationRepository.save(certificationEntity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return MemberEmailCertificationResponseDto.success();
     }
 }

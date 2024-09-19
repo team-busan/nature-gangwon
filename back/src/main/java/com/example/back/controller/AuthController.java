@@ -15,6 +15,7 @@ import com.example.back.dto.request.auth.ValidateNicknameRequestDto;
 import com.example.back.dto.response.auth.CheckCertificationResponseDto;
 import com.example.back.dto.response.auth.EmailCertificationResponseDto;
 import com.example.back.dto.response.auth.EmailCheckResponseDto;
+import com.example.back.dto.response.auth.MemberEmailCertificationResponseDto;
 import com.example.back.dto.response.auth.SignInResponseDto;
 import com.example.back.dto.response.auth.SignUpResponseDto;
 import com.example.back.dto.response.auth.ValidateNicknameResponseDto;
@@ -80,6 +81,15 @@ public class AuthController {
         @RequestBody @Valid EmailCertificationRequestDto requestBody
     ) {
         ResponseEntity<? super EmailCertificationResponseDto> response = authService.emailCertification(requestBody);
+        return response;
+    }
+
+    //? 회원 메일 보내기
+    @PostMapping("/member/email-send-certification")
+    public ResponseEntity<? super MemberEmailCertificationResponseDto> memberEmailCertification(
+        @RequestBody @Valid EmailCertificationRequestDto requestBody
+    ) {
+        ResponseEntity<? super MemberEmailCertificationResponseDto> response = authService.memberEmailCertification(requestBody);
         return response;
     }
 }
