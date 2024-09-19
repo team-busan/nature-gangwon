@@ -11,7 +11,7 @@ public class GetFestivalMarkListItemDto {
     private int festivalId;
     private String festivalTitle;
     private String festivalStartDate;
-    private String festvailEndDate;
+    private String festivalEndDate;
     private String festivalFirstImage;
     private String festivalImage3;
 }

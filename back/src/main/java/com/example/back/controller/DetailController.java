@@ -45,10 +45,11 @@ public class DetailController {
     @GetMapping("/list")
     public ResponseEntity<? super GetDetailListResponseDto> getDetailList(
         @RequestParam(name = "detailSigungucode", required = false) String detailSigungucode,
+        @RequestParam(name = "keword", required = false) String searchKeword,
         @RequestParam(name = "page", defaultValue = "0") int page,
         @RequestParam(name = "size", defaultValue = "16") int size
     ) {
-        ResponseEntity<? super GetDetailListResponseDto> response = detailService.getDetailList(detailSigungucode, page, size);
+        ResponseEntity<? super GetDetailListResponseDto> response = detailService.getDetailList(detailSigungucode,searchKeword, page, size);
         return response;
     }
 
@@ -71,7 +72,7 @@ public class DetailController {
     }
 
     //? 관광지 댓글 좋아요
-    @PostMapping("/commentLike")
+    @PostMapping("/comment-like")
     public ResponseEntity<? super PostDetailCommentLikeResponseDto> postCommentLike(
         @AuthenticationPrincipal String userEmail,
         @RequestBody @Valid PostDetailCommentLikeRequestDto requestBody
