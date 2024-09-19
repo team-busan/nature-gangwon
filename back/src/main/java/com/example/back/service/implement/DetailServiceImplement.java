@@ -100,16 +100,24 @@ public class DetailServiceImplement implements DetailService{
 
     //? 관광지 리스트
     @Override
-    public ResponseEntity<? super GetDetailListResponseDto> getDetailList(String detailSigungucode, int page, int size) {
+    public ResponseEntity<? super GetDetailListResponseDto> getDetailList(String detailSigungucode, String searchKeyword, int page, int size) {
         try {
             int zeroBasedPage = page - 1;
             Pageable pageable = PageRequest.of(zeroBasedPage, size);
             Page<DetailEntity> detailPageList;
             if ("all".equals(detailSigungucode)) {
-                detailPageList = detailRepository.findAll(pageable);
+                if (searchKeyword != null) {
+                    detailPageList = detailRepository.findByDetailTitleContainingIgnoreCase(searchKeyword, pageable);
+                } else {
+                    detailPageList = detailRepository.findAll(pageable);
+                }
             } else if (detailSigungucode != null) {
                 String mappedCode = mapSigungucode(detailSigungucode);
-                detailPageList = detailRepository.findByDetailSigungucode(mappedCode, pageable);
+                if (searchKeyword != null) {
+                    detailPageList = detailRepository.findByDetailSigungucodeAndDetailTitleContainingIgnoreCase(mappedCode, searchKeyword, pageable);
+                } else {
+                    detailPageList = detailRepository.findByDetailSigungucode(mappedCode, pageable);
+                }
             } else {
                 detailPageList = Page.empty(pageable);
             }

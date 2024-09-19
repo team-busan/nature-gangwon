@@ -12,6 +12,8 @@ import java.util.List;
 public interface DetailRepository extends JpaRepository<DetailEntity, Integer>{
     DetailEntity findByDetailId(int detailId);
     Page<DetailEntity> findByDetailSigungucode(String detailSigungucode, Pageable pageable);
+    Page<DetailEntity> findByDetailTitleContainingIgnoreCase(String keyword, Pageable pageable);
+    Page<DetailEntity> findByDetailSigungucodeAndDetailTitleContainingIgnoreCase(String detailSigungucode, String keyword, Pageable pageable);
 
     @Query(value = "SELECT * FROM detail WHERE detail_contenttypeid = :contentTypeId ORDER BY RAND() LIMIT 3", nativeQuery = true)
     List<DetailEntity> findRandom3ByContentTypeId(int contentTypeId);
