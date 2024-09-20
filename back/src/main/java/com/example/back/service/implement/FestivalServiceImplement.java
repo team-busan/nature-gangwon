@@ -69,7 +69,7 @@ public class FestivalServiceImplement implements FestivalService {
     private final FestivalMarkRepository festivalMarkRepository;
     //? 축제 리스트
     @Override
-    public ResponseEntity<? super GetFestivalListResponseDto> getFestivalList(int page, int size){
+    public ResponseEntity<? super GetFestivalListResponseDto> getFestivalList(int page, int size, String sortOrder){
         try {
             LocalDateTime currentDate = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -88,7 +88,24 @@ public class FestivalServiceImplement implements FestivalService {
             // DTO 변환
             List<GetFestivalListItemDto> onGoingFestivalList = GetFestivalListItemDto.copyList(onGoingFestivals, festivalCommentRepository);
             List<GetFestivalListItemDto> upComingFestivalList = GetFestivalListItemDto.copyList(upComingFestivalsPage.getContent(), festivalCommentRepository);
-    
+
+            //정렬
+            Comparator<GetFestivalListItemDto> comparator;
+            switch (sortOrder) {
+                case "댓글순":
+                    comparator = Comparator.comparing(GetFestivalListItemDto::getFestivalTotalComment);
+                    break;
+                case "인기순":
+                    comparator = Comparator.comparing(GetFestivalListItemDto::getFestivalViews);
+                    break;
+                case "전체":
+                default:
+                    comparator = Comparator.comparing(GetFestivalListItemDto::getFestivalStartDate);
+                    break;
+            }   
+            
+            onGoingFestivalList.sort(comparator.reversed());
+            upComingFestivalList.sort(comparator.reversed());
             // 응답 객체 구성
             GetFestivalListResponseDto responseBody = new GetFestivalListResponseDto(
                 onGoingFestivalList,

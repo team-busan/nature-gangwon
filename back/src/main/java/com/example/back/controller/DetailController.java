@@ -46,10 +46,11 @@ public class DetailController {
     public ResponseEntity<? super GetDetailListResponseDto> getDetailList(
         @RequestParam(name = "detailSigungucode", required = false) String detailSigungucode,
         @RequestParam(name = "keyword", required = false) String searchKeword,
+        @RequestParam(name = "sort", defaultValue = "전체") String sortOrder,
         @RequestParam(name = "page", defaultValue = "0") int page,
         @RequestParam(name = "size", defaultValue = "16") int size
     ) {
-        ResponseEntity<? super GetDetailListResponseDto> response = detailService.getDetailList(detailSigungucode,searchKeword, page, size);
+        ResponseEntity<? super GetDetailListResponseDto> response = detailService.getDetailList(detailSigungucode,searchKeword, sortOrder, page, size);
         return response;
     }
 

@@ -101,7 +101,7 @@ public class DetailServiceImplement implements DetailService{
 
     //? 관광지 리스트
     @Override
-    public ResponseEntity<? super GetDetailListResponseDto> getDetailList(String detailSigungucode, String searchKeyword, int page, int size) {
+    public ResponseEntity<? super GetDetailListResponseDto> getDetailList(String detailSigungucode, String searchKeyword, String sortOrder,int page, int size) {
         try {
             int zeroBasedPage = page - 1;
             Pageable pageable = PageRequest.of(zeroBasedPage, size);
@@ -124,6 +124,22 @@ public class DetailServiceImplement implements DetailService{
             }
             
             List<GetDetailListItemDto> responseList = GetDetailListItemDto.copyList(detailPageList.getContent(), detailCommentRepository);
+
+            Comparator<GetDetailListItemDto> comparator;
+            switch (sortOrder) {
+                case "댓글순":
+                    comparator = Comparator.comparing(GetDetailListItemDto::getDetailTotalComment);
+                    break;
+                case "인기순":
+                    comparator = Comparator.comparing(GetDetailListItemDto::getDetailViews);
+                    break;
+                case "전체":
+                default:
+                    comparator = Comparator.comparing(GetDetailListItemDto::getDetailId).reversed();
+                    break;
+            }
+            responseList.sort(comparator.reversed());
+
             GetDetailListResponseDto responseBody = new GetDetailListResponseDto(responseList, detailPageList.getTotalElements(), detailPageList.getTotalPages(), page);
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {

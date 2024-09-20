@@ -18,7 +18,7 @@ import com.example.back.dto.response.detail.PatchDetailCommentResponseDto;
 import com.example.back.dto.response.detail.PostDetailCommentLikeResponseDto;
 
 public interface DetailService {
-    ResponseEntity<? super GetDetailListResponseDto> getDetailList(String detailSigungucode, String searchKeyword, int page, int size);
+    ResponseEntity<? super GetDetailListResponseDto> getDetailList(String detailSigungucode, String searchKeyword, String sortOrder, int page, int size);
     ResponseEntity<? super GetDetailResponseDto> getDetail(int detailId);
     ResponseEntity<? super PostDetailCommentResponseDto> postComment(String userEmail, PostDetailCommentRequsetDto dto);
     ResponseEntity<? super PostDetailCommentLikeResponseDto> postDetailCommentLike(String userEmail, PostDetailCommentLikeRequestDto dto);
