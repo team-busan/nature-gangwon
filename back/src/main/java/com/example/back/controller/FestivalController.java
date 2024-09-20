@@ -40,9 +40,10 @@ public class FestivalController {
     @GetMapping("/list")
     public ResponseEntity<? super GetFestivalListResponseDto> getFestivalList(
         @RequestParam(name = "page", defaultValue = "0") int page,
-        @RequestParam(name = "size", defaultValue = "16") int size
+        @RequestParam(name = "size", defaultValue = "16") int size,
+        @RequestParam(name = "sort", defaultValue = "전체") String sortOrder
     ){
-        ResponseEntity<? super GetFestivalListResponseDto> response = festivalService.getFestivalList(page, size);
+        ResponseEntity<? super GetFestivalListResponseDto> response = festivalService.getFestivalList(page, size, sortOrder);
         return response;
     }
     
