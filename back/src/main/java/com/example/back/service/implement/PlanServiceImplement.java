@@ -65,6 +65,7 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Comparator;
+import java.util.Collections;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -442,7 +443,94 @@ public class PlanServiceImplement implements PlanService{
         return DeletePlanResponseDto.success();
     }
 
-    //? 계획 리스트
+    // //? 계획 리스트
+    // @Override
+    // public ResponseEntity<? super GetPlanListResponseDto> getPlanList(String filter, String sortOrder, String keyword, int page, int size) {
+    //     try {
+    //         LocalDateTime currentDate = LocalDateTime.now();
+    //         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    //         String formattedCurrentDate = currentDate.format(formatter);
+
+    //         Pageable pageable = PageRequest.of(page - 1, size);
+    //         Page<PlanEntity> planPage;
+
+    //         switch (filter) {
+    //             case "여행 전":
+    //                 planPage = (keyword != null && !keyword.isEmpty()) ? 
+    //                     planRepository.findByStartDateAfterAndPlanTitleContaining(formattedCurrentDate, keyword, pageable) :
+    //                     planRepository.findByStartDateAfter(formattedCurrentDate, pageable);
+    //                 break;
+    //             case "여행 완료":
+    //                 planPage = (keyword != null && !keyword.isEmpty()) ?
+    //                     planRepository.findByEndDateBeforeAndPlanTitleContaining(formattedCurrentDate, keyword, pageable) :
+    //                     planRepository.findByEndDateBefore(formattedCurrentDate, pageable);
+    //                 break;
+    //             case "여행 중":
+    //                 planPage = (keyword != null && !keyword.isEmpty()) ?
+    //                     planRepository.findByStartDateBeforeAndEndDateAfterAndPlanTitleContaining(formattedCurrentDate, formattedCurrentDate, keyword, pageable) :
+    //                     planRepository.findByStartDateBeforeAndEndDateAfter(formattedCurrentDate, formattedCurrentDate, pageable);
+    //                 break;
+    //             case "전체":
+    //             default:
+    //                 if (keyword != null && !keyword.isEmpty()) {
+    //                     planPage = planRepository.findByPlanTitleContaining(keyword, pageable);
+    //                 } else {
+    //                     PageRequest pageableWithSort = PageRequest.of(page - 1, size, Sort.by("planUploadDate").descending());
+    //                     planPage = planRepository.findAll(pageableWithSort);
+    //                 }
+    //                 break;
+    //         }
+
+    //         List<GetPlanListItemDto> planDtos = planPage.getContent().stream().map(plan -> {
+    //             UserEntity user = userRepository.findByUserEmail(plan.getUserEmail());
+    //             String userNickname = (user != null) ? user.getUserNickname() : "Unknown";
+
+    //             List<PlacesEntity> placesEntities = placesRepository.findByPlanId(plan.getPlanId());
+    //             List<String> photoUrls = placesEntities.stream()
+    //                 .flatMap(place -> photosRepository.findByPlacesId(place.getPlacesId()).stream())
+    //                 .map(PhotosEntity::getPhotoUrl)
+    //                 .collect(Collectors.toList());
+
+    //             int commentCount = planCommentRepository.countByPlanId(plan.getPlanId());
+    //             int markCount = planMarkRepository.countByPlanId(plan.getPlanId());
+    //             String travelStatus = getTravelStatus(plan, currentDate);
+
+    //             return new GetPlanListItemDto(
+    //                 plan.getPlanId(),
+    //                 userNickname,
+    //                 plan.getPlanTitle(),
+    //                 plan.getPlanUploadDate(),
+    //                 markCount,
+    //                 photoUrls,
+    //                 commentCount,
+    //                 travelStatus,
+    //                 plan.getPlanCount()
+    //             );
+    //         }).collect(Collectors.toList());
+
+    //         Comparator<GetPlanListItemDto> comparator;
+    //         switch (sortOrder) {
+    //             case "인기순":
+    //                 comparator = Comparator.comparing(GetPlanListItemDto::getMarkCount);
+    //                 break;
+    //             case "댓글순":
+    //                 comparator = Comparator.comparing(GetPlanListItemDto::getCommentCount);
+    //                 break;
+    //             case "전체":
+    //             default:
+    //                 comparator = Comparator.comparing(GetPlanListItemDto::getPlanUploadDate);
+    //                 break;
+    //         }
+
+    //         planDtos.sort(comparator.reversed());
+
+    //         GetPlanListResponseDto responseBody = new GetPlanListResponseDto(planDtos, planPage.getTotalElements(), planPage.getTotalPages(), page);
+    //         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //         return ResponseDto.databaseError();
+    //     }
+    // }
     @Override
     public ResponseEntity<? super GetPlanListResponseDto> getPlanList(String filter, String sortOrder, String keyword, int page, int size) {
         try {
@@ -450,37 +538,33 @@ public class PlanServiceImplement implements PlanService{
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formattedCurrentDate = currentDate.format(formatter);
 
-            Pageable pageable = PageRequest.of(page - 1, size);
-            Page<PlanEntity> planPage;
+            List<PlanEntity> planEntities;
 
             switch (filter) {
                 case "여행 전":
-                    planPage = (keyword != null && !keyword.isEmpty()) ? 
-                        planRepository.findByStartDateAfterAndPlanTitleContaining(formattedCurrentDate, keyword, pageable) :
-                        planRepository.findByStartDateAfter(formattedCurrentDate, pageable);
+                    planEntities = (keyword != null && !keyword.isEmpty()) ? 
+                        planRepository.findByStartDateAfterAndPlanTitleContaining(formattedCurrentDate, keyword) :
+                        planRepository.findByStartDateAfter(formattedCurrentDate);
                     break;
                 case "여행 완료":
-                    planPage = (keyword != null && !keyword.isEmpty()) ?
-                        planRepository.findByEndDateBeforeAndPlanTitleContaining(formattedCurrentDate, keyword, pageable) :
-                        planRepository.findByEndDateBefore(formattedCurrentDate, pageable);
+                    planEntities = (keyword != null && !keyword.isEmpty()) ?
+                        planRepository.findByEndDateBeforeAndPlanTitleContaining(formattedCurrentDate, keyword) :
+                        planRepository.findByEndDateBefore(formattedCurrentDate);
                     break;
                 case "여행 중":
-                    planPage = (keyword != null && !keyword.isEmpty()) ?
-                        planRepository.findByStartDateBeforeAndEndDateAfterAndPlanTitleContaining(formattedCurrentDate, formattedCurrentDate, keyword, pageable) :
-                        planRepository.findByStartDateBeforeAndEndDateAfter(formattedCurrentDate, formattedCurrentDate, pageable);
+                    planEntities = (keyword != null && !keyword.isEmpty()) ?
+                        planRepository.findByStartDateBeforeAndEndDateAfterAndPlanTitleContaining(formattedCurrentDate, formattedCurrentDate, keyword) :
+                        planRepository.findByStartDateBeforeAndEndDateAfter(formattedCurrentDate, formattedCurrentDate);
                     break;
                 case "전체":
                 default:
-                    if (keyword != null && !keyword.isEmpty()) {
-                        planPage = planRepository.findByPlanTitleContaining(keyword, pageable);
-                    } else {
-                        PageRequest pageableWithSort = PageRequest.of(page - 1, size, Sort.by("planUploadDate").descending());
-                        planPage = planRepository.findAll(pageableWithSort);
-                    }
+                    planEntities = (keyword != null && !keyword.isEmpty()) ? 
+                        planRepository.findByPlanTitleContaining(keyword) :
+                        planRepository.findAll();
                     break;
             }
 
-            List<GetPlanListItemDto> planDtos = planPage.getContent().stream().map(plan -> {
+            List<GetPlanListItemDto> planDtos = planEntities.stream().map(plan -> {
                 UserEntity user = userRepository.findByUserEmail(plan.getUserEmail());
                 String userNickname = (user != null) ? user.getUserNickname() : "Unknown";
 
@@ -515,7 +599,7 @@ public class PlanServiceImplement implements PlanService{
                 case "댓글순":
                     comparator = Comparator.comparing(GetPlanListItemDto::getCommentCount);
                     break;
-                case "전체":
+                case "최신순":
                 default:
                     comparator = Comparator.comparing(GetPlanListItemDto::getPlanUploadDate);
                     break;
@@ -523,7 +607,17 @@ public class PlanServiceImplement implements PlanService{
 
             planDtos.sort(comparator.reversed());
 
-            GetPlanListResponseDto responseBody = new GetPlanListResponseDto(planDtos, planPage.getTotalElements(), planPage.getTotalPages(), page);
+            int start = (page - 1) * size;
+            int end = Math.min(start + size, planDtos.size());
+
+            List<GetPlanListItemDto> pagedPlanDtos;
+            if (start > planDtos.size()) {
+                pagedPlanDtos = Collections.emptyList(); 
+            } else {
+                pagedPlanDtos = planDtos.subList(start, end);
+            }
+
+            GetPlanListResponseDto responseBody = new GetPlanListResponseDto(pagedPlanDtos, planDtos.size(), (planDtos.size() + size - 1) / size, page);
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
             e.printStackTrace();
