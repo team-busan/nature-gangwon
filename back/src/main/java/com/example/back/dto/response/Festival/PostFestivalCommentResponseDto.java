@@ -26,7 +26,7 @@ public class PostFestivalCommentResponseDto extends ResponseDto{
     }
 
     public static ResponseEntity<ResponseDto> ExistFestival(){
-        ResponseDto responseBody = new ResponseDto(ResponseCode.NOT_EXIST_PLAN, ResponseMessage.NOT_EXIST_PLAN);
+        ResponseDto responseBody = new ResponseDto(ResponseCode.NOT_EXIST_FESTIVAL, ResponseMessage.NOT_EXIST_FESTIVAL);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
     }
 

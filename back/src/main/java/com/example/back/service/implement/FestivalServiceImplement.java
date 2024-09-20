@@ -390,7 +390,7 @@ public class FestivalServiceImplement implements FestivalService {
             if (sortType == null || sortType.isEmpty() || "인기순".equals(sortType)) {
                 commentDtos.sort(Comparator.comparingInt(GetFestivalCommentListItemDto::getLikeCount).reversed());          
             }else if("최신순".equals(sortType)){
-                commentDtos.sort(Comparator.comparing(GetFestivalCommentListItemDto::getFestivalUploadDate));
+                commentDtos.sort(Comparator.comparing(GetFestivalCommentListItemDto::getFestivalUploadDate).reversed());
             }
             
             return GetFestivalCommentListResponseDto.success(commentDtos);

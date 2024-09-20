@@ -449,7 +449,7 @@ public class DetailServiceImplement implements DetailService{
             if (sortType == null || sortType.isEmpty() || "인기순".equals(sortType)) {
                 commentDtos.sort(Comparator.comparingInt(GetDetailCommentListItemDto::getLikeCount).reversed());
             }else if("최신순".equals(sortType)){
-                commentDtos.sort(Comparator.comparing(GetDetailCommentListItemDto::getDetailUploadDate));
+                commentDtos.sort(Comparator.comparing(GetDetailCommentListItemDto::getDetailUploadDate).reversed());
             }
 
             return GetDetailCommentListResponseDto.success(commentDtos);
