@@ -65,7 +65,11 @@ const Memos = () => {
     return result;
   };
 
-  return <ul className="grid grid-cols-4 justify-between gap-6">{render()}</ul>;
+  return (
+    <ul className="grid grid-cols-4 justify-between gap-6">
+      {memos.length === 0 ? <div>아직 작성한 메모가 없습니다</div> : render()}
+    </ul>
+  );
 };
 
 export default Memos;

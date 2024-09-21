@@ -12,6 +12,7 @@ import PlanSelect from "./PlanSelect.jsx";
 import {
   contentTypeState,
   isScrollState,
+  pageState,
   searchQueryState,
   sigunguCodeState,
 } from "../../state/planSearchQueryStates.js";
@@ -20,6 +21,7 @@ const SearchBar = ({ refetch }) => {
   const [searchQuery, setSearchQuery] = useRecoilState(searchQueryState);
   const [sigunguCode, setSigunguCode] = useRecoilState(sigunguCodeState);
   const [contentType, setContentType] = useRecoilState(contentTypeState);
+  const [page, setPage] = useRecoilState(pageState);
 
   const sigunguRef = useRef(null);
   const contentTypeIdRef = useRef(null);
@@ -58,7 +60,10 @@ const SearchBar = ({ refetch }) => {
       <div className="flex gap-1 bg-white py-2 px-3 rounded-lg shadow">
         <MdOutlineSearch
           className="text-2xl cursor-pointer"
-          onClick={() => refetch()}
+          onClick={async () => {
+            await setPage(1);
+            refetch();
+          }}
         />
         <input
           type="text"
@@ -70,7 +75,7 @@ const SearchBar = ({ refetch }) => {
         {searchQuery ? (
           <MdOutlineAddCircle
             className="text-2xl rotate-45 text-gray-400 cursor-pointer"
-            onClick={() => searchQueryState("")}
+            onClick={() => setSearchQuery("")}
           />
         ) : null}
       </div>

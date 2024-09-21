@@ -3,6 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
 import MyPagePlan from "./MyPagePlan";
+import { Link } from "react-router-dom";
 
 const MarkedPlans = () => {
   const [cookies, setCookies] = useCookies(["token"]);
@@ -19,15 +20,19 @@ const MarkedPlans = () => {
   };
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ["plans"],
+    queryKey: ["planMarkList"],
     queryFn: getPlans,
   });
 
   return (
     <ul className="grid grid-cols-4 gap-6 justify-between">
-      {plans.map((plan, idx) => {
-        return <MyPagePlan key={idx} plan={plan} />;
-      })}
+      {plans.length === 0 ? (
+        <Link to="/plan/list">아직 즐겨찾기한 계획이 없습니다</Link>
+      ) : (
+        plans.map((plan, idx) => {
+          return <MyPagePlan key={idx} plan={plan} />;
+        })
+      )}
     </ul>
   );
 };
