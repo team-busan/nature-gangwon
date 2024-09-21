@@ -60,7 +60,7 @@ const PlanBuild = ({
   }, [message]);
 
   return (
-    <div className={`h-lvh w-full relative`}>
+    <div className="h-lvh w-full relative">
       <motion.div
         variants={foldVariants}
         animate={foldControl}

@@ -11,13 +11,16 @@ import {
   searchResultListState,
   searchResultPageState,
   searchResultSigunguCodeState,
-  searchResultSortState,
   searchResultTypeState,
 } from "../state/searchResultState";
+import { useLocation } from "react-router-dom";
 
 const SearchResult = () => {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const queryParam = searchParams.get("query");
+
   const [list, setList] = useRecoilState(searchResultListState);
-  const [sort, setSort] = useRecoilState(searchResultSortState);
   const [type, setType] = useRecoilState(searchResultTypeState);
   const [sigungu, setSigungu] = useRecoilState(searchResultSigunguCodeState);
   const [displayNum, setDisplayNum] = useRecoilState(
@@ -27,7 +30,7 @@ const SearchResult = () => {
 
   const getLocationsInfo = async () => {
     const response = await axios.get(
-      `http://localhost:8000/location/list?locationContenttypeid=${type}&locationSigungucode=${sigungu}&page=${page}&size=${displayNum}`
+      `http://localhost:8000/location/list?locationContenttypeid=${type}&locationSigungucode=${sigungu}&keyword=${queryParam}&page=${page}&size=${displayNum}`
     );
     return response.data;
   };

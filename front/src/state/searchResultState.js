@@ -5,11 +5,6 @@ export const searchResultListState = atom({
   default: [],
 });
 
-export const searchResultSortState = atom({
-  key: "searchResultSortState",
-  default: "관련도순",
-});
-
 export const searchResultTypeState = atom({
   key: "searchResultTypeState",
   default: "",

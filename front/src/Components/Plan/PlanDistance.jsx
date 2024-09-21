@@ -34,10 +34,7 @@ const PlanDistance = ({ nextItem, x1, y1, x2, y2 }) => {
   };
 
   useEffect(() => {
-    console.log(x1, x2, y1, y2);
     if (x1 !== x2 && y1 !== y2) {
-      console.log(x1 === x2);
-      console.log("get result");
       getResult(x1, y1, x2, y2).then((res) => {
         setDistance(res.distance);
         setMinute(res.duration);
@@ -58,11 +55,10 @@ const PlanDistance = ({ nextItem, x1, y1, x2, y2 }) => {
         "0분"
       ) : (
         <div>
-          <span>{millisecondsToHours(minute) + "시간"}</span>
+          <span>{millisecondsToHours(minute) + "시간 "}</span>
           <span>{(millisecondsToMinutes(minute) % 60) + "분"}</span>
         </div>
       )}
-      <span></span>
     </Link>
   );
 };

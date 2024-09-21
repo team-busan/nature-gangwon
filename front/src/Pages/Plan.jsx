@@ -17,22 +17,13 @@ import {
   isScrollState,
 } from "../state/planSearchQueryStates";
 import PlanChooseThumnail from "../Components/Plan/PlanChooseThumnail";
-import { userState } from "../state/userState";
-import { useNavigate } from "react-router-dom";
 
 const Plan = () => {
-  // const navigate = useNavigate();
-  // const [user, setUser] = useRecoilState(userState);
-  // useEffect(() => {
-  //   if (!user) {
-  //     navigate("/Login");
-  //   }
-  // }, []);
-
   const [planStage, setPlanStage] = useState(0);
   const [dates, setDates] = useState([new Date(), new Date()]);
   const [foldStage, setFoldStage] = useState(1);
   const [dataState, setDataState] = useState([]);
+  const [data, setData] = useState([]);
 
   const [searchQuery, setSearchQuery] = useRecoilState(searchQueryState);
   const [contentType, setContentType] = useRecoilState(contentTypeState);
@@ -48,16 +39,13 @@ const Plan = () => {
 
   const getLocationsInfo = async () => {
     const res = await axios.get(
-      `http://localhost:8000/location/list?${
-        contentType ? "&locationContenttypeid=" + contentType : ""
-      }${
-        sigunguCode ? "&locationSigungucode=" + sigunguCode : ""
-      }&page=${page}&size=50`
+      `http://localhost:8000/location/list?&locationContenttypeid=${contentType}&locationSigungucode=${sigunguCode}&keyword=${searchQuery}&page=${page}&size=50`
     );
+    setData(res.data.locationList);
     return res.data.locationList;
   };
 
-  const { data, error, isLoading, refetch } = useQuery({
+  const { planData, planError, planIsLoading, refetch } = useQuery({
     queryKey: ["planContent"],
     queryFn: getLocationsInfo,
   });

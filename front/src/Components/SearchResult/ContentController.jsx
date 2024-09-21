@@ -1,28 +1,24 @@
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import useDetectClose from ".././../Hooks/useDetectClose.js";
 import ControllerSelect from "./ControllerSelect.jsx";
 import { useRecoilState } from "recoil";
 import {
   searchResultDisplayNumState,
   searchResultSigunguCodeState,
-  searchResultSortState,
   searchResultTypeState,
 } from "../../state/searchResultState.js";
 
 const ContentController = ({ refetch }) => {
-  const [sort, setSort] = useRecoilState(searchResultSortState);
   const [type, setType] = useRecoilState(searchResultTypeState);
   const [sigungu, setSigungu] = useRecoilState(searchResultSigunguCodeState);
   const [displayNum, setDisplayNum] = useRecoilState(
     searchResultDisplayNumState
   );
 
-  const sortRef = useRef(null);
   const typeRef = useRef(null);
   const sigunguRef = useRef(null);
   const displayNumRef = useRef(null);
 
-  const [sortOpen, setSortOpen] = useDetectClose(sortRef, false);
   const [typeOpen, setTypeOpen] = useDetectClose(typeRef, false);
   const [sigunguOpen, setSigunguOpen] = useDetectClose(sigunguRef, false);
   const [displayNumOpen, setDisplayNumOpen] = useDetectClose(
@@ -30,7 +26,6 @@ const ContentController = ({ refetch }) => {
     false
   );
 
-  const sortList = ["관련도순", "인기순", "리뷰순"];
   const typeList = ["", "관광지", "축제", "숙박", "음식점"];
   const sigunguList = [
     "",
@@ -59,17 +54,6 @@ const ContentController = ({ refetch }) => {
     <div className="w-full">
       <div className="sticky top-0">
         <div className="flex flex-col gap-6 shadow-content rounded-xl px-4 py-6 w-full h-min">
-          <ControllerSelect
-            label="정렬"
-            id="sort"
-            value={sort}
-            setValue={setSort}
-            ref={sortRef}
-            open={sortOpen}
-            setOpen={setSortOpen}
-            list={sortList}
-            refetch={refetch}
-          />
           <ControllerSelect
             label="관광타입"
             id="type"

@@ -1,6 +1,4 @@
-import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { useQuery } from "@tanstack/react-query";
@@ -21,10 +19,6 @@ const MyPlans = () => {
     return res.data;
   };
 
-  useEffect(() => {
-    console.log(plans);
-  }, [plans]);
-
   const { data, error, isLoading } = useQuery({
     queryKey: ["plans"],
     queryFn: getPlans,
@@ -32,9 +26,11 @@ const MyPlans = () => {
 
   return (
     <ul className="grid grid-cols-4 justify-between gap-6">
-      {plans.map((item, idx) => (
-        <MyPagePlan key={idx} plan={item} />
-      ))}
+      {plans.length === 0 ? (
+        <div>아직 만든 계획이 없습니다</div>
+      ) : (
+        plans.map((item, idx) => <MyPagePlan key={idx} plan={item} />)
+      )}
     </ul>
   );
 };
