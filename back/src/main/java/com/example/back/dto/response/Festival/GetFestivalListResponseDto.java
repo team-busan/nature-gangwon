@@ -17,22 +17,23 @@ import lombok.Getter;
 public class GetFestivalListResponseDto extends ResponseDto {
     private List<GetFestivalListItemDto> onGoing;
     private UpComingFestivalDto upComing;
+    private String randomFestivalImage;
 
     public GetFestivalListResponseDto(List<GetFestivalListItemDto> onGoing, List<GetFestivalListItemDto> upComingFestivals,
-    long totalData, int totalPage, int currentPage){
+    long totalData, int totalPage, int currentPage, String randomFestivalImage){
         super();
         this.onGoing = onGoing;
         this.upComing = new UpComingFestivalDto(totalData, totalPage, currentPage, upComingFestivals);
-    
+        this.randomFestivalImage = randomFestivalImage;
     }
     public static ResponseEntity<GetFestivalListResponseDto> succes(List<GetFestivalListItemDto> onGoing, List<GetFestivalListItemDto> upComingFestivals,
-    long totalData, int totalPage, int currentPage){
-        GetFestivalListResponseDto responseBody = new GetFestivalListResponseDto(onGoing, upComingFestivals, totalData, totalPage, currentPage);
+    long totalData, int totalPage, int currentPage,String randomFestivalImage){
+        GetFestivalListResponseDto responseBody = new GetFestivalListResponseDto(onGoing, upComingFestivals, totalData, totalPage, currentPage, randomFestivalImage);
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 
     public static ResponseEntity<ResponseDto> getFestivalListFail(){
-        ResponseDto responseBody = new ResponseDto(ResponseCode.DATABASE_ERROR, ResponseMessage.DATABASE_ERROR);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+        ResponseDto responseBody = new ResponseDto(ResponseCode.NOT_EXIST_FESTIVAL, ResponseMessage.NOT_EXIST_FESTIVAL);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
     }
 }

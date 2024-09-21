@@ -48,6 +48,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.Comparator;
+import java.util.Collections;
+import java.util.Random;
 
 
 import java.math.BigDecimal;
@@ -67,29 +69,43 @@ public class FestivalServiceImplement implements FestivalService {
     private final UserRepository userRepository;
     private final FestivalCommentLikeRepository festivalCommentLikeRepository;
     private final FestivalMarkRepository festivalMarkRepository;
+    
     //? 축제 리스트
     @Override
     public ResponseEntity<? super GetFestivalListResponseDto> getFestivalList(int page, int size, String sortOrder){
         try {
             LocalDateTime currentDate = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    
             String formattedCurrentDate = currentDate.format(formatter);
     
             // 현재 진행 중인 축제 조회
             List<FestivalEntity> onGoingFestivals = festivalRepository
                 .findByFestivalStartDateBeforeAndFestivalEndDateAfter(formattedCurrentDate, formattedCurrentDate);
     
-            // 다가오는 축제 조회
-            Pageable pageable = PageRequest.of(page - 1, size);
-            Page<FestivalEntity> upComingFestivalsPage = festivalRepository
-                .findByFestivalStartDateAfter(formattedCurrentDate, pageable);
+            // 다가오는 축제 조회 (전체 리스트로 조회한 후 수동으로 페이지네이션)
+            List<FestivalEntity> upComingFestivals = festivalRepository
+                .findByFestivalStartDateAfter(formattedCurrentDate);
     
             // DTO 변환
             List<GetFestivalListItemDto> onGoingFestivalList = GetFestivalListItemDto.copyList(onGoingFestivals, festivalCommentRepository);
-            List<GetFestivalListItemDto> upComingFestivalList = GetFestivalListItemDto.copyList(upComingFestivalsPage.getContent(), festivalCommentRepository);
+            List<GetFestivalListItemDto> upComingFestivalList = GetFestivalListItemDto.copyList(upComingFestivals, festivalCommentRepository);
+    
+            Random random = new Random();
+            GetFestivalListItemDto randomFestival = null;
 
-            //정렬
+            if (!onGoingFestivalList.isEmpty()) {
+                int randomIndex = random.nextInt(onGoingFestivalList.size());  
+                randomFestival = onGoingFestivalList.get(randomIndex);         
+            }
+
+            String randomFestivalImage = null;
+            if (randomFestival != null) {
+                randomFestivalImage = randomFestival.getFestivalFirstimage();
+                if (randomFestivalImage == null || randomFestivalImage.isEmpty()) {
+                    randomFestivalImage = "/image/festival.jpg";  
+                }
+            }
+            // 정렬 로직
             Comparator<GetFestivalListItemDto> comparator;
             switch (sortOrder) {
                 case "댓글순":
@@ -102,19 +118,30 @@ public class FestivalServiceImplement implements FestivalService {
                 default:
                     comparator = Comparator.comparing(GetFestivalListItemDto::getFestivalStartDate);
                     break;
-            }   
-            
+            }
+    
+            // 정렬 적용 (내림차순으로 적용)
             onGoingFestivalList.sort(comparator.reversed());
             upComingFestivalList.sort(comparator.reversed());
+
+            int start = (page - 1) * size;
+            int end = Math.min(start + size, upComingFestivalList.size());
+            List<GetFestivalListItemDto> pagedUpComingList;
+            if(start>upComingFestivalList.size()){
+                pagedUpComingList = Collections.emptyList();
+            }else{
+                pagedUpComingList = upComingFestivalList.subList(start, end);
+            }
             // 응답 객체 구성
             GetFestivalListResponseDto responseBody = new GetFestivalListResponseDto(
                 onGoingFestivalList,
-                upComingFestivalList,
-                upComingFestivalsPage.getTotalElements(),
-                upComingFestivalsPage.getTotalPages(),
-                page
+                pagedUpComingList,
+                upComingFestivalList.size(),
+                (upComingFestivalList.size()+size-1)/size,
+                page,
+                randomFestivalImage
             );
-    
+            
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         }catch(Exception exception) {
             exception.printStackTrace();

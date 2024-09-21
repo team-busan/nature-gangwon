@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.Comparator;
+import java.util.ArrayList;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -25,6 +26,7 @@ import com.example.back.dto.request.detail.PostDetailCommentRequsetDto;
 import com.example.back.dto.request.detail.PostDetailMarkRequestDto;
 import com.example.back.dto.response.detail.PostDetailCommentResponseDto;
 import com.example.back.dto.response.detail.PostDetailMarkResponseDto;
+import com.example.back.dto.response.Festival.GetFestivalListResponseDto;
 import com.example.back.dto.response.detail.DeleteDetailCommentResponseDto;
 import com.example.back.dto.response.detail.GetDetailCommentListResponseDto;
 import com.example.back.dto.response.detail.GetDetailListResponseDto;
@@ -103,27 +105,26 @@ public class DetailServiceImplement implements DetailService{
     @Override
     public ResponseEntity<? super GetDetailListResponseDto> getDetailList(String detailSigungucode, String searchKeyword, String sortOrder,int page, int size) {
         try {
-            int zeroBasedPage = page - 1;
-            Pageable pageable = PageRequest.of(zeroBasedPage, size);
-            Page<DetailEntity> detailPageList;
+            List<DetailEntity> detailEntities;
+
             if ("all".equals(detailSigungucode)) {
-                if (searchKeyword != null) {
-                    detailPageList = detailRepository.findByDetailTitleContainingIgnoreCase(searchKeyword, pageable);
+                if (searchKeyword != null && !searchKeyword.isEmpty()) {
+                    detailEntities = detailRepository.findByDetailTitleContainingIgnoreCase(searchKeyword);
                 } else {
-                    detailPageList = detailRepository.findAll(pageable);
+                    detailEntities = detailRepository.findAll();
                 }
-            } else if (detailSigungucode != null) {
+            } else if (detailSigungucode != null && !searchKeyword.isEmpty()) {
                 String mappedCode = mapSigungucode(detailSigungucode);
                 if (searchKeyword != null) {
-                    detailPageList = detailRepository.findByDetailSigungucodeAndDetailTitleContainingIgnoreCase(mappedCode, searchKeyword, pageable);
+                    detailEntities = detailRepository.findByDetailSigungucodeAndDetailTitleContainingIgnoreCase(mappedCode, searchKeyword);
                 } else {
-                    detailPageList = detailRepository.findByDetailSigungucode(mappedCode, pageable);
+                    detailEntities = detailRepository.findByDetailSigungucode(mappedCode);
                 }
             } else {
-                detailPageList = Page.empty(pageable);
+                detailEntities = new ArrayList<>();
             }
             
-            List<GetDetailListItemDto> responseList = GetDetailListItemDto.copyList(detailPageList.getContent(), detailCommentRepository);
+            List<GetDetailListItemDto> detailDto = GetDetailListItemDto.copyList(detailEntities, detailCommentRepository);
 
             Comparator<GetDetailListItemDto> comparator;
             switch (sortOrder) {
@@ -138,9 +139,18 @@ public class DetailServiceImplement implements DetailService{
                     comparator = Comparator.comparing(GetDetailListItemDto::getDetailId).reversed();
                     break;
             }
-            responseList.sort(comparator.reversed());
+            detailDto.sort(comparator.reversed());
 
-            GetDetailListResponseDto responseBody = new GetDetailListResponseDto(responseList, detailPageList.getTotalElements(), detailPageList.getTotalPages(), page);
+            int start = (page - 1) * size;
+            int end = Math.min(start + size, detailDto.size());
+            List<GetDetailListItemDto> pagedDetailDto;
+            if(start>detailDto.size()){
+                pagedDetailDto = Collections.emptyList();
+            }else{
+                pagedDetailDto = detailDto.subList(start, end);
+            }
+            GetDetailListResponseDto responseBody = new GetDetailListResponseDto(pagedDetailDto, detailDto.size(), (detailDto.size()+size-1)/size, page);
+            
             return ResponseEntity.status(HttpStatus.OK).body(responseBody);
         } catch (Exception e) {
             e.printStackTrace();
