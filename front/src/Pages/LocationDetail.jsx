@@ -30,6 +30,7 @@ export default function LocationDetail() {
 
   const detailEntity = {
     Title: destination.detailEntity.detailTitle,
+    Id : destination.detailEntity.detailId,
     Address: destination.detailEntity.detailAddress,
     Tel: destination.detailEntity.detailTel,
     TotalScore: destination.detailEntity.detailTotalScore,
@@ -60,7 +61,7 @@ export default function LocationDetail() {
 
   return (
     <>
-      <DetailHeader header={detailEntity} />
+      <DetailHeader header={detailEntity} title = "destination" mark = {destination.markedUserEmails} refetch = {refetch} />
       <DetailSlider images={images} />
       <DetailDescription description={description} />
       <DetailInformation information={information} />
@@ -68,6 +69,7 @@ export default function LocationDetail() {
         typeId = {detailId}
         apiEndPoint = {url}
         title = "destination"
+        totalScore = {detailEntity.TotalScore}
       />
     </>
   );

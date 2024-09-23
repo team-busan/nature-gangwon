@@ -62,7 +62,7 @@ export default function FestivalDetail() {
 
   return (
     <>
-      <DetailHeader header={festivalEntity} />
+      <DetailHeader header={festivalEntity} title = "festival" mark = {festival.markedUserEmails} refetch = {refetch} />
       <DetailSlider images={images} />
       <DetailDescription description = {description} type = "festival"/>
       <DetailInformation information = {information} type = "festival"/>
@@ -70,8 +70,8 @@ export default function FestivalDetail() {
         title = "festival"
         apiEndPoint = {url}
         typeId = {festivalId}
+        totalScore = {festivalEntity.TotalScore}
       />
-      {/* test */}
     </>
   );
 }
