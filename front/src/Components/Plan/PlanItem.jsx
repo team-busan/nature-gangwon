@@ -1,7 +1,13 @@
 import { motion } from "framer-motion";
 import DefaultImage from "../DefaultImage";
+import { useState } from "react";
+import { useRecoilState } from "recoil";
+import { planList } from "../../state/planState";
 
 const PlanItem = ({ item, handleClick }) => {
+  const [handleDaySelectOpen, setHandleDaySelectOpen] = useState(false);
+  const [plans, setPlans] = useRecoilState(planList);
+
   let type = "";
   let color = "";
 
@@ -24,8 +30,8 @@ const PlanItem = ({ item, handleClick }) => {
       initial={{ backgroundColor: "#ffffff" }}
       whileHover={{ backgroundColor: "#C7F7C6" }}
       key={item.locationBasedId}
-      onClick={() => handleClick(item)}
-      className="w-full flex gap-4 cursor-pointer p-2 rounded-lg shadow-md border-[1px] border-gray-200"
+      onClick={() => setHandleDaySelectOpen((prev) => !prev)}
+      className="w-full flex gap-4 cursor-pointer p-2 rounded-lg shadow-md border-[1px] border-gray-200 relative"
     >
       {item.locationFirstimage === "" ? (
         <div className="w-28 h-28 rounded-lg shrink-0">
@@ -50,6 +56,32 @@ const PlanItem = ({ item, handleClick }) => {
         </div>
         <p>{item.locationAdd1}</p>
       </div>
+      {handleDaySelectOpen && (
+        <div className="absolute top-0 left-0 w-full bg-white rounded-lg shadow-content z-10">
+          <motion.div
+            key={-1}
+            initial={{ backgroundColor: "#ffffff" }}
+            whileHover={{ backgroundColor: "#ffa095" }}
+            className="rounded-t-lg p-3"
+          >
+            취소
+          </motion.div>
+          {plans.map((plan, idx) => {
+            return (
+              <motion.div
+                key={idx}
+                initial={{ backgroundColor: "#ffffff" }}
+                whileHover={{ backgroundColor: "#C7F7C6" }}
+                onClick={() => handleClick(item, idx)}
+                className="p-3 last:rounded-b-lg"
+              >
+                <span>{idx + 1}</span>
+                <span>일차에 추가</span>
+              </motion.div>
+            );
+          })}
+        </div>
+      )}
     </motion.li>
   );
 };

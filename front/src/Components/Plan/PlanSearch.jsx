@@ -131,35 +131,29 @@ const SearchList = ({ data, setFoldStage, observeRef, curData, refetch }) => {
   };
 
   // 장소 선택
-  const handleClick = (item) => {
+  const handleClick = (item, idx) => {
     let plansCopy = deepCopy(plans);
-    for (let i = 0; i < plansCopy.length; i++) {
-      if (plansCopy[i].length === 5) {
-        if (i === plansCopy.length - 1) {
-          setMessage("더이상 장소를 선택할 수 없습니다. (하루에 5개까지)");
-        } else {
-          continue;
-        }
-      } else {
-        let plansDayCopy = [...plansCopy[i]];
-        item.memo = "";
-        item.memo2 = "";
-        item.photoUrls = [];
-        plansDayCopy.push(item);
-        plansCopy.splice(i, 1, plansDayCopy);
-        setPlans(plansCopy);
-        setFoldStage(2);
-
-        const displayObject = {
-          mapx: item.locationMapx,
-          mapy: item.locationMapy,
-          title: item.locationTitle,
-          photoUrls: [item.locationFirstimage],
-        };
-        setMapdisplayPlans([...mapdisplayPlans, displayObject]);
-        return;
-      }
+    if (plansCopy[idx].length === 5) {
+      setMessage("더이상 장소를 선택할 수 없습니다. (하루에 5개까지)");
+      return;
     }
+    let plansDayCopy = [...plansCopy[idx]];
+    item.memo = "";
+    item.memo2 = "";
+    item.photoUrls = [];
+    plansDayCopy.push(item);
+    plansCopy.splice(idx, 1, plansDayCopy);
+    setPlans(plansCopy);
+    setFoldStage(2);
+
+    const displayObject = {
+      mapx: item.locationMapx,
+      mapy: item.locationMapy,
+      title: item.locationTitle,
+      photoUrls: [item.locationFirstimage],
+    };
+    setMapdisplayPlans([...mapdisplayPlans, displayObject]);
+    return;
   };
 
   // 무한 스크롤
