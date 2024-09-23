@@ -2,16 +2,65 @@ import React, { useState, useRef } from "react";
 import { FaStar } from "react-icons/fa";
 import { IoHeartOutline } from "react-icons/io5";
 import { LuShare2 } from "react-icons/lu";
+import { FaRegHeart, FaHeart } from "react-icons/fa6";
 import { PiEyesDuotone } from "react-icons/pi";
 import { FaRegComment } from "react-icons/fa6";
 import ShareModal from "../Comment/ShareModal";
+import { userState } from "../../state/userState";
+import { useRecoilState } from "recoil";
+import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query";
+import { API_URL, axiosInstance } from "../../Stores/API";
+import { useCookies } from "react-cookie";
+import Swal from "sweetalert2";
+import { useParams } from "react-router-dom";
 
-export default function DetailHeader({ header }) {
+export default function DetailHeader({ header, title, mark, refetch }) {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const shareButtonRef = useRef(null);
+  const [user] = useRecoilState(userState);
+  const [cookies] = useCookies(["token"]);
+  const { id } = useParams();
+  const detailId = Number(id);
+
+  const queryClient = new QueryClient();
+  const userEmail = user ? user.userEmail : "";
+
+  const markMutation = useMutation({
+    mutationKey : ["Mark", header.id],
+    mutationFn : () => {
+      let url = `${axiosInstance.defaults.baseURL}`;
+
+      if(title === "destination"){
+        url = `${axiosInstance.defaults.baseURL}/${API_URL.DestinationMark}`;
+      }else{
+        url = `${axiosInstance.defaults.baseURL}/${API_URL.FestivalMark}`;
+      };
+
+      const data = {
+        [`${title === 'destination' ? 'detail' : title}Id`]: detailId,
+      }
+
+      return axiosInstance.post(
+        url,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: async () => {
+      refetch();
+      await queryClient.invalidateQueries(["locationDetail", detailId]);
+    },
+    onError: (error) => {
+      Swal.fire("오류 발생", "로그인 후 이용해주세요", "error");
+    },
+  })
+
 
   const toggleShareModal = () => {
-    // 모달이 열려 있는 상태에서 버튼을 클릭하면 모달을 닫기만 한다
     setIsShareModalOpen((prev) => !prev);
   };
 
@@ -19,6 +68,13 @@ export default function DetailHeader({ header }) {
     navigator.clipboard.writeText(window.location.href);
     alert("링크가 복사되었습니다!");
   };
+
+  const handleOnMark = (Id) => {
+    markMutation.mutate(Id);
+  }
+
+  const isLikedByUser = mark && mark.includes(userEmail);
+
 
   return (
     <section className="w-1420 flex flex-col p-3">
@@ -28,8 +84,20 @@ export default function DetailHeader({ header }) {
             <h1 className="flex text-darkGreen">{header.Title}</h1>
           </span>
           <div className="flex gap-3 relative">
-            <button className="">
-              <IoHeartOutline className="w-6 h-6 text-red-500" />
+            <button 
+              className=""
+            >
+            {isLikedByUser ? (
+            <FaHeart
+              className="text-red-600 cursor-pointer"
+              onClick = {() => handleOnMark(header.Id)}
+            />
+          ) : (
+            <FaRegHeart
+              className="text-red-600 cursor-pointer"
+              onClick = {() => handleOnMark(header.Id)}
+            />
+          )}
             </button>
             <button
               ref={shareButtonRef}

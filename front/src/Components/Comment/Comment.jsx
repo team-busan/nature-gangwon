@@ -80,7 +80,7 @@ export default function Comment({ comment, formRef, title }) {
   
       const data = {
         [`${title === 'destination' ? 'detail' : title}Id`]: detailId,
-        [`${title}CommentId`]: commentId,
+        [`${title === 'destination' ? 'detail' : title}CommentId`]: commentId,
       };
   
       return axiosInstance.post(
@@ -164,6 +164,7 @@ export default function Comment({ comment, formRef, title }) {
 
   const isLikedByUser = comment.likedUserEmails && comment.likedUserEmails.includes(userEmail);
  // 사용자가 댓글 좋아요 했는지 확인 여부
+
 
 
   return (

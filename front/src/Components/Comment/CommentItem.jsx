@@ -35,7 +35,9 @@ export function CommentItem({ comment, onLike, formRef, title }) {
             "https://i.namu.wiki/i/Bge3xnYd4kRe_IKbm2uqxlhQJij2SngwNssjpjaOyOqoRhQlNwLrR2ZiK-JWJ2b99RGcSxDaZ2UCI7fiv4IDDQ.webp",
           content: comment.festivalContent,
           uploadDate: comment.festivalUploadDate,
+          like : comment.likeCount,
           score: comment.score || 0,
+          likedUserEmails : comment.likedUserEmails,
         };
       case "destination":
         return {
@@ -48,6 +50,8 @@ export function CommentItem({ comment, onLike, formRef, title }) {
           content: comment.detailContent,
           uploadDate: comment.detailUploadDate,
           score: comment.score || 0,
+          like : comment.likeCount,
+          likedUserEmails : comment.likedUserEmails,
         };
       default:
         return comment;

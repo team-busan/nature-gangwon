@@ -14,7 +14,7 @@ import {
 } from "../../state/comment";
 import { CommentList } from "../Comment/CommentList";
 
-export default function DetailComment({ apiEndPoint, title, typeId }) {
+export default function DetailComment({ apiEndPoint, title, typeId, totalScore }) {
   const [cookies] = useCookies(["token"]);
   const { id } = useParams();
   const detailId = Number(id);
@@ -72,16 +72,6 @@ export default function DetailComment({ apiEndPoint, title, typeId }) {
     enabled: !!typeId,
   });
 
-  const calculateAverageScore = (comments = []) => {
-    if (comments.length === 0) return 0;
-    const totalScore = comments.reduce(
-      (acc, comment) => acc + comment.score,
-      0
-    );
-    return (totalScore / comments.length).toFixed(1);
-  };
-
-  const averageScore = comments.length ? calculateAverageScore(comments) : 0;
 
   const handleAddComment = () => {
     refetchComments();
@@ -126,20 +116,36 @@ export default function DetailComment({ apiEndPoint, title, typeId }) {
       throw new Error("잘못된 값입니다");
   }
 
+  let commentsLength = 0;
+
+  switch (title) {
+    case "plan":
+      commentsLength = comments.planCommentList ? comments.planCommentList.length : 0;
+      break;
+    case "destination":
+      commentsLength = comments.detailCommentList ? comments.detailCommentList.length : 0;
+      break;
+    case "festival":
+      commentsLength = comments.festivalCommentList ? comments.festivalCommentList.length : 0;
+      break;
+    default:
+      throw new Error("잘못된 값입니다");
+  }
+  
 
   return (
     <section className="w-1420 p-3" ref={formRef}>
       <div>
         <div className="flex items-center justify-between mb-3">
           <div className="flex gap-10 items-center">
-            <h3 className="text-green">{title} 댓글</h3>
+            <h3 className="text-green">댓글</h3>
             {title === "plan" ? null : (
               <span className="flex items-center">
                 <span className="text-yellow-400">
                   <FaStar />
                 </span>
-                <p>{averageScore}</p>
-                <p>({comments.length})</p>
+                <p>{totalScore}</p>
+                <p>({commentsLength})</p>
               </span>
             )}
           </div>

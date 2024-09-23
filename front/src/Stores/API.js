@@ -20,6 +20,8 @@ const API_URL = {
   MyPage: "/myPage",
   Plan: "/plan",
   PlanMark : "/plan/mark",
+  DestinationMark : "destination/mark",
+  FestivalMark : "festival/mark",
   PlanComment: "/plan/patch-comment",
   FestivalComment: "/festival/patch-comment",
   DetailComment: "/detail/patch-comment",
