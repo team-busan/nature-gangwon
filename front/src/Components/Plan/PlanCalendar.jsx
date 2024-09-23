@@ -11,6 +11,7 @@ import {
   addDays,
   differenceInDays,
   subDays,
+  set,
 } from "date-fns";
 import {
   getShortWeatherIcon,
@@ -195,6 +196,8 @@ const CaledarBody = ({ curMon, dates, onDateClick, rangeState }) => {
       } else {
         return <div className="py-2"></div>;
       }
+    } else {
+      return <div className="py-3"></div>;
     }
   };
 
@@ -288,9 +291,18 @@ const PlanCalendar = ({ setPlanStage, dates, setDates, setFoldStage }) => {
     useRecoilState(mapDisplayPlansState);
 
   const onDateClick = (date) => {
+    if (date < subDays(new Date(), 1)) {
+      setMessage("오늘 이전 날짜는 선택할 수 없습니다.");
+      return;
+    }
     if (rangeState === false) {
-      setDates((prev) => [date, prev[1]]);
-      setRangeState(true);
+      if (date > dates[1]) {
+        setDates([date, date]);
+        setRangeState(true);
+      } else {
+        setDates((prev) => [date, prev[1]]);
+        setRangeState(true);
+      }
     } else {
       if (date < dates[0]) {
         setMessage("여행 마지막 날은 여행 시작 날 이후여야 합니다.");
@@ -318,7 +330,15 @@ const PlanCalendar = ({ setPlanStage, dates, setDates, setFoldStage }) => {
   return (
     <div className="w-1/2">
       <div className="w-full h-20 mt-5 mb-10 relative flex justify-center items-center">
-        <h2>{!rangeState ? "여행 시작 날 선택" : "여행 마지막 날 선택"}</h2>
+        <h2>
+          <span>여행 </span>
+          {!rangeState ? (
+            <span className="text-paleGreen">시작</span>
+          ) : (
+            <span className="text-softGreen">마지막</span>
+          )}
+          <span> 날 선택</span>
+        </h2>
         {message && <PlanAlert />}
       </div>
       <CalendarHeader curMon={curMon} prevMon={prevMon} nextMon={nextMon} />

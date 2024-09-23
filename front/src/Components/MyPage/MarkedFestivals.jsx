@@ -66,7 +66,7 @@ const MarkedFestivals = () => {
                 </h6>
                 <div className="absolute right-6 bottom-6 text-white z-20 text-right">
                   <p>{item.festivalStartDate.substring(0, 10)} ~</p>
-                  <p>{item.festvailEndDate.substring(0, 10)}</p>
+                  <p>{item.festivalEndDate.substring(0, 10)}</p>
                 </div>
               </div>
             </Link>
