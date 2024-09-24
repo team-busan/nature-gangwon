@@ -113,9 +113,9 @@ public class DetailServiceImplement implements DetailService{
                 } else {
                     detailEntities = detailRepository.findAll();
                 }
-            } else if (detailSigungucode != null && !searchKeyword.isEmpty()) {
+            } else if (detailSigungucode != null) {
                 String mappedCode = mapSigungucode(detailSigungucode);
-                if (searchKeyword != null) {
+                if (searchKeyword != null && !searchKeyword.isEmpty()) {
                     detailEntities = detailRepository.findByDetailSigungucodeAndDetailTitleContainingIgnoreCase(mappedCode, searchKeyword);
                 } else {
                     detailEntities = detailRepository.findByDetailSigungucode(mappedCode);
