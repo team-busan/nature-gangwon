@@ -48,11 +48,12 @@ public class FestivalController {
     }
     
     //? 상세 가져오기
-    @GetMapping("/{festivalId}")
+    @GetMapping("/{festivalContentid}")
     public ResponseEntity<? super GetFestivalResponseDto> getFestival(
-        @PathVariable(name = "festivalId") int festivalId
+        @PathVariable(name = "festivalContentid") String festivalContentid
     ) {
-    return festivalService.getFestival(festivalId);
+        ResponseEntity<? super GetFestivalResponseDto> response = festivalService.getFestival(festivalContentid);
+        return response;
     }
 
     //? 댓글작성
@@ -113,6 +114,7 @@ public class FestivalController {
         ResponseEntity <? super GetFestivalMarkListResponseDto> response = festivalService.getFestivalMarkList(userEmail);
         return response;
     }
+
     //? 축제 댓글 리스트
     @GetMapping("/comment/{festivalId}")
     public ResponseEntity<? super GetFestivalCommentListResponseDto> getFestivalCommentList(

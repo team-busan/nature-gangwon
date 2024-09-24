@@ -19,7 +19,7 @@ import com.example.back.dto.response.detail.PostDetailCommentLikeResponseDto;
 
 public interface DetailService {
     ResponseEntity<? super GetDetailListResponseDto> getDetailList(String detailSigungucode, String searchKeyword, String sortOrder, int page, int size);
-    ResponseEntity<? super GetDetailResponseDto> getDetail(int detailId);
+    ResponseEntity<? super GetDetailResponseDto> getDetail(String detailContentid);
     ResponseEntity<? super PostDetailCommentResponseDto> postComment(String userEmail, PostDetailCommentRequsetDto dto);
     ResponseEntity<? super PostDetailCommentLikeResponseDto> postDetailCommentLike(String userEmail, PostDetailCommentLikeRequestDto dto);
     ResponseEntity<? super DeleteDetailCommentResponseDto> deleteDetailComment(String userEmail, int detailCommentId);

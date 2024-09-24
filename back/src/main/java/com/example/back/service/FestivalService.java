@@ -18,7 +18,7 @@ import com.example.back.dto.response.Festival.PostFestivalMarkResponseDto;
 
 public interface FestivalService {
     ResponseEntity<? super GetFestivalListResponseDto> getFestivalList(int page, int size, String sortOrder);
-    ResponseEntity<? super GetFestivalResponseDto> getFestival(int festivalId);
+    ResponseEntity<? super GetFestivalResponseDto> getFestival(String festivalContentid);
     ResponseEntity<? super PostFestivalCommentResponseDto> postFestivalComment(String userEmail, PostFestivalCommentRequestDto dto);
     ResponseEntity<? super PostFestivalCommentLikeResponseDto> postFestivalCommentLike(String userEmail, PostFestivalCommentLikeRequestDto dto);
     ResponseEntity<? super DeleteFestivalCommentResponseDto> deleteFestivalComment(String userEamil, int festivalCommentId);
