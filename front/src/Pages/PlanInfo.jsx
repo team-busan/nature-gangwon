@@ -49,7 +49,7 @@ export default function PlanInfo() {
   const handleSortChange = (newSortOption) => {
     setSortOption(newSortOption);
     navigate(`/plan/list?page=1&size=${size}&filter=${selectTravel}&sort=${newSortOption}`);
-    setPage(1);  // 새로운 정렬 옵션으로 첫 페이지부터 시작
+    setPage(1);
   };
 
   const handleSelectTravel = (newSortOption) => {
@@ -84,7 +84,7 @@ export default function PlanInfo() {
         />
       </div>
       <SortButtons setSortOption={handleSortChange} sortOption = {sortOption} />
-      <SearchBar type = "계획"/>
+      <SearchBar keyword = {keyword} setKeyword = {setKeyword}/>
       <PlanInfoList data = {data} loading = {isLoading} error = {error}/>
       <div className="flex justify-center mt-4">
         <ReactPaginate

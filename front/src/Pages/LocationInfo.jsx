@@ -11,17 +11,17 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { useQuery } from "@tanstack/react-query";
 
 export default function LocationInfo() {
-  const [selectedLocation, setSelectedLocation] = useState("all"); // 현재 선택 된 지역
-  const [size] = useState(16); // 데이터 받아오는 사이즈 수
-  const [totalPages, setTotalPages] = useState(1); // 총 페이지 수
-  const [searchQuery, setSearchQuery] = useState(""); // 검색 쿼리
-  const [page, setPage] = useState(1); // 현재 페이지 번호
-  const [searchParams] = useSearchParams(); // url 검색 파라미터 가져옴
-  const [sortOption, setSortOption] = useState("all"); // 전체순, 인기순(조회순?), 후기순(댓글순?) 나열 
+  const [selectedLocation, setSelectedLocation] = useState("all");
+  const [size] = useState(16);
+  const [totalPages, setTotalPages] = useState(1);
+  const [keyword, setKeyword] = useState("");
+  const [page, setPage] = useState(1);
+  const [searchParams] = useSearchParams();
+  const [sortOption, setSortOption] = useState("전체");
   const navigate = useNavigate();
 
-  const currentPage = parseInt(searchParams.get("page")) || 1; // 기본 값 1
-  const region = searchParams.get("detailSigungucode") || "all"; // 기본 값 "all"
+  const currentPage = parseInt(searchParams.get("page")) || 1;
+  const region = searchParams.get("detailSigungucode") || "all";
   const mainImage = "http://tong.visitkorea.or.kr/cms/resource/84/3334184_image2_1.jpg";
 
   useEffect(() => {
@@ -44,9 +44,9 @@ export default function LocationInfo() {
   };
 
   const fetchLocationInfo = async ({ queryKey }) => {
-    const [_key, page, selectedLocation] = queryKey;
+    const [_key, page, sortOption, selectedLocation, keyword ] = queryKey;
     try {
-      const params = { page, size, detailSigungucode: selectedLocation };
+      const params = { page, size, sort : sortOption, detailSigungucode: selectedLocation, keyword };
       const url = `${axiosInstance.defaults.baseURL}${API_URL.LocationInfo}`;
       const response = await axiosInstance.get(url, { params });
       setTotalPages(response.data.totalPage);
@@ -56,8 +56,14 @@ export default function LocationInfo() {
     }
   };
 
+  const handleSortChange = (newSortOption) => {
+    setSortOption(newSortOption);
+    navigate(`/destination/list?detailSigungucode=${region}&page=1&size=${size}`);
+    setPage(1);
+  }
+
   const { data, error, isLoading } = useQuery({
-    queryKey: ["locationInfo", page, selectedLocation],
+    queryKey: ["locationInfo", page, sortOption, selectedLocation, keyword],
     queryFn: fetchLocationInfo,
     keepPreviousData: true, // 페이지 전환 시 이전 데이터 유지하면서 새로운 데이터 페칭
   });
@@ -79,10 +85,9 @@ export default function LocationInfo() {
         }
         onLocationClick={handleLocationClick}
       />
-      <SortButtons setSortOption={setSortOption} sortOption = {sortOption}  />
+      <SortButtons setSortOption={handleSortChange} sortOption = {sortOption}  />
       <SearchBar
-        searchQuery={searchQuery}
-        onSearchChange={(e) => setSearchQuery(e.target.value)}
+        keyword = {keyword} setKeyword = {setKeyword}
       />
       <LocationList data={data} loading={isLoading} error={error} idKey="detailId" routePrefix="/destination" />
       <div className="flex justify-center mt-4">

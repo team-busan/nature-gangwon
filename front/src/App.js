@@ -18,6 +18,7 @@ import PlanDetail from "./Pages/PlanDetail.jsx";
 import Landing from "./Pages/Landing.jsx";
 import OAuth from "./Pages/OAuth.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
+import FindPassword from "./Pages/FindPassword.jsx";
 
 const router = createBrowserRouter([
   {
@@ -67,6 +68,10 @@ const router = createBrowserRouter([
       {
         path: "/Login",
         element: <Login />,
+      },
+      {
+        path : "/FindPassword",
+        element : <FindPassword/>,
       },
       {
         path: "/SignUp",

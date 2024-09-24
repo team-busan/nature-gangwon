@@ -26,8 +26,6 @@ export default function FestivalInfo() {
     }
   }, [currentPage]);
 
-  const mainImage =
-    "http://tong.visitkorea.or.kr/cms/resource/07/3112107_image2_1.jpg";
 
   const fetchFestivalInfo = async ({ queryKey }) => {
     const [_key, page] = queryKey;
@@ -52,6 +50,8 @@ export default function FestivalInfo() {
       navigate(`/festival/list?page=${selectedPage}&size=${size}`);
     }
   };
+  const mainImage = data?.randomFestivalImage || "";
+
 
   return (
     <section className=" overflow-x-hidden">
@@ -74,7 +74,7 @@ export default function FestivalInfo() {
       <div className = "bg-lightGreen shadow-md">
         <h3 className="p-4 font-semibold">다가오는 축제 ⏱️</h3>
       </div>
-      <SortButtons/>
+      {/* <SortButtons/> */}
       <LocationList
         data={data?.upComing.festivals}
         loading={isLoading}
