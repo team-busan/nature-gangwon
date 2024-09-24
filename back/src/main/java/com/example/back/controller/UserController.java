@@ -57,10 +57,9 @@ public class UserController {
     //? 유저 비밀번호 변경
     @PatchMapping("/password")
     public ResponseEntity<? super PatchUserPasswordResponseDto>  patchUserPassword(
-        @AuthenticationPrincipal String userEmail,
         @Valid @RequestBody PatchUserPasswordRequestDto requestBody
     ) {
-        ResponseEntity<? super PatchUserPasswordResponseDto> response = userService.patchUserPassword(userEmail, requestBody);
+        ResponseEntity<? super PatchUserPasswordResponseDto> response = userService.patchUserPassword(requestBody);
         return response;
     }
 }
