@@ -55,11 +55,11 @@ public class DetailController {
     }
 
     //? 특정 관광지 가져오기
-    @GetMapping("/{detailId}")
+    @GetMapping("/{detailContentid}")
     public ResponseEntity<? super GetDetailResponseDto> getDetail(
-        @PathVariable(name = "detailId") int detailId 
+        @PathVariable(name = "detailContentid") String detailContentid 
     ) {
-        return detailService.getDetail(detailId);
+        return detailService.getDetail(detailContentid);
     }
     //? 댓글 요청
     @PostMapping("/post-comment")

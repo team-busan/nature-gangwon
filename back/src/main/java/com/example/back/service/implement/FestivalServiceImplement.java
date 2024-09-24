@@ -151,25 +151,25 @@ public class FestivalServiceImplement implements FestivalService {
 
     //? 축제 상세
     @Override
-    public ResponseEntity<? super GetFestivalResponseDto> getFestival(int festivalId) {
+    public ResponseEntity<? super GetFestivalResponseDto> getFestival(String festivalContentid) {
         try {
-            FestivalEntity festivalEntity = festivalRepository.findByFestivalId(festivalId);
+            FestivalEntity festivalEntity = festivalRepository.findByFestivalContentid(festivalContentid);
             if (festivalEntity == null) {
                 return GetFestivalResponseDto.getFestivalFail();
             }
 
-            FestivalDescriptionEntity festivalDescriptionEntity = festivalDescriptionRepository.findByFestivalId(festivalId);
+            FestivalDescriptionEntity festivalDescriptionEntity = festivalDescriptionRepository.findByFestivalId(festivalEntity.getFestivalId());
             if (festivalDescriptionEntity == null) {
                 return GetFestivalResponseDto.getFestivalFail();
             }
 
-            FestivalImageEntity festivalImageEntity = festivalImageRepository.findByFestivalId(festivalId);
+            FestivalImageEntity festivalImageEntity = festivalImageRepository.findByFestivalId(festivalEntity.getFestivalId());
             GetFestivalImageDto festivalImageDto = null;
             if (festivalImageEntity != null) {
                 festivalImageDto = new GetFestivalImageDto(festivalEntity, festivalImageEntity);
             }
 
-            List<FestivalMarkEntity> festivalMarkEntities = festivalMarkRepository.findByFestivalId(festivalId);
+            List<FestivalMarkEntity> festivalMarkEntities = festivalMarkRepository.findByFestivalId(festivalEntity.getFestivalId());
             List<String> markedUserEmails = festivalMarkEntities.stream()
                 .map(FestivalMarkEntity::getUserEmail)
                 .collect(Collectors.toList());

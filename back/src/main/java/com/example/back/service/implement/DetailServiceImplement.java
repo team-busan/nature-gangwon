@@ -160,26 +160,26 @@ public class DetailServiceImplement implements DetailService{
 
     //? 관광지 상세
     @Override
-    public ResponseEntity<? super GetDetailResponseDto> getDetail(int detailId) {
+    public ResponseEntity<? super GetDetailResponseDto> getDetail(String detailContentid) {
         try {
-            DetailEntity detailEntity = detailRepository.findByDetailId(detailId);
+            DetailEntity detailEntity = detailRepository.findByDetailContentid(detailContentid);
             if (detailEntity == null) {
                 return GetDetailResponseDto.getDetailFail();
             }
 
-            DetailImageEntity detailImageEntity = detailImageRepository.findByDetailId(detailId);
+            DetailImageEntity detailImageEntity = detailImageRepository.findByDetailId(detailEntity.getDetailId());
 
             GetDetailImageDto detailImageDto = null;
             if (detailImageEntity != null) {
                 detailImageDto = new GetDetailImageDto(detailEntity, detailImageEntity);
             }
 
-            DetailDescriptionEntity detailDescriptionEntity = detailDescriptionRepository.findByDetailId(detailId);
+            DetailDescriptionEntity detailDescriptionEntity = detailDescriptionRepository.findByDetailId(detailEntity.getDetailId());
             if (detailDescriptionEntity == null) {
                 return GetDetailResponseDto.getDetailFail();
             }
 
-            List<DetailMarkEntity> detailMarkEntities = detailMarkRepository.findByDetailId(detailId);
+            List<DetailMarkEntity> detailMarkEntities = detailMarkRepository.findByDetailId(detailEntity.getDetailId());
 
             List<String> markedUserEmails = detailMarkEntities.stream()
                 .map(DetailMarkEntity::getUserEmail)

@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface DetailRepository extends JpaRepository<DetailEntity, Integer>{
     DetailEntity findByDetailId(int detailId);
+    DetailEntity findByDetailContentid(String detailContentid);
     List<DetailEntity> findByDetailSigungucode(String detailSigungucode);
     List<DetailEntity> findByDetailTitleContainingIgnoreCase(String keyword);
     List<DetailEntity> findByDetailSigungucodeAndDetailTitleContainingIgnoreCase(String detailSigungucode, String keyword);
