@@ -7,7 +7,6 @@ export default function Signup() {
   const [currentStep, setCurrentStep] = useState(1);
   const [email, setEmail] = useState("");
   const [certificationCode, setCertificationCode] = useState(""); // 인증코드 저장
-  const navigate = useNavigate();
 
   const handleNextStep = () => {
     setCurrentStep(currentStep + 1);

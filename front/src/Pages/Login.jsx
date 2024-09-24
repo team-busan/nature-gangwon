@@ -7,6 +7,9 @@ import { useCookies } from "react-cookie";
 import { useSetRecoilState } from "recoil";
 import { userState } from "../state/userState";
 import Swal from "sweetalert2";
+import naverLoginImg from "../img/btnG_축약형.png";
+import kokooLoginImg from "../img/kakao_login_small.png";
+
 
 export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -135,7 +138,7 @@ export default function Login() {
           </button>
         </form>
         <div className="mt-4">
-          <p>비밀번호를 잊으셨나요?</p>
+          <Link to = "/FindPassword">비밀번호를 잊으셨나요?</Link>
           <p className="text-gray-400 mt-4">
             계정이 없으신가요?{" "}
             <Link to="/SignUp" className="text-black border-b border-black">
@@ -143,8 +146,22 @@ export default function Login() {
             </Link>
           </p>
         </div>
-        <Link to="http://localhost:8000/auth/oauth2/kakao">카카오</Link>
-        <Link to="http://localhost:8000/auth/oauth2/naver">네이버</Link>
+        <div className = "flex flex-row mt-2">
+        <Link to="http://localhost:8000/auth/oauth2/kakao">
+          <img
+            className = "w-20 h-8 bg-cover mr-2"
+            src = {naverLoginImg}
+            alt = "로그인이미지"
+          />
+        </Link>
+        <Link to="http://localhost:8000/auth/oauth2/naver">
+          <img
+            className = "w-20 h-8 bg-cover"
+            src = {kokooLoginImg}
+            alt = "로그인이미지"
+          />
+        </Link>
+        </div>
       </div>
     </div>
   );
