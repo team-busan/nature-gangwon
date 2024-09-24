@@ -14,5 +14,5 @@ public interface UserService {
     ResponseEntity<? super GetUserResponseDto> getUser(String userEmail);
     ResponseEntity<? super PatchUserNicknameResponseDto> patchUserNickname(String userEmail, PatchUserNicknameRequestDto dto);
     ResponseEntity<? super PatchUserProfileResponseDto> patchUserProfile(String userEmail, PatchUserProfileRequestDto dto);
-    ResponseEntity<? super PatchUserPasswordResponseDto> patchUserPassword(String userEmail, PatchUserPasswordRequestDto dto);
+    ResponseEntity<? super PatchUserPasswordResponseDto> patchUserPassword(PatchUserPasswordRequestDto dto);
 }

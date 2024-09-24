@@ -139,9 +139,9 @@ public class UserServiceImplemet implements UserService{
 
     //? 유저 비밀번호 변경
     @Override
-    public ResponseEntity<? super PatchUserPasswordResponseDto> patchUserPassword(String userEmail, PatchUserPasswordRequestDto dto) {
+    public ResponseEntity<? super PatchUserPasswordResponseDto> patchUserPassword(PatchUserPasswordRequestDto dto) {
         try {
-            UserEntity userEntity = userRepository.findByUserEmail(userEmail);
+            UserEntity userEntity = userRepository.findByUserEmail(dto.getUserEmail());
             if (userEntity == null) {
                 return PatchUserPasswordResponseDto.getUserFail();
             }
@@ -151,7 +151,7 @@ public class UserServiceImplemet implements UserService{
             userEntity.patchPassword(encodedPassword);
             userRepository.save(userEntity);
             
-            certificationRepository.deleteByUserEmail(userEmail);
+            certificationRepository.deleteByUserEmail(dto.getUserEmail());
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.databaseError();
