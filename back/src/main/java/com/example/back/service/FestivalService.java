@@ -25,5 +25,5 @@ public interface FestivalService {
     ResponseEntity<? super PatchFestivalCommentResponseDto> patchFestivalComment(String userEamil, PatchFestivalCommentRequestDto dto);
     ResponseEntity<? super PostFestivalMarkResponseDto> postFestivalMark(String userEmail, PostFestivalMarkRequestDto dto);
     ResponseEntity<? super GetFestivalMarkListResponseDto> getFestivalMarkList(String userEmail);
-    ResponseEntity<? super GetFestivalCommentListResponseDto> getFestivalCommentList(int festivalId, String sortType);
+    ResponseEntity<? super GetFestivalCommentListResponseDto> getFestivalCommentList(String festivalContentid, String sortType);
 }   

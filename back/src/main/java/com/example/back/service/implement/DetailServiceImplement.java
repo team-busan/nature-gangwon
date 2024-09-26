@@ -12,9 +12,6 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -26,7 +23,6 @@ import com.example.back.dto.request.detail.PostDetailCommentRequsetDto;
 import com.example.back.dto.request.detail.PostDetailMarkRequestDto;
 import com.example.back.dto.response.detail.PostDetailCommentResponseDto;
 import com.example.back.dto.response.detail.PostDetailMarkResponseDto;
-import com.example.back.dto.response.Festival.GetFestivalListResponseDto;
 import com.example.back.dto.response.detail.DeleteDetailCommentResponseDto;
 import com.example.back.dto.response.detail.GetDetailCommentListResponseDto;
 import com.example.back.dto.response.detail.GetDetailListResponseDto;
@@ -46,7 +42,6 @@ import com.example.back.entity.DetailDescriptionEntity;
 import com.example.back.entity.DetailEntity;
 import com.example.back.entity.DetailImageEntity;
 import com.example.back.entity.DetailMarkEntity;
-import com.example.back.entity.PlanMarkEntity;
 import com.example.back.entity.UserEntity;
 import com.example.back.repository.DetailCommentLikeRepository;
 import com.example.back.repository.DetailCommentRepository;
@@ -423,14 +418,14 @@ public class DetailServiceImplement implements DetailService{
 
     //? 관광지 댓글 리스트
     @Override
-    public ResponseEntity<? super GetDetailCommentListResponseDto> getDetailCommentList(int detailId, String sortType){
+    public ResponseEntity<? super GetDetailCommentListResponseDto> getDetailCommentList(String detailContentid, String sortType){
         try{
-            DetailEntity detailEntity = detailRepository.findByDetailId(detailId);
+            DetailEntity detailEntity = detailRepository.findByDetailContentid(detailContentid);
             if(detailEntity == null){
                 return GetDetailCommentListResponseDto.notExistDetail();
             }
             
-            List<DetailCommentEntity> comments =  detailCommentRepository.findByDetailIdOrderByDetailUploadDateDesc(detailId);
+            List<DetailCommentEntity> comments =  detailCommentRepository.findByDetailIdOrderByDetailUploadDateDesc(detailEntity.getDetailId());
             if(comments.isEmpty()){
                 return GetDetailCommentListResponseDto.notExistComment();
             }

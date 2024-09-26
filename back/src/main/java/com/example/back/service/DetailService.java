@@ -27,5 +27,5 @@ public interface DetailService {
     ResponseEntity<? super PostDetailMarkResponseDto> postDetailMark(String userEmail, PostDetailMarkRequestDto dto);
     ResponseEntity<? super GetDetailMyMarkListResponseDto> getDetailMarkList(String userEmail);
     ResponseEntity<? super PatchDetailCommentResponseDto> patchDetailComment(String userEmail, PatchDetailCommentRequestDto dto);
-    ResponseEntity<? super GetDetailCommentListResponseDto> getDetailCommentList(int detailId, String sortType);
+    ResponseEntity<? super GetDetailCommentListResponseDto> getDetailCommentList(String detailContentid, String sortType);
 }

@@ -116,12 +116,12 @@ public class FestivalController {
     }
 
     //? 축제 댓글 리스트
-    @GetMapping("/comment/{festivalId}")
+    @GetMapping("/comment/{festivalContentid}")
     public ResponseEntity<? super GetFestivalCommentListResponseDto> getFestivalCommentList(
-        @PathVariable(name = "festivalId") int festivalId,
+        @PathVariable(name = "festivalContentid") String festivalContentid,
         @RequestParam(value = "sort", defaultValue = "like") String sortType
     ){
-        ResponseEntity<? super GetFestivalCommentListResponseDto> response = festivalService.getFestivalCommentList(festivalId, sortType);
+        ResponseEntity<? super GetFestivalCommentListResponseDto> response = festivalService.getFestivalCommentList(festivalContentid, sortType);
         return response;
     }
 }
