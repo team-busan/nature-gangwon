@@ -28,8 +28,8 @@ const LandingSelectItem = ({
         alt={item.text}
         className="bg-gray-200 h-3/4 rounded-xl"
       />
-      <div className="bg-gray-200 h-1/4 rounded-xl flex items-center justify-center">
-        {item.text}
+      <div className="bg-gray-200 h-1/4 p-4 rounded-xl flex items-center justify-center text-center">
+        <p>{item.text}</p>
       </div>
     </motion.div>
   );

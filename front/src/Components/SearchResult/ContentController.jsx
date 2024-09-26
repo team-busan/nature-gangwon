@@ -51,7 +51,7 @@ const ContentController = ({ refetch }) => {
   const displayNumList = [10, 50, 100];
 
   return (
-    <div className="w-full">
+    <div className="w-full max-w-[350px]">
       <div className="sticky top-0">
         <div className="flex flex-col gap-6 shadow-content rounded-xl px-4 py-6 w-full h-min">
           <ControllerSelect

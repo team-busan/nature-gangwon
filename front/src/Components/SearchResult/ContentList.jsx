@@ -20,11 +20,15 @@ const ContentList = ({ data, refetch }) => {
   };
 
   return (
-    <div className="flex flex-col gap-8">
-      <ul className="flex flex-col gap-8">
-        {list?.map((content, idx) => (
-          <Content key={idx} content={content} />
-        ))}
+    <div className="flex flex-col gap-8 w-full">
+      <ul className="flex flex-col gap-8 w-full">
+        {list.length === 0 ? (
+          <div className="w-full h-128 flex justify-center items-center">
+            <h3>검색 결과가 없습니다.</h3>
+          </div>
+        ) : (
+          list?.map((content, idx) => <Content key={idx} content={content} />)
+        )}
       </ul>
       <div className="w-full flex justify-center">
         <ReactPaginate
