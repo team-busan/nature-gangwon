@@ -3,12 +3,15 @@ import { FaEyeSlash, FaCircle } from "react-icons/fa";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 export default function FindPasswordStep2({ email }) {
   const [formData, setFormData] = useState({
     password: "",
     confirmPassword: "",
   });
+
+  const navigate = useNavigate();
 
   const [passwordValid1, setPasswordValid1] = useState(false);
   const [passwordValid2, setPasswordValid2] = useState(false);
@@ -40,6 +43,7 @@ export default function FindPasswordStep2({ email }) {
         title: "비밀번호가 성공적으로 변경되었습니다!",
         confirmButtonColor: "green",
       });
+      navigate('/Login');
     },
     onError: () => {
       Swal.fire({
@@ -60,6 +64,7 @@ export default function FindPasswordStep2({ email }) {
     }
     mutation.mutate({
       userPassword: formData.password,
+      userEmail : email,
     });
     console.log(formData.password);
   };
