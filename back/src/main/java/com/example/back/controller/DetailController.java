@@ -61,6 +61,7 @@ public class DetailController {
     ) {
         return detailService.getDetail(detailContentid);
     }
+
     //? 댓글 요청
     @PostMapping("/post-comment")
     public ResponseEntity<? super PostDetailCommentResponseDto> postComment(
@@ -130,13 +131,13 @@ public class DetailController {
     }
 
     //? 관광지 댓글 리스트
-    @GetMapping("/comment/{detailId}")
+    @GetMapping("/comment/{detailContentid}")
     public ResponseEntity<? super GetDetailCommentListResponseDto> getDetailCommentList(
-        @PathVariable(name = "detailId") int detailId,
+        @PathVariable(name = "detailContentid") String detailContentid,
         @RequestParam(value = "sort", defaultValue = "like") String sortType
 
     ){
-        ResponseEntity<? super GetDetailCommentListResponseDto> response = detailService.getDetailCommentList(detailId, sortType);
+        ResponseEntity<? super GetDetailCommentListResponseDto> response = detailService.getDetailCommentList(detailContentid, sortType);
         return response;
     }
 }

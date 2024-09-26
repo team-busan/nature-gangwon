@@ -1,8 +1,5 @@
 package com.example.back.service.implement;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -26,7 +23,6 @@ import com.example.back.dto.response.Festival.Festivalfiled.GetFestivalImageDto;
 import com.example.back.dto.response.Festival.Festivalfiled.GetFestivalListItemDto;
 import com.example.back.dto.response.Festival.Festivalfiled.GetFestivalMarkListItemDto;
 import com.example.back.dto.response.plan.PostPlanCommentResponseDto;
-import com.example.back.entity.DetailMarkEntity;
 import com.example.back.entity.FestivalCommentEntity;
 import com.example.back.entity.FestivalCommentLIkeEntity;
 import com.example.back.entity.FestivalDescriptionEntity;
@@ -380,14 +376,14 @@ public class FestivalServiceImplement implements FestivalService {
 
     //? 축제 댓글 리스트
     @Override
-    public ResponseEntity<? super GetFestivalCommentListResponseDto> getFestivalCommentList(int festivalId, String sortType){
+    public ResponseEntity<? super GetFestivalCommentListResponseDto> getFestivalCommentList(String festivalContentid, String sortType){
         try{
-            FestivalEntity festivalEntity = festivalRepository.findByFestivalId(festivalId);
+            FestivalEntity festivalEntity = festivalRepository.findByFestivalContentid(festivalContentid);
             if(festivalEntity == null){
                 return GetFestivalCommentListResponseDto.notExistFestival();
             }
 
-            List<FestivalCommentEntity> comments = festivalCommentRepository.findByFestivalIdOrderByFestivalUploadDateDesc(festivalId);
+            List<FestivalCommentEntity> comments = festivalCommentRepository.findByFestivalIdOrderByFestivalUploadDateDesc(festivalEntity.getFestivalId());
             if(comments.isEmpty()){
                 return GetFestivalCommentListResponseDto.notExistComment();
             }
