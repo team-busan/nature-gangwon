@@ -42,8 +42,6 @@ const Content = ({ content }) => {
     }
   };
 
-  console.log(content);
-
   return (
     <li>
       <motion.div

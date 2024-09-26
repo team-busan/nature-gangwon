@@ -7,7 +7,7 @@ const ProfileCard = () => {
   const [user, setUser] = useRecoilState(userState);
 
   return (
-    <div className="w-[350px] h-[500px] py-10 rounded-lg bg-random bg-cover flex flex-col items-center justify-between">
+    <div className="w-[350px] h-[500px] py-10 rounded-lg flex flex-col items-center justify-center gap-16 shadow-content bg-lightGreen">
       <img
         className="w-[150px] h-[150px] rounded-full"
         src={
@@ -18,7 +18,7 @@ const ProfileCard = () => {
         alt={user.userNickname}
       />
       <div className="bg-black/75 py-1 px-2 rounded-xl">
-        <span className="text-white text-xl">{user.userNickname} 님</span>
+        <h4 className="text-white">{user.userNickname} 님</h4>
       </div>
     </div>
   );

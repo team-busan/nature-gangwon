@@ -43,7 +43,11 @@ const MyPhotos = () => {
                   key={idx.toString() + idx2.toString()}
                 >
                   <Link to={`/plan/${item.planId}`}>
-                    <img src={photo} alt="여행 이미지" />
+                    <img
+                      src={photo}
+                      alt="여행 이미지"
+                      className="absolute w-full h-full rounded-xl object-cover"
+                    />
                   </Link>
                 </motion.li>
                 <p>{item.planTitle}</p>

@@ -41,7 +41,7 @@ const MyActivity = ({ contentNum, setContentNum }) => {
   return (
     <div className="h-[500px] flex flex-col justify-between">
       <h4>내 활동</h4>
-      <motion.div className="bg-lightGreen w-[660px] h-[450px] rounded-xl grid grid-cols-3 place-items-center">
+      <motion.div className="bg-lightGreen w-[660px] h-[450px] rounded-xl grid grid-cols-3 place-items-center shadow-content">
         {activities.map((activity, idx) => (
           <MyActivityButton
             key={idx}

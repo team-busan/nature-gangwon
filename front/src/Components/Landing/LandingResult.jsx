@@ -1,6 +1,12 @@
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { WORLDCUP_RESULT_LIST } from "../../Stores/mockData";
+import { useState } from "react";
+import Swal from "sweetalert2";
 
 const LandingResult = ({ userSelectList }) => {
+  const [list, setList] = useState(WORLDCUP_RESULT_LIST);
+
   const headerList = [
     ["산을", "바다를"],
     ["활기찬 장소를", "인적 드문 장소를"],
@@ -8,31 +14,46 @@ const LandingResult = ({ userSelectList }) => {
     ["펜션을", "호텔을"],
   ];
 
-  const resultList = [
-    [[{ img: "", id: 1 }], [{ img: "", id: 2 }]],
-    [[{ img: "", id: 3 }], [{ img: "", id: 4 }]],
-    [[{ img: "", id: 5 }], [{ img: "", id: 6 }]],
-    [[{ img: "", id: 7 }], [{ img: "", id: 8 }]],
-  ];
+  const onClick = (item, e) => {
+    if (item.id === null) {
+      e.preventDefault();
+      Swal.fire({
+        icon: "error",
+        title: "준비중",
+        text: "현재 숙박, 음식점의 상세 정보는 제공되지 않습니다.",
+        showCloseButton: true,
+        timer: 1500,
+      });
+      return;
+    }
+  };
 
   return (
     <div className="flex flex-col gap-16">
       <div className="flex gap-6">
-        {resultList.map((item, idx) => {
+        {list.map((item, idx) => {
+          const content =
+            item[userSelectList[idx]][
+              Math.floor(Math.random() * item[userSelectList[idx]].length)
+            ];
           return (
             <Link
-              to={`/destination/${item[userSelectList[idx]][0].id}`}
+              to={`/destination/${content.id}`}
               key={idx}
+              onClick={(e) => onClick(content, e)}
               className="flex flex-col gap-6"
             >
               <h6 className="text-center">
                 {headerList[idx][userSelectList[idx]] + " 선택하셨습니다"}
               </h6>
-              <img
-                src={item[userSelectList[idx]][0].img}
+              <motion.img
+                initial={{ scale: 1 }}
+                whileHover={{ scale: 1.1 }}
+                src={content.img}
                 alt={headerList[idx][userSelectList[idx]] + " 선택지 후보"}
-                className="w-[300px] h-[300px] rounded-xl bg-blue-300 shadow-content"
+                className="w-[300px] h-[300px] rounded-xl bg-blue-300 shadow-content object-cover"
               />
+              <h6 className="text-center">{content.title}</h6>
             </Link>
           );
         })}

@@ -1,10 +1,8 @@
-
-
 export const destination_detail = [
   {
     detailId: 1,
-    detailTitle : "가곡유황온천&스파",
-    detailContentid : "2994116",
+    detailTitle: "가곡유황온천&스파",
+    detailContentid: "2994116",
     detailAddress: "강원도",
     detailTel: "051-1111-1234",
     detailTotalScore: "4.5",
@@ -26,7 +24,8 @@ export const festival_info = {
       festivalAddress: "강원도 춘천시",
       festivalStartDate: "2024-08-12",
       festivalEndDate: "2024-08-16",
-      festivalFirstImage: "http://tong.visitkorea.or.kr/cms/resource/77/3317777_image2_1.jpg",
+      festivalFirstImage:
+        "http://tong.visitkorea.or.kr/cms/resource/77/3317777_image2_1.jpg",
       festivalTotalScore: "4.5",
       festivalTotalComments: "4",
     },
@@ -52,11 +51,11 @@ export const festival_info = {
     },
   ],
 
-  upComing:{
-    totalData : 40,
-    totalPage : 3,
-    currentPage : 1,
-    festivals : [
+  upComing: {
+    totalData: 40,
+    totalPage: 3,
+    currentPage: 1,
+    festivals: [
       {
         festivalId: 4,
         festivalTitle: "서울 음악 축제",
@@ -457,91 +456,100 @@ export const festival_info = {
         festivalTotalScore: "4.9",
         festivalTotalComments: "33",
       },
-    ]
-    }
-
+    ],
+  },
 };
 
 export const festival_detail = {
   code: "SU",
   message: "Success.",
   festivalEntity: {
-      festivalId: 1,
-      festivalTitle: "가곡유황온천&스파",
-      festivalContentid: "2994116",
-      festivalAddress: "강원특별자치도 삼척시 가곡면 탕곡리",
-      festivalTel: "033-572-1800",
-      festivalTotalScore: 3.5,
-      festivalViews: 475,
-      festivalStartDate : "2024-08-15 00:00:00",
-      festivalEndDate : "2024-08-15 00:00:00",
-      festivalMapx: "129.2062296318",
-      festivalMapy: "37.1507494904",
-      festivalFirstimage: "http://tong.visitkorea.or.kr/cms/resource/54/2994054_image2_1.jpg",
-      festivalFirstimage2: "http://tong.visitkorea.or.kr/cms/resource/54/2994054_image3_1.jpg",
-      "festivalSigungucode": "4"
+    festivalId: 1,
+    festivalTitle: "가곡유황온천&스파",
+    festivalContentid: "2994116",
+    festivalAddress: "강원특별자치도 삼척시 가곡면 탕곡리",
+    festivalTel: "033-572-1800",
+    festivalTotalScore: 3.5,
+    festivalViews: 475,
+    festivalStartDate: "2024-08-15 00:00:00",
+    festivalEndDate: "2024-08-15 00:00:00",
+    festivalMapx: "129.2062296318",
+    festivalMapy: "37.1507494904",
+    festivalFirstimage:
+      "http://tong.visitkorea.or.kr/cms/resource/54/2994054_image2_1.jpg",
+    festivalFirstimage2:
+      "http://tong.visitkorea.or.kr/cms/resource/54/2994054_image3_1.jpg",
+    festivalSigungucode: "4",
   },
   festivalDescriptionEntity: {
-      festivalDescriptionId: 1,
-      festivalId: 1,
-      festivalHomepage: "<a href=\"https://gagokspa.kr/\" target=\"_blank\" title=\"삼척가곡유황온천&스파 사이트로 이동\">https://gagokspa.kr/</a>",
-      festivalOverview: "가곡 유황온천&스파는 자연에서 솟아나는 유황온천을 즐길 수 있는 곳이다. 가곡면의 멋진 풍광을 함께 즐길 수 있는 메인 풀장부터 어린아이도 함께할 수 있는 키즈 스파, 동굴 스파, 쿨링 스파, 인피니티 풀, 자쿠지 풀까지 다양한 테마의 시설이 준비되어 있다. 스낵 코너에서 간단한 식사도 가능하다. 근처에 가곡 국민여가캠핑장도 조성되어 있어 가족과 자연 속에서 알찬 휴가를 보내기에 손색이 없다. 1일 2회 시간제 코스로 삼척 시티투어버스도 운영중이어서 접근성 또한 좋다. 다만 온천장 이용 시 수축기 혈압 170 이상, 심장병(심근경색, 협심증) 등의 심신이 허약한 경우에는 입장이 불가하다."
+    festivalDescriptionId: 1,
+    festivalId: 1,
+    festivalHomepage:
+      '<a href="https://gagokspa.kr/" target="_blank" title="삼척가곡유황온천&스파 사이트로 이동">https://gagokspa.kr/</a>',
+    festivalOverview:
+      "가곡 유황온천&스파는 자연에서 솟아나는 유황온천을 즐길 수 있는 곳이다. 가곡면의 멋진 풍광을 함께 즐길 수 있는 메인 풀장부터 어린아이도 함께할 수 있는 키즈 스파, 동굴 스파, 쿨링 스파, 인피니티 풀, 자쿠지 풀까지 다양한 테마의 시설이 준비되어 있다. 스낵 코너에서 간단한 식사도 가능하다. 근처에 가곡 국민여가캠핑장도 조성되어 있어 가족과 자연 속에서 알찬 휴가를 보내기에 손색이 없다. 1일 2회 시간제 코스로 삼척 시티투어버스도 운영중이어서 접근성 또한 좋다. 다만 온천장 이용 시 수축기 혈압 170 이상, 심장병(심근경색, 협심증) 등의 심신이 허약한 경우에는 입장이 불가하다.",
   },
   getFestivalImageDto: {
-      festivalId: 1,
-      festivalContentid: "2994116",
-      festivalImage1: "http://tong.visitkorea.or.kr/cms/resource/54/2994054_image2_1.jpg",
-      festivalImage2: "http://tong.visitkorea.or.kr/cms/resource/54/2994054_image3_1.jpg",
-      festivalImage3: "http://tong.visitkorea.or.kr/cms/resource/49/2994049_image2_1.jpg",
-      festivalImage4: "http://tong.visitkorea.or.kr/cms/resource/50/2994050_image2_1.jpg",
-      festivalImage5: "http://tong.visitkorea.or.kr/cms/resource/51/2994051_image2_1.jpg",
-      festivalImage6: "http://tong.visitkorea.or.kr/cms/resource/52/2994052_image2_1.jpg",
-      festivalImage7: "http://tong.visitkorea.or.kr/cms/resource/53/2994053_image2_1.jpg"
+    festivalId: 1,
+    festivalContentid: "2994116",
+    festivalImage1:
+      "http://tong.visitkorea.or.kr/cms/resource/54/2994054_image2_1.jpg",
+    festivalImage2:
+      "http://tong.visitkorea.or.kr/cms/resource/54/2994054_image3_1.jpg",
+    festivalImage3:
+      "http://tong.visitkorea.or.kr/cms/resource/49/2994049_image2_1.jpg",
+    festivalImage4:
+      "http://tong.visitkorea.or.kr/cms/resource/50/2994050_image2_1.jpg",
+    festivalImage5:
+      "http://tong.visitkorea.or.kr/cms/resource/51/2994051_image2_1.jpg",
+    festivalImage6:
+      "http://tong.visitkorea.or.kr/cms/resource/52/2994052_image2_1.jpg",
+    festivalImage7:
+      "http://tong.visitkorea.or.kr/cms/resource/53/2994053_image2_1.jpg",
   },
   festivalCommentList: [
-      {
-          festivalCommentId: 48,
-          festivalId: 1,
-          userEmail: "ko6252123@gmail.com",
-          userNickname: "nature",
-          userProfile: "/image/profile.jpg",
-          festivalContent: "내가 작성한 건 삭제가 될까?",
-          score: 5,
-          festivalUploadDate: "2024-08-19 16:37:43"
-      },
-      {
-          festivalCommentId: 7,
-          festivalId: 1,
-          userEmail: "ftko6252@naver.com",
-          userNickname: "게임불만",
-          userProfile: "/image/profile.jpg",
-          festivalContent: "ㅇㅇ",
-          score: 1,
-          festivalUploadDate: "2024-08-17 15:06:33"
-      },
-      {
-          festivalCommentId: 6,
-          festivalId: 1,
-          userEmail: "ftko6252@naver.com",
-          userNickname: "게임불만",
-          userProfile: "/image/profile.jpg",
-          festivalContent: "제발 오류 뜨지마라",
-          score: 3,
-          festivalUploadDate: "2024-08-17 15:06:20"
-      },
-      {
-          festivalCommentId: 4,
-          festivalId: 1,
-          userEmail: "ftko6252@naver.com",
-          userNickname: "게임불만",
-          userProfile: "/image/profile.jpg",
-          festivalContent: "테스트 중입니다",
-          score: 5,
-          festivalUploadDate: "2024-08-17 15:02:30"
-      }
-  ]
-}
-
+    {
+      festivalCommentId: 48,
+      festivalId: 1,
+      userEmail: "ko6252123@gmail.com",
+      userNickname: "nature",
+      userProfile: "/image/profile.jpg",
+      festivalContent: "내가 작성한 건 삭제가 될까?",
+      score: 5,
+      festivalUploadDate: "2024-08-19 16:37:43",
+    },
+    {
+      festivalCommentId: 7,
+      festivalId: 1,
+      userEmail: "ftko6252@naver.com",
+      userNickname: "게임불만",
+      userProfile: "/image/profile.jpg",
+      festivalContent: "ㅇㅇ",
+      score: 1,
+      festivalUploadDate: "2024-08-17 15:06:33",
+    },
+    {
+      festivalCommentId: 6,
+      festivalId: 1,
+      userEmail: "ftko6252@naver.com",
+      userNickname: "게임불만",
+      userProfile: "/image/profile.jpg",
+      festivalContent: "제발 오류 뜨지마라",
+      score: 3,
+      festivalUploadDate: "2024-08-17 15:06:20",
+    },
+    {
+      festivalCommentId: 4,
+      festivalId: 1,
+      userEmail: "ftko6252@naver.com",
+      userNickname: "게임불만",
+      userProfile: "/image/profile.jpg",
+      festivalContent: "테스트 중입니다",
+      score: 5,
+      festivalUploadDate: "2024-08-17 15:02:30",
+    },
+  ],
+};
 
 export const user_info = [
   {
@@ -620,3 +628,228 @@ export const plan = [
   },
 ];
 
+export const GANGWON_MAIN = [
+  "https://www.gangwon.to/upload/board/BDMAIN11/cc7d2441-34f4-49d9-a3f0-77e214092233.jpg",
+  "https://www.gangwon.to/upload/board/BDMAIN11/5dfc7bdc-ebdb-4d7b-8fb3-8843c7b17b3b.jpg",
+  "https://www.gangwon.to/upload/board/BDMAIN11/a01e9907-d1da-4323-ac3d-7cbbe9b3e8c6.jpg",
+  "https://www.gangwon.to/upload/board/BDMAIN11/d184dac7-26f4-455e-aa5e-fccb7220f853.jpg",
+  "https://www.gangwon.to/upload/board/BDMAIN11/eaa4603e-9826-4132-a066-b4cee53dcb7a.jpg",
+  "https://www.gangwon.to/upload/board/BDMAIN11/62c5d4f0-2688-40e3-8218-1f8378735b88.jpg",
+  "https://www.gangwon.to/upload/board/BDMAIN11/fd251172-6466-4cf9-b758-28f14b33f3ef.jpg",
+  "https://www.gangwon.to/upload/board/BDMAIN11/bc6b238c-2557-4e87-b071-ac27300420fc.jpg",
+  "https://www.gangwon.to/upload/board/BDMAIN11/2c1bb902-1fe5-4271-a0ef-748b3aef5799.jpg",
+];
+
+export const GANGWON_TMI = [
+  {
+    title: "알프스와의 자매결연",
+    text: "강원도의 평창군과 알프스 산맥을 포함한 오스트리아 티롤주가 자매결연을 맺고 있어요. 이는 양국의 겨울 스포츠와 산악 관광 활성화를 위한 협력의 일환이에요.",
+    image:
+      "https://digitalchosun.dizzo.com/site/data/img_dir/2019/09/30/2019093080155_0.jpg",
+    image_source: "오스트리아 관광청 제공",
+  },
+  {
+    title: "국내 최초의 스키장",
+    text: "강원도에는 한국 최초의 스키장인 용평 리조트가 있어요. 1975년에 개장한 이 스키장은 현재까지도 많은 국내외 관광객들에게 사랑받고 있어요.",
+    image: "https://www.ifocus.kr/news/photo/202001/186875_248516_3533.png",
+    image_source: "용평 리조트 제공",
+  },
+  {
+    title: "전국 최대의 산림",
+    text: "강원도에는 대한민국 산림의 약 26%가 위치하고 있어요. 특히 양양군의 '설악산'은 한반도에서 두 번째로 높은 산으로, 생태학적으로 매우 중요한 지역이에요.",
+    image:
+      "https://www.gangwon.to/upload/board/BDMAIN11/d44347fb-48d7-4a52-8d13-5deddac87204.jpg",
+    image_source: "강원관광 제공",
+  },
+  {
+    title: "정선 아리랑",
+    text: "정선군은 한국 전통 민요인 아리랑의 고장으로 알려져 있어요. 정선 아리랑은 2012년에 유네스코 인류무형문화유산으로 등재되었고, 매년 정선 아리랑제를 통해 그 전통을 계승하고 있어요.",
+    image: "https://www.jacf.or.kr/jacf/img/sub08/sub08b_01_001.png",
+    image_source: "정선아리랑문화재단 제공",
+  },
+  {
+    title: "고성의 DMZ 박물관",
+    text: "고성군에는 비무장지대(DMZ) 박물관이 있어요. 이곳에서는 한국전쟁과 DMZ의 역사, 그리고 남북 분단의 아픔을 느낄 수 있는 다양한 전시물이 전시되어 있어요.",
+    image: "https://www.gwgs.go.kr/images/tour/sub01/0507/18.jpg",
+    image_source: "고성군 문화관광 제공",
+  },
+  {
+    title: "동굴 관광의 명소",
+    text: "강원도 삼척시에는 다양한 동굴이 있어 관광 명소로 유명해요. 그 중 '환선굴'은 길이가 6.5km에 달하며, 석회암 동굴로서 독특한 형성과정을 볼 수 있어 많은 관광객들이 찾는 곳이에요.",
+    image:
+      "https://i.namu.wiki/i/uXjHO313gFmt4KGs8aHFvg3_REnRWfETmq3Da0ndof_4Vh8Vg5cMKR8k729r06tZWQ3PyJAxvpMH90Utd0i_4ffsqter0n_krOQYEMt7aUV7T1qa1X-omTxWje-7btGjR_-aZCEr1cxjSXwp1VmJsQ.webp",
+    image_source: "나무위키 제공",
+  },
+  {
+    title: "커피의 메카, 강릉",
+    text: "강릉은 한국에서 커피 문화가 발달한 곳으로, 커피 애호가들에게 유명해요. 특히 강릉 안목 해변 근처에는 다양한 커피숍이 밀집해 있어, '커피거리'라고 불리기도 해요. 매년 강릉에서는 '강릉 커피축제'가 열리며, 한국의 커피 문화와 역사를 체험할 수 있는 기회도 제공해요. 강릉 커피박물관도 있어, 커피의 다양한 면모를 탐구할 수 있어요.",
+    image:
+      "https://renew.terarosa.com:9000/store/thumb/store_t_32616d5e-0e16-46b9-9a88-18f3f5f7e411.png",
+    image_source: "테라로사 제공",
+  },
+  {
+    title: "해양심층수",
+    text: "강원도는 해양심층수 생산의 중심지로 유명해요. 동해안의 해양심층수는 청정하고 미네랄이 풍부해 다양한 용도로 활용되고 있어요. 강원도 고성, 속초, 강릉 등지에서 해양심층수를 활용한 음료, 화장품, 건강식품 등이 생산되고 있으며, 관광지에서도 해양심층수를 체험할 수 있는 시설이 있어요.",
+    image:
+      "https://img.marieclairekorea.com//2020/07/mck_5f165c20b452e-562x375.jpg",
+    image_source: "marie claire 제공",
+  },
+];
+
+export const WORLDCUP_SELECT_LIST = [
+  [
+    {
+      image:
+        "http://tong.visitkorea.or.kr/cms/resource/70/1172070_image2_1.jpg",
+      text: "산은 자연의 아름다움과 고요함을 제공하며, 하이킹과 등산으로 모험과 힐링을 즐길 수 있는 장소입니다.",
+    },
+    {
+      image:
+        "http://tong.visitkorea.or.kr/cms/resource/19/2671419_image2_1.jpg",
+      text: "바다는 끝없는 수평선과 맑은 물, 다양한 해양 생물로 가득한 휴식과 레저의 공간입니다.",
+    },
+  ],
+  [
+    {
+      image:
+        "http://tong.visitkorea.or.kr/cms/resource/97/3082597_image2_1.jpg",
+      text: "활기찬 장소는 사람들로 붐비며, 다양한 활동과 즐길 거리가 가득합니다.",
+    },
+    {
+      image:
+        "http://tong.visitkorea.or.kr/cms/resource/27/3007927_image2_1.jpg",
+      text: "인적 드문 곳은 고요하고 한적하며, 조용히 휴식을 취할 수 있는 공간입니다.",
+    },
+  ],
+  [
+    {
+      image:
+        "http://tong.visitkorea.or.kr/cms/resource/71/2554071_image2_1.jpg",
+      text: "휴양은 편안한 환경에서 휴식과 재충전을 목적으로 하는 활동입니다.",
+    },
+    {
+      image:
+        "http://tong.visitkorea.or.kr/cms/resource/65/2900665_image2_1.JPG",
+      text: "관광은 새로운 장소를 방문하여 문화와 명소를 체험하는 활동입니다.",
+    },
+  ],
+  [
+    {
+      image:
+        "http://tong.visitkorea.or.kr/cms/resource/06/2707806_image2_1.jpg",
+      text: "펜션은 자연 속에서 편안한 숙박과 휴식을 제공하는 아늑한 숙소입니다.",
+    },
+    {
+      image:
+        "http://tong.visitkorea.or.kr/cms/resource/10/2950310_image2_1.jpg",
+      text: "호텔은 다양한 편의시설과 서비스를 제공하는 고급 숙박 시설입니다.",
+    },
+  ],
+];
+
+export const WORLDCUP_RESULT_LIST = [
+  [
+    [
+      {
+        img: "http://tong.visitkorea.or.kr/cms/resource/70/1172070_image2_1.jpg",
+        id: 89,
+        title: "계방산(평창)",
+      },
+      {
+        img: "http://tong.visitkorea.or.kr/cms/resource/00/2733300_image2_1.jpg",
+        id: 651,
+        title: "설악산 울산바위",
+      },
+    ],
+    [
+      {
+        img: "http://tong.visitkorea.or.kr/cms/resource/19/2671419_image2_1.jpg",
+        id: 26,
+        title: "강릉 경포해수욕장",
+      },
+      {
+        img: "http://tong.visitkorea.or.kr/cms/resource/07/3041707_image2_1.jpg",
+        id: 11,
+        title: "간이해변",
+      },
+    ],
+  ],
+  [
+    [
+      {
+        img: "http://tong.visitkorea.or.kr/cms/resource/97/3082597_image2_1.jpg",
+        id: 56,
+        title: "강아지숲",
+      },
+      {
+        img: "http://tong.visitkorea.or.kr/cms/resource/69/2687969_image2_1.jpg",
+        id: 83,
+        title: "경포 아쿠아리움",
+      },
+    ],
+    [
+      {
+        img: "http://tong.visitkorea.or.kr/cms/resource/27/3007927_image2_1.jpg",
+        id: 125,
+        title: "공현진1리해변",
+      },
+      {
+        img: "http://tong.visitkorea.or.kr/cms/resource/53/2739753_image2_1.jpg",
+        id: 124,
+        title: "공지천유원지",
+      },
+    ],
+  ],
+  [
+    [
+      {
+        img: "http://tong.visitkorea.or.kr/cms/resource/71/2554071_image2_1.jpg",
+        id: 168,
+        title: "국립대관령치유의숲",
+      },
+      {
+        img: "http://tong.visitkorea.or.kr/cms/resource/08/2739708_image2_1.jpg",
+        id: 60,
+        title: "강원숲체험장",
+      },
+    ],
+    [
+      {
+        img: "http://tong.visitkorea.or.kr/cms/resource/65/2900665_image2_1.JPG",
+        id: 24,
+        title: "강릉 3.1운동 기념공원",
+      },
+      {
+        img: "http://tong.visitkorea.or.kr/cms/resource/56/2391456_image2_1.jpg",
+        id: 145,
+        title: "구룡사",
+      },
+    ],
+  ],
+  [
+    [
+      {
+        img: "http://tong.visitkorea.or.kr/cms/resource/06/2707806_image2_1.jpg",
+        id: null,
+        title: "가재와곰펜션",
+      },
+      {
+        img: "http://tong.visitkorea.or.kr/cms/resource/46/2801446_image2_1.jpg",
+        id: null,
+        title: "눈꽃새 펜션",
+      },
+    ],
+    [
+      {
+        img: "http://tong.visitkorea.or.kr/cms/resource/10/2950310_image2_1.jpg",
+        id: null,
+        title: "강릉 부띠끄호텔 봄봄",
+      },
+      {
+        img: "http://tong.visitkorea.or.kr/cms/resource/86/2746786_image2_1.jpg",
+        id: null,
+        title: "낙산비치호텔",
+      },
+    ],
+  ],
+];

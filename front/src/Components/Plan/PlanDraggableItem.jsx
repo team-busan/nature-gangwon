@@ -127,7 +127,7 @@ const PlanDraggableItem = ({ day, item, idx, idx2, handleDelete }) => {
                 }}
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                className={`absolute top-0 w-full h-56 rounded-lg p-4 flex flex-col gap-4 overflow-y-scroll bg-lightGreen bg-paper bg-cover z-10 ${
+                className={`absolute top-0 w-full h-56 rounded-lg p-4 flex flex-col gap-4 overflow-y-scroll bg-white bg-paper bg-cover z-10 ${
                   isMemoOpen === 1 ? "origin-top-left" : "origin-top-right"
                 }`}
               >
