@@ -89,7 +89,7 @@ export default function LocationInfo() {
       <SearchBar
         keyword = {keyword} setKeyword = {setKeyword}
       />
-      <LocationList data={data} loading={isLoading} error={error} idKey="detailId" routePrefix="/destination" />
+      <LocationList data={data} loading={isLoading} error={error} idKey="detailContentid" routePrefix="/destination" />
       <div className="flex justify-center mt-4">
         <ReactPaginate
           previousLabel={<FaAngleLeft />} // 이전 페이지 버튼의 라벨

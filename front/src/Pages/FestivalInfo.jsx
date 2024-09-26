@@ -66,7 +66,7 @@ export default function FestivalInfo() {
           loading={false}
           error={null}
           type="festival_ing"
-          idKey="festivalId"
+          idKey="festivalContentid"
           routePrefix="/festival"
         />
       </div>
