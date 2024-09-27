@@ -19,7 +19,6 @@ import com.example.back.entity.DetailCommentEntity;
 import com.example.back.entity.FestivalCommentEntity;
 import com.example.back.entity.PlanCommentEntity;
 import com.example.back.entity.UserEntity;
-import com.example.back.provider.EmailProvider;
 import com.example.back.repository.CertificationRepository;
 import com.example.back.repository.DetailCommentRepository;
 import com.example.back.repository.FestivalCommentRepository;

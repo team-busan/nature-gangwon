@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import com.example.back.entity.CustomOauth2User;
 import com.example.back.entity.UserEntity;
 import com.example.back.repository.UserRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,12 +25,6 @@ public class Oauth2UserServiceImplemet extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest request) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(request);
         String oauthClientName = request.getClientRegistration().getClientName();
-
-        // try {
-        //     System.out.println(new ObjectMapper().writeValueAsString(oAuth2User.getAttributes()));
-        // } catch (Exception e) {
-        //     e.printStackTrace();
-        // }
 
         System.out.println(oauthClientName);
 

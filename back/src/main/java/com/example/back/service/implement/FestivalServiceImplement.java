@@ -74,15 +74,12 @@ public class FestivalServiceImplement implements FestivalService {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formattedCurrentDate = currentDate.format(formatter);
     
-            // 현재 진행 중인 축제 조회
             List<FestivalEntity> onGoingFestivals = festivalRepository
                 .findByFestivalStartDateBeforeAndFestivalEndDateAfter(formattedCurrentDate, formattedCurrentDate);
     
-            // 다가오는 축제 조회 (전체 리스트로 조회한 후 수동으로 페이지네이션)
             List<FestivalEntity> upComingFestivals = festivalRepository
                 .findByFestivalStartDateAfter(formattedCurrentDate);
     
-            // DTO 변환
             List<GetFestivalListItemDto> onGoingFestivalList = GetFestivalListItemDto.copyList(onGoingFestivals, festivalCommentRepository);
             List<GetFestivalListItemDto> upComingFestivalList = GetFestivalListItemDto.copyList(upComingFestivals, festivalCommentRepository);
     
@@ -101,7 +98,7 @@ public class FestivalServiceImplement implements FestivalService {
                     randomFestivalImage = "/image/festival.jpg";  
                 }
             }
-            // 정렬 로직
+
             Comparator<GetFestivalListItemDto> comparator;
             switch (sortOrder) {
                 case "댓글순":
@@ -116,7 +113,6 @@ public class FestivalServiceImplement implements FestivalService {
                     break;
             }
     
-            // 정렬 적용 (내림차순으로 적용)
             onGoingFestivalList.sort(comparator.reversed());
             upComingFestivalList.sort(comparator.reversed());
 
@@ -128,7 +124,7 @@ public class FestivalServiceImplement implements FestivalService {
             }else{
                 pagedUpComingList = upComingFestivalList.subList(start, end);
             }
-            // 응답 객체 구성
+
             GetFestivalListResponseDto responseBody = new GetFestivalListResponseDto(
                 onGoingFestivalList,
                 pagedUpComingList,
@@ -220,6 +216,7 @@ public class FestivalServiceImplement implements FestivalService {
        }
        return PostFestivalCommentResponseDto.success();
     }
+
     //? 댓글 좋아요
     @Override
     public ResponseEntity<? super PostFestivalCommentLikeResponseDto> postFestivalCommentLike(String userEmail, PostFestivalCommentLikeRequestDto dto){

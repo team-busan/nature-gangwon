@@ -19,10 +19,9 @@ public class JwtProvider {
     @Value("${secret-key}")
     private String secretKey;
     
-    //user_id에 따른 토큰 제작
     public String create(String userId) {
         Date espiredDate = Date.from(Instant.now().plus(1, ChronoUnit.HOURS));
-        //시크릿키 제작
+
         Key key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
 
         String jwt = Jwts.builder()
@@ -33,7 +32,6 @@ public class JwtProvider {
         return jwt;
     }
 
-    //jwt 검증
     public String validate(String jwt) {
 
         String subject = null;

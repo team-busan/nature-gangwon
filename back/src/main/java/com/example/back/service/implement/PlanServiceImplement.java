@@ -1,9 +1,5 @@
 package com.example.back.service.implement;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -57,8 +53,6 @@ import com.example.back.repository.PlanMarkRepository;
 import com.example.back.repository.PlanRepository;
 import com.example.back.repository.UserRepository;
 import com.example.back.service.PlanService;
-
-import io.jsonwebtoken.lang.Objects;
 
 import java.util.List;
 import java.util.ArrayList;
