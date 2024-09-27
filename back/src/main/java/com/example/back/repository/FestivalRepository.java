@@ -10,7 +10,6 @@ public interface FestivalRepository extends JpaRepository<FestivalEntity, Intege
     FestivalEntity findByFestivalId(int festivalId);
     FestivalEntity findByFestivalContentid(String festivalContentid);
     List<FestivalEntity> findByFestivalStartDateAfter(String currentDate);
-     // 현재 진행 중인 축제(현재 날짜가 시작일과 종료일 사이에 있는 경우)
     List<FestivalEntity> findByFestivalStartDateBeforeAndFestivalEndDateAfter(String currentDate, String currentDate2);
     
 }

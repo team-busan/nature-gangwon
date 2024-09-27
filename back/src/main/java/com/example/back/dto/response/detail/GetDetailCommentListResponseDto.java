@@ -27,7 +27,7 @@ public class GetDetailCommentListResponseDto extends ResponseDto {
     }
     
     public static ResponseEntity<ResponseDto> notExistDetail(){
-        ResponseDto responseBody = new ResponseDto(ResponseCode.NOT_EXIST_DETAIL, ResponseMessage.NOT_EXIST_PLAN);
+        ResponseDto responseBody = new ResponseDto(ResponseCode.NOT_EXIST_DETAIL, ResponseMessage.NOT_EXIST_DETAIL);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
     }
 

@@ -93,7 +93,7 @@ public class DetailServiceImplement implements DetailService{
         sigunguMap.put("화천군", "17");
         sigunguMap.put("횡성군", "18");
 
-        return (String) sigunguMap.getOrDefault(sigunguName, sigunguName); // 기본적으로 입력값 반환
+        return (String) sigunguMap.getOrDefault(sigunguName, sigunguName);
     }
 
     //? 관광지 리스트
@@ -351,8 +351,6 @@ public class DetailServiceImplement implements DetailService{
         }
         return PatchDetailCommentResponseDto.success();
     }
-
-
 
     //? 관광지 즐겨찾기
     @Override
