@@ -33,6 +33,7 @@ import com.example.back.dto.response.detail.PatchDetailCommentResponseDto;
 import com.example.back.dto.response.detail.PostDetailCommentLikeResponseDto;
 import com.example.back.dto.response.detail.Detailfiled.GetDetailCommentListItemDto;
 import com.example.back.dto.response.detail.Detailfiled.GetDetailImageDto;
+import com.example.back.dto.response.detail.Detailfiled.GetDetailItemDto;
 import com.example.back.dto.response.detail.Detailfiled.GetDetailListItemDto;
 import com.example.back.dto.response.detail.Detailfiled.GetDetailMarkListItemDto;
 import com.example.back.dto.response.detail.Detailfiled.GetDetailRandom3ListItemDto;
@@ -157,9 +158,11 @@ public class DetailServiceImplement implements DetailService{
     @Override
     public ResponseEntity<? super GetDetailResponseDto> getDetail(String detailContentid) {
         try {
+
             DetailEntity detailEntity = detailRepository.findByDetailContentid(detailContentid);
-            if (detailEntity == null) {
-                return GetDetailResponseDto.getDetailFail();
+            GetDetailItemDto detailItemDto = null;
+            if (detailEntity != null) {
+                detailItemDto = new GetDetailItemDto(detailEntity,detailCommentRepository);
             }
 
             DetailImageEntity detailImageEntity = detailImageRepository.findByDetailId(detailEntity.getDetailId());
@@ -180,7 +183,7 @@ public class DetailServiceImplement implements DetailService{
                 .map(DetailMarkEntity::getUserEmail)
                 .collect(Collectors.toList());
 
-            GetDetailResponseDto responseDto = new GetDetailResponseDto(detailEntity, detailImageDto, detailDescriptionEntity, markedUserEmails);
+            GetDetailResponseDto responseDto = new GetDetailResponseDto(detailItemDto, detailImageDto, detailDescriptionEntity, markedUserEmails);
             detailEntity.increaseViewCount();
             detailRepository.save(detailEntity);
             return ResponseEntity.status(HttpStatus.OK).body(responseDto);

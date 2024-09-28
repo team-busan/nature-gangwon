@@ -7,8 +7,8 @@ import org.springframework.http.ResponseEntity;
 
 import com.example.back.dto.ResponseDto;
 import com.example.back.dto.response.detail.Detailfiled.GetDetailImageDto;
+import com.example.back.dto.response.detail.Detailfiled.GetDetailItemDto;
 import com.example.back.entity.DetailDescriptionEntity;
-import com.example.back.entity.DetailEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,12 +22,12 @@ import com.example.back.common.ResponseMessage;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetDetailResponseDto extends ResponseDto {
-    private DetailEntity detailEntity;
+    private GetDetailItemDto detailEntity;
     private DetailDescriptionEntity detailDescriptionEntity;
     private GetDetailImageDto getDetailImageDto;
     private List<String> markedUserEmails;
 
-    public GetDetailResponseDto(DetailEntity detailEntity, GetDetailImageDto detailImageDto, DetailDescriptionEntity detailDescriptionEntity, List<String> markedUserEmails){
+    public GetDetailResponseDto(GetDetailItemDto detailEntity, GetDetailImageDto detailImageDto, DetailDescriptionEntity detailDescriptionEntity, List<String> markedUserEmails){
         super();
         this.detailEntity = detailEntity;
         this.getDetailImageDto = detailImageDto;
@@ -35,7 +35,7 @@ public class GetDetailResponseDto extends ResponseDto {
         this.markedUserEmails = markedUserEmails;
     }
 
-    public static ResponseEntity<GetDetailResponseDto> success(DetailEntity detailEntity, DetailDescriptionEntity detailDescriptionEntity, GetDetailImageDto getDetailImageDto, List<String> markedUserEmails){
+    public static ResponseEntity<GetDetailResponseDto> success(GetDetailItemDto detailEntity, DetailDescriptionEntity detailDescriptionEntity, GetDetailImageDto getDetailImageDto, List<String> markedUserEmails){
         GetDetailResponseDto responseBody = new GetDetailResponseDto();
         responseBody.setDetailEntity(detailEntity);
         responseBody.setDetailDescriptionEntity(detailDescriptionEntity);

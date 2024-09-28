@@ -9,9 +9,11 @@ import com.example.back.common.ResponseCode;
 import com.example.back.common.ResponseMessage;
 import com.example.back.dto.ResponseDto;
 import com.example.back.dto.response.Festival.Festivalfiled.GetFestivalImageDto;
+import com.example.back.dto.response.Festival.Festivalfiled.GetFestivalItemDto;
 import com.example.back.entity.FestivalDescriptionEntity;
 import com.example.back.entity.FestivalEntity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,12 +21,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class GetFestivalResponseDto extends ResponseDto {
-    private FestivalEntity festivalEntity;
+    private GetFestivalItemDto festivalEntity;
     private FestivalDescriptionEntity festivalDescriptionEntity;
     private GetFestivalImageDto getFestivalImageDto;
     private List<String> markedUserEmails;
     
-    public GetFestivalResponseDto(FestivalEntity festivalEntity, FestivalDescriptionEntity festivalDescriptionEntity, GetFestivalImageDto festivalImageDto, List<String> markedUserEmails){
+    public GetFestivalResponseDto(GetFestivalItemDto festivalEntity, FestivalDescriptionEntity festivalDescriptionEntity, GetFestivalImageDto festivalImageDto, List<String> markedUserEmails){
         super();
         this.festivalEntity = festivalEntity;
         this.festivalDescriptionEntity = festivalDescriptionEntity;
@@ -32,7 +34,7 @@ public class GetFestivalResponseDto extends ResponseDto {
         this.markedUserEmails = markedUserEmails;
     }
 
-    public static ResponseEntity<GetFestivalResponseDto> success(FestivalEntity festivalEntity, FestivalDescriptionEntity festivalDescriptionEntity, GetFestivalImageDto festivalImageDto, List<String> markedUserEmails){
+    public static ResponseEntity<GetFestivalResponseDto> success(GetFestivalItemDto festivalEntity, FestivalDescriptionEntity festivalDescriptionEntity, GetFestivalImageDto festivalImageDto, List<String> markedUserEmails){
         GetFestivalResponseDto responseBody = new GetFestivalResponseDto();
         responseBody.setFestivalEntity(festivalEntity);
         responseBody.setFestivalDescriptionEntity(festivalDescriptionEntity);

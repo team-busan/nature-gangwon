@@ -20,6 +20,7 @@ import com.example.back.dto.response.Festival.PostFestivalCommentResponseDto;
 import com.example.back.dto.response.Festival.PostFestivalMarkResponseDto;
 import com.example.back.dto.response.Festival.Festivalfiled.GetFestivalCommentListItemDto;
 import com.example.back.dto.response.Festival.Festivalfiled.GetFestivalImageDto;
+import com.example.back.dto.response.Festival.Festivalfiled.GetFestivalItemDto;
 import com.example.back.dto.response.Festival.Festivalfiled.GetFestivalListItemDto;
 import com.example.back.dto.response.Festival.Festivalfiled.GetFestivalMarkListItemDto;
 import com.example.back.dto.response.plan.PostPlanCommentResponseDto;
@@ -146,8 +147,9 @@ public class FestivalServiceImplement implements FestivalService {
     public ResponseEntity<? super GetFestivalResponseDto> getFestival(String festivalContentid) {
         try {
             FestivalEntity festivalEntity = festivalRepository.findByFestivalContentid(festivalContentid);
-            if (festivalEntity == null) {
-                return GetFestivalResponseDto.getFestivalFail();
+            GetFestivalItemDto festivalItemDto = null;
+            if (festivalEntity != null) {
+                festivalItemDto = new GetFestivalItemDto(festivalEntity,festivalCommentRepository);
             }
 
             FestivalDescriptionEntity festivalDescriptionEntity = festivalDescriptionRepository.findByFestivalId(festivalEntity.getFestivalId());
@@ -166,7 +168,7 @@ public class FestivalServiceImplement implements FestivalService {
                 .map(FestivalMarkEntity::getUserEmail)
                 .collect(Collectors.toList());
             
-            GetFestivalResponseDto responseDto = new GetFestivalResponseDto(festivalEntity, festivalDescriptionEntity, festivalImageDto, markedUserEmails);
+            GetFestivalResponseDto responseDto = new GetFestivalResponseDto(festivalItemDto, festivalDescriptionEntity, festivalImageDto, markedUserEmails);
             festivalEntity.increaseViewCount();
             festivalRepository.save(festivalEntity);
             return ResponseEntity.status(HttpStatus.OK).body(responseDto);
