@@ -1,3 +1,16 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+@font-face {
+  font-family: "gmarket";
+  src: url("./fonts/GmarketSansTTFMedium.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
 @tailwind base;
 @layer base {
   h1 {
@@ -22,6 +35,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/* src/index.css */
+body,
 * {
-  font-family: "Noto Sans KR", sans-serif;
+  font-family: "gmarket", sans-serif;
+
+  ::-webkit-scrollbar {
+    width: 8px; /* 스크롤바의 너비 */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    height: 30%; /* 스크롤바의 길이 */
+    background: #00a05b; /* 스크롤바의 색상 */
+
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgba(33, 244, 93, 0.1); /*스크롤바 뒷 배경 색상*/
+  }
 }

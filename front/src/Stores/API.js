@@ -1,8 +1,6 @@
 import axios from "axios";
-import AxiosMockAdapter from "axios-mock-adapter";
-import { exeample } from "./mockData.js";
 
-const BASE_URL = "http://localhost:8000/api";
+const BASE_URL = "http://localhost:8000";
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -11,15 +9,28 @@ const axiosInstance = axios.create({
 
 const API_URL = {
   HOME: "/",
+  SEARCH: "/search",
+  LocationInfo: "/destination/list",
+  LocationDetail: "/destination/:id",
+  LocationComment : "/destination",
+  FestivalInfo : "/festival/list",
+  FestivalDetails : "/festival/:id",
+  PlanInfo : "/plan/list",
+  PlanDetail : "/plan/:id",
+  MyPage: "/myPage",
+  Plan: "/plan",
+  PlanMark : "/plan/mark",
+  DestinationMark : "destination/mark",
+  FestivalMark : "festival/mark",
+  PlanComment: "/plan/patch-comment",
+  FestivalComment: "/festival/patch-comment",
+  DetailComment: "/detail/patch-comment",
+  DestinationCommentDelete : "/destination/delete-comment",
+  FestivalCommentDelete : "/festival/delete-comment",
+  PlanCommentDelete : "/plan/delete-comment",
+  PlanCommentLike : "/plan/comment-like",
+  DestinationCommentLike : "/destination/comment-like",
+  FestivalCommentLike : "/festival/comment-like"
 };
-
-const axiosMock = new AxiosMockAdapter(axiosInstance, {
-  delayResponse: 100,
-  onNoMatch: "throwException",
-});
-
-axiosMock.onGet(API_URL.HOME).reply(() => {
-  return [200, exeample];
-});
 
 export { axiosInstance, API_URL };
