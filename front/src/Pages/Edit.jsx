@@ -60,7 +60,7 @@ const Edit = () => {
           const obj = {
             locationAdd1: item.placeAdd1,
             locationBasedId: item.locationBasedId,
-            locationContenttypeid: "",
+            locationContenttypeid: item.locationContenttypeid,
             locationFirstimage: item.locationFirstimage,
             locationFirstimage2: "",
             locationMapx: item.mapx,
