@@ -63,7 +63,7 @@ const PlanDraggableItem = ({ day, item, idx, idx2, handleDelete }) => {
   };
 
   return (
-    <Draggable draggableId={idx2.toString()} index={idx2}>
+    <Draggable draggableId={idx.toString() + idx2.toString()} index={idx2}>
       {(provided) => (
         <motion.li
           ref={provided.innerRef}

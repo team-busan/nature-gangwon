@@ -1,16 +1,16 @@
 import { useRef } from "react";
 import { useRecoilState } from "recoil";
 import {
-  planList,
   planPhotoAccordianState,
   planPhotoAccordianItemState,
 } from "../../state/planState";
 
 import { FaTrash } from "react-icons/fa6";
 import axios from "axios";
+import { prevPlanState } from "../../state/editState";
 
-const PlanViewPhotos = () => {
-  const [plans, setPlans] = useRecoilState(planList);
+const PlanViewPhotosEdit = () => {
+  const [plans, setPlans] = useRecoilState(prevPlanState);
   const [arrcodianState, setAccordianState] = useRecoilState(
     planPhotoAccordianState
   );
@@ -45,6 +45,7 @@ const PlanViewPhotos = () => {
           },
         })
         .then((res) => photoUrlsCopy.push(res.data));
+
       setPlans(planCopy);
     }
   };
@@ -123,4 +124,4 @@ const PlanViewPhotos = () => {
   return <div className="flex flex-col gap-10 pr-10">{rendering()}</div>;
 };
 
-export default PlanViewPhotos;
+export default PlanViewPhotosEdit;
