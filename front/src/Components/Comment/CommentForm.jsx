@@ -9,7 +9,7 @@ import { commentContents, commentEdit, score } from "../../state/comment";
 import { getRequestData } from './CommentFunction';
 import Swal from "sweetalert2";
 
-export default function CommentForm({ onSubmit, title, apiEndPoint }) {
+export default function CommentForm({ onSubmit, Id, title, apiEndPoint }) {
   const [commentContent, setCommentContent] = useRecoilState(commentContents);
   const [rating, setRating] = useRecoilState(score);
   const [cookies] = useCookies(["token"]);
@@ -23,13 +23,12 @@ export default function CommentForm({ onSubmit, title, apiEndPoint }) {
   const mutation = useMutation({
     mutationKey: ["commentSend", title],
     mutationFn: async () => {
-      const { url, data } = getRequestData(edit, detailId, commentContent, rating, title, apiEndPoint);
+      const { url, data } = getRequestData(edit, Id, commentContent, rating, title, apiEndPoint);
 
       if (!cookies.token) {
         alert("로그인이 필요합니다.");
         return;
       }
-
       console.log(data);
 
       const response = await (edit ? axiosInstance.patch : axiosInstance.post)(
@@ -41,7 +40,6 @@ export default function CommentForm({ onSubmit, title, apiEndPoint }) {
           },
         }
       );
-
       return response.data;
     },
     onSuccess: async () => {

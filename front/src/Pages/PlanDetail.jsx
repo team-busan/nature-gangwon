@@ -76,6 +76,7 @@ export default function PlanDetail() {
       />
       <DetailComment
         apiEndPoint={url}
+        Id = {planDetail.planEntity.planId}
         title="plan"
         typeId = {planId}
       />

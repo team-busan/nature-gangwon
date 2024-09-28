@@ -80,7 +80,6 @@ export default function FindPassword() {
           currentStep === 2 && (
             <FindPasswordStep2
               email = {email}
-
             />
           )
         )}
