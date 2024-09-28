@@ -161,6 +161,7 @@ public class PlanServiceImplement implements PlanService{
                     place.getPlacesId(),
                     place.getPlanId(),
                     place.getLocationBasedId(),
+                    location.getLocationContenttypeid(),
                     place.getDayNumber(),
                     place.getNote(),
                     place.getNote2(),

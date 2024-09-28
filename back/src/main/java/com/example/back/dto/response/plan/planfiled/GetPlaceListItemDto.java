@@ -13,6 +13,7 @@ public class GetPlaceListItemDto {
     private int placeId;
     private int planId;
     private int locationBasedId;
+    private String locationContenttypeid;
     private int dayNumber;
     private String note;
     private String note2;
