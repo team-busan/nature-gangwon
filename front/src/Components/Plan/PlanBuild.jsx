@@ -56,10 +56,6 @@ const PlanBuild = ({
     }
   }, [message]);
 
-  useEffect(() => {
-    console.log(plans);
-  }, [plans]);
-
   return (
     <div className="h-lvh w-full relative">
       <motion.div

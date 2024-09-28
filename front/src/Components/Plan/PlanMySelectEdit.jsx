@@ -72,6 +72,10 @@ const PlanMySelectEdit = ({ setPlanStage }) => {
     setPlans(plansCopy);
   };
 
+  useEffect(() => {
+    console.log(mapDisplayPlans);
+  }, mapDisplayPlans);
+
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
