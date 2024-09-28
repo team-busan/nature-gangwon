@@ -14,7 +14,7 @@ import { useCookies } from "react-cookie";
 import Swal from "sweetalert2";
 import { useParams } from "react-router-dom";
 
-export default function DetailHeader({ header, title, mark, refetch }) {
+export default function DetailHeader({ header, Id, title, mark, refetch }) {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const shareButtonRef = useRef(null);
   const [user] = useRecoilState(userState);
@@ -37,7 +37,7 @@ export default function DetailHeader({ header, title, mark, refetch }) {
       };
 
       const data = {
-        [`${title === 'destination' ? 'detail' : title}Id`]: detailId,
+        [`${title === 'destination' ? 'detail' : title}Id`]: Id,
       }
 
       return axiosInstance.post(
@@ -125,7 +125,7 @@ export default function DetailHeader({ header, title, mark, refetch }) {
           <PiEyesDuotone className="mr-2 text-2xl transform rotate-180" />
           <p className="mr-4">{header.Views}</p>
           <FaRegComment className="mr-2 text-2xl" />
-          <p>0</p>
+          <p>{header.TotalComment}</p>
         </span>
       </div>
       <div className="flex justify-center w-full mt-3">

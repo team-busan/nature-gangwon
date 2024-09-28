@@ -14,7 +14,7 @@ import {
 } from "../../state/comment";
 import { CommentList } from "../Comment/CommentList";
 
-export default function DetailComment({ apiEndPoint, title, typeId, totalScore }) {
+export default function DetailComment({ apiEndPoint, Id, title, typeId, totalScore }) {
   const [cookies] = useCookies(["token"]);
   const { id } = useParams();
   const detailId = Number(id);
@@ -182,12 +182,13 @@ export default function DetailComment({ apiEndPoint, title, typeId, totalScore }
         {isWritingComment && (
           <CommentForm
             onSubmit={handleAddComment}
+            Id = {Id}
             title={title}
             apiEndPoint={apiEndPoint}
           />
         )}
       </div>
-      <CommentList comments={filteredComments} formRef={formRef} title={title} />
+      <CommentList comments={filteredComments} Id = {Id} formRef={formRef} title={title} />
     </section>
   );
 }

@@ -22,7 +22,21 @@ export default function LocationInfo() {
 
   const currentPage = parseInt(searchParams.get("page")) || 1;
   const region = searchParams.get("detailSigungucode") || "all";
-  const mainImage = "http://tong.visitkorea.or.kr/cms/resource/84/3334184_image2_1.jpg";
+  const images = [
+    "http://tong.visitkorea.or.kr/cms/resource/00/2733300_image2_1.jpg",
+    "http://tong.visitkorea.or.kr/cms/resource/07/3041707_image2_1.jpg",
+    "http://tong.visitkorea.or.kr/cms/resource/83/2921483_image2_1.jpg",
+    "http://tong.visitkorea.or.kr/cms/resource/87/3334187_image2_1.jpg"
+  ];
+
+  // 랜덤 이미지 상태를 설정
+  const [mainImage, setMainImage] = useState(images[0]);
+
+  useEffect(() => {
+    // 페이지가 로드될 때마다 4개의 이미지 중 하나를 랜덤하게 선택
+    const randomIndex = Math.floor(Math.random() * images.length);
+    setMainImage(images[randomIndex]);
+  }, []);
 
   useEffect(() => {
     // URL 파라미터에 따라 초기 상태 설정, url 상태가 일치하지 않으면 뒤로가기 할 때 버그 발생

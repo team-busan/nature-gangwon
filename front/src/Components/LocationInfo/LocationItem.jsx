@@ -2,6 +2,8 @@ import React from "react";
 import { FaStar } from "react-icons/fa";
 import { FaRegComment } from "react-icons/fa6";
 import FestivalSchedule from "../FestivalInfo/FestivalSchedule";
+import DefaultImage from "../DefaultImage";
+import Logo from "../../img/logo.png";
 
 const LocationItem = ({ item, type = "" }) => {
   const title = type.includes("festival") ? item.festivalTitle : item.detailTitle;
@@ -19,7 +21,7 @@ const LocationItem = ({ item, type = "" }) => {
       <ul className="bg-white rounded-lg shadow">
         <li className="w-full h-40">
           <img
-            src={image}
+            src={image ? image : Logo}
             className="w-full h-full object-cover rounded-t-lg"
             alt={type.includes("festival") ? "축제 이미지" : "관광지 이미지"}
           />
