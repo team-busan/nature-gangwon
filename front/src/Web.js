@@ -19,6 +19,7 @@ import Landing from "./Pages/Landing.jsx";
 import OAuth from "./Pages/OAuth.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import FindPassword from "./Pages/FindPassword.jsx";
+import Edit from "./Pages/Edit.jsx";
 
 const router = createBrowserRouter([
   {
@@ -88,6 +89,10 @@ const router = createBrowserRouter([
           {
             path: "/plan",
             element: <Plan />,
+          },
+          {
+            path: "/plan/edit/:id",
+            element: <Edit />,
           },
         ],
       },

@@ -1,15 +1,19 @@
 import { motion } from "framer-motion";
 
 import NaverMapWithMarkers from "../NaverMapWithMarkers.js";
-import PlanSearch from "./PlanSearch";
-import PlanMySelect from "./PlanMySelect";
 import { FaAngleLeft } from "react-icons/fa6";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { planList, mapDisplayPlansState } from "../../state/planState.js";
+import { planList } from "../../state/planState.js";
 import { alertState } from "../../state/alertState.js";
+import PlanMySelectEdit from "./PlanMySelectEdit.jsx";
+import PlanSearchEdit from "./PlanSearchEdit.jsx";
+import {
+  prevMapDisplayPlansState,
+  prevPlanState,
+} from "../../state/editState.js";
 
-const PlanBuild = ({
+const PlanBuildEdit = ({
   foldStage,
   setFoldStage,
   foldControl,
@@ -17,10 +21,11 @@ const PlanBuild = ({
   handleFold,
   setPlanStage,
 }) => {
-  const [plans, setPlans] = useRecoilState(planList);
+  const [plans, setPlans] = useRecoilState(prevPlanState);
   const [message, setMessage] = useRecoilState(alertState);
-  const [mapDisplayPlans, setMapDisplayPlans] =
-    useRecoilState(mapDisplayPlansState);
+  const [mapDisplayPlans, setMapDisplayPlans] = useRecoilState(
+    prevMapDisplayPlansState
+  );
 
   const markerColors = [
     { marker: "#1E3A8A", text: "#FFFFFF" }, // Navy Blue
@@ -56,10 +61,6 @@ const PlanBuild = ({
     }
   }, [message]);
 
-  useEffect(() => {
-    console.log(plans);
-  }, [plans]);
-
   return (
     <div className="h-lvh w-full relative">
       <motion.div
@@ -69,12 +70,14 @@ const PlanBuild = ({
           foldStage === 1 ? "w-[500px]" : "w-[1000px]"
         } h-lvh py-4 pl-6 shadow-lightGreen`}
       >
-        <PlanSearch
+        <PlanSearchEdit
           foldStage={foldStage}
           setFoldStage={setFoldStage}
           dates={dates}
         />
-        {foldStage === 2 ? <PlanMySelect setPlanStage={setPlanStage} /> : null}
+        {foldStage === 2 ? (
+          <PlanMySelectEdit setPlanStage={setPlanStage} />
+        ) : null}
         <div
           onClick={handleFold}
           className="bg-white w-10 h-20 rounded-r-xl flex items-center justify-center cursor-pointer"
@@ -100,4 +103,4 @@ const PlanBuild = ({
   );
 };
 
-export default PlanBuild;
+export default PlanBuildEdit;

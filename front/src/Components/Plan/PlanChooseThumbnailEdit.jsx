@@ -1,19 +1,20 @@
 import { useRecoilState } from "recoil";
-import { planList, planTitleState } from "../../state/planState";
 import { MdAddPhotoAlternate } from "react-icons/md";
 import { useState } from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import { format, set } from "date-fns";
+import { format } from "date-fns";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PlanDefaultImage from "../PlanDefaultImage";
+import { prevPlanState, prevPlanTitleState } from "../../state/editState";
 
-const PlanChooseThumnail = ({ setPlanStage, dates }) => {
+const PlanChooseThumbnailEdit = ({ setPlanStage, dates }) => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [cookies, setCookies] = useCookies(["token"]);
-  const [planTitle, setPlanTitle] = useRecoilState(planTitleState);
-  const [plans, setPlans] = useRecoilState(planList);
+  const [planTitle, setPlanTitle] = useRecoilState(prevPlanTitleState);
+  const [plans, setPlans] = useRecoilState(prevPlanState);
   const [selectedIndex, setSelectedIndex] = useState({
     i: -1,
     j: -1,
@@ -37,13 +38,14 @@ const PlanChooseThumnail = ({ setPlanStage, dates }) => {
           dayNumber: i + 1,
           note: plans[i][j].memo,
           note2: plans[i][j].memo2,
-          photoUrls: plans[i][j].photoUrls.map((url) => url.substring(5)),
+          photoUrls: plans[i][j].photoUrls,
         };
         postPlans.push(postItem);
       }
     }
 
     const plan = {
+      planId: id,
       startDate: format(dates[0], "yyyy-MM-dd"),
       endDate: format(dates[1], "yyyy-MM-dd"),
       planTitle: planTitle,
@@ -55,11 +57,11 @@ const PlanChooseThumnail = ({ setPlanStage, dates }) => {
           : plans[selectedIndex.i][selectedIndex.j].photoUrls[
               selectedIndex.k
             ].substring(5),
-      postPlanList: postPlans,
+      patchPlanList: postPlans,
     };
 
     axios
-      .post("http://localhost:8000/plan/post", plan, {
+      .patch("http://localhost:8000/plan/patch", plan, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
@@ -75,6 +77,7 @@ const PlanChooseThumnail = ({ setPlanStage, dates }) => {
         navigate("/plan/list");
       })
       .catch((err) => {
+        console.log(err);
         Swal.fire({
           icon: "error",
           title: "계획 저장에 실패했습니다.",
@@ -152,4 +155,4 @@ const PlanChooseThumnail = ({ setPlanStage, dates }) => {
   );
 };
 
-export default PlanChooseThumnail;
+export default PlanChooseThumbnailEdit;

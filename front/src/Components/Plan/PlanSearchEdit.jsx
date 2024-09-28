@@ -6,7 +6,7 @@ import PlanItem from "./PlanItem.jsx";
 import { MdOutlineSearch, MdOutlineAddCircle } from "react-icons/md";
 
 import { useRecoilState } from "recoil";
-import { mapDisplayPlansState, planList } from "../../state/planState.js";
+import { mapDisplayPlansState } from "../../state/planState.js";
 import { alertState } from "../../state/alertState.js";
 import PlanSelect from "./PlanSelect.jsx";
 import {
@@ -18,6 +18,7 @@ import {
 } from "../../state/planSearchQueryStates.js";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
+import { prevPlanState } from "../../state/editState.js";
 
 const SearchBar = ({ refetch }) => {
   const [searchQuery, setSearchQuery] = useRecoilState(searchQueryState);
@@ -106,7 +107,7 @@ const SearchBar = ({ refetch }) => {
 };
 
 const SearchList = ({ data, setFoldStage, observeRef, refetch }) => {
-  const [plans, setPlans] = useRecoilState(planList);
+  const [plans, setPlans] = useRecoilState(prevPlanState);
   const [message, setMessage] = useRecoilState(alertState);
   const [isScroll, setIsScroll] = useRecoilState(isScrollState);
   const [mapdisplayPlans, setMapdisplayPlans] =
@@ -195,12 +196,9 @@ const SearchList = ({ data, setFoldStage, observeRef, refetch }) => {
   );
 };
 
-const PlanSearch = ({ foldStage, setFoldStage, dates }) => {
+const PlanSearchEdit = ({ foldStage, setFoldStage, dates }) => {
   const observeRef = useRef(null);
-
-  //
   const [data, setData] = useState([]);
-
   const [searchQuery, setSearchQuery] = useRecoilState(searchQueryState);
   const [contentType, setContentType] = useRecoilState(contentTypeState);
   const [sigunguCode, setSigunguCode] = useRecoilState(sigunguCodeState);
@@ -232,7 +230,6 @@ const PlanSearch = ({ foldStage, setFoldStage, dates }) => {
       setPage((prev) => prev + 1);
     }
   }, [data]);
-  //
 
   return (
     <div
@@ -259,4 +256,4 @@ const PlanSearch = ({ foldStage, setFoldStage, dates }) => {
   );
 };
 
-export default PlanSearch;
+export default PlanSearchEdit;

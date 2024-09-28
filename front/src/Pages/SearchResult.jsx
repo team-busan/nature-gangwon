@@ -46,6 +46,10 @@ const SearchResult = () => {
     }
   }, [data]);
 
+  useEffect(() => {
+    refetch();
+  }, [queryParam]);
+
   if (isLoading) {
     return <div>Loading...</div>;
   } else {
