@@ -59,7 +59,7 @@ const PlanChooseThumbnail = ({ setPlanStage, dates }) => {
     };
 
     axios
-      .post("http://localhost:8000/plan/post", plan, {
+      .post("http://nature-gangwon.shop/plan/post", plan, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
