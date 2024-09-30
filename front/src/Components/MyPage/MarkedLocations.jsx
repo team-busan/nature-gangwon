@@ -24,10 +24,6 @@ const MarkedLocations = () => {
     queryFn: getLocations,
   });
 
-  useEffect(() => {
-    console.log(locations);
-  }, [locations]);
-
   const renderImage = (img1, img2) => {
     if (img1) {
       return (
