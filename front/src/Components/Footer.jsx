@@ -42,6 +42,10 @@ const Footer = () => {
           </Link>
         </div>
       </div>
+      <div className="w-96 flex gap-[4.7rem]">
+        <span>기획</span>
+        <span>현수빈</span>
+      </div>
       <p>호스팅 제공관 : 카페24</p>
       <p>데이터 제공관 : 한국 관광공사, 네이버, 구글, 기상청</p>
       <p>대표 이메일 : cjfals8570@naver.com</p>
