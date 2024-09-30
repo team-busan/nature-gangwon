@@ -30,7 +30,7 @@ const SearchResult = () => {
 
   const getLocationsInfo = async () => {
     const response = await axios.get(
-      `http://nature-gangwon.shop:8000/location/list?locationContenttypeid=${type}&locationSigungucode=${sigungu}&keyword=${queryParam}&page=${page}&size=${displayNum}`
+      `/api/location/list?locationContenttypeid=${type}&locationSigungucode=${sigungu}&keyword=${queryParam}&page=${page}&size=${displayNum}`
     );
     return response.data;
   };
