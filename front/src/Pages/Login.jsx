@@ -20,7 +20,7 @@ export default function Login() {
   const setUser = useSetRecoilState(userState); // Recoil 상태 업데이트 함수
 
   const fetchUserData = async (token) => {
-    const response = await axios.get("http://nature-gangwon.shop:8000/user", {
+    const response = await axios.get("http://nature-gangwon.shop/user", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -31,7 +31,7 @@ export default function Login() {
   const mutation = useMutation({
     mutationFn: async (data) => {
       const response = await axios.post(
-        "http://nature-gangwon.shop:8000/auth/sign-in",
+        "http://nature-gangwon.shop/auth/sign-in",
         {
           userEmail: data.email,
           userPassword: data.password,
