@@ -37,13 +37,13 @@ export default function FindPasswordStep2({ email }) {
 
   const mutation = useMutation({
     mutationFn: (data) =>
-      axios.patch("http://nature-gangwon.shop/user/password", data),
+      axios.patch("http://nature-gangwon.shop:8000/user/password", data),
     onSuccess: () => {
       Swal.fire({
         title: "비밀번호가 성공적으로 변경되었습니다!",
         confirmButtonColor: "green",
       });
-      navigate('/Login');
+      navigate("/Login");
     },
     onError: () => {
       Swal.fire({
@@ -64,7 +64,7 @@ export default function FindPasswordStep2({ email }) {
     }
     mutation.mutate({
       userPassword: formData.password,
-      userEmail : email,
+      userEmail: email,
     });
     console.log(formData.password);
   };
@@ -105,7 +105,9 @@ export default function FindPasswordStep2({ email }) {
         <div className="flex items-center mt-1">
           <FaCircle
             className={
-              passwordValid1 ? "text-green mr-1 text-xs" : "text-red-600 mr-1 text-xs"
+              passwordValid1
+                ? "text-green mr-1 text-xs"
+                : "text-red-600 mr-1 text-xs"
             }
           />
           <p>
@@ -117,7 +119,9 @@ export default function FindPasswordStep2({ email }) {
         <div className="flex items-center mt-1">
           <FaCircle
             className={
-              passwordValid2 ? "text-green mr-1 text-xs" : "text-red-600 mr-1 text-xs"
+              passwordValid2
+                ? "text-green mr-1 text-xs"
+                : "text-red-600 mr-1 text-xs"
             }
           />
           <p>
@@ -126,7 +130,10 @@ export default function FindPasswordStep2({ email }) {
               : "숫자 또는 문자 하나 이상 입력해주세요"}
           </p>
         </div>
-        <label htmlFor="confirmPassword" className="block text-gray-700 mb-2 mt-4">
+        <label
+          htmlFor="confirmPassword"
+          className="block text-gray-700 mb-2 mt-4"
+        >
           비밀번호 확인
         </label>
         <input
@@ -142,10 +149,16 @@ export default function FindPasswordStep2({ email }) {
         <div className="flex items-center mt-1">
           <FaCircle
             className={
-              samePassword ? "text-green mr-1 text-xs" : "text-red-600 mr-1 text-xs"
+              samePassword
+                ? "text-green mr-1 text-xs"
+                : "text-red-600 mr-1 text-xs"
             }
           />
-          <p>{samePassword ? "비밀번호가 일치합니다." : "비밀번호가 일치하지 않습니다."}</p>
+          <p>
+            {samePassword
+              ? "비밀번호가 일치합니다."
+              : "비밀번호가 일치하지 않습니다."}
+          </p>
         </div>
         <button
           type="submit"

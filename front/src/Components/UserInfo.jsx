@@ -5,7 +5,7 @@ import { useCookies } from "react-cookie";
 
 const fetchUserData = async ({ queryKey }) => {
   const [, token] = queryKey;
-  const response = await axios.get("http://nature-gangwon.shop/user", {
+  const response = await axios.get("http://nature-gangwon.shop:8000/user", {
     headers: {
       Authorization: `Bearer ${token}`,
     },

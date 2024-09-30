@@ -11,7 +11,7 @@ const MarkedFestivals = () => {
 
   const getFestivals = async () => {
     const res = await axios.get(
-      "http://nature-gangwon.shop/festival/mark-list",
+      "http://nature-gangwon.shop:8000/festival/mark-list",
       {
         headers: {
           Authorization: `Bearer ${cookie.token}`,
