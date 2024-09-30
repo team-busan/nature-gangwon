@@ -61,6 +61,9 @@ public class PlanEntity {
     @Transient
     private int markCount;
 
+    @Transient
+    private int commentCount;
+
     public int getMarkCount() {
         return markCount;
     }
