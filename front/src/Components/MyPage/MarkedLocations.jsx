@@ -11,7 +11,7 @@ const MarkedLocations = () => {
 
   const getLocations = async () => {
     const res = await axios.get(
-      "http://nature-gangwon.shop/destination/mark-list",
+      "http://nature-gangwon.shop:8000/destination/mark-list",
       {
         headers: {
           Authorization: `Bearer ${cookie.token}`,

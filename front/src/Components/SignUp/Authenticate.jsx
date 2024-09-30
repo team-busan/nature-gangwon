@@ -8,29 +8,35 @@ export default function Authenticate({ email, onVerificationSuccess }) {
 
   const sendVerificationCode = useMutation({
     mutationFn: (data) =>
-      axios.post("http://nature-gangwon.shop/auth/email-send-certification", data),
+      axios.post(
+        "http://nature-gangwon.shop:8000/auth/email-send-certification",
+        data
+      ),
     onSuccess: () => {
       Swal.fire({
-        title : '메일을 발송 했습니다',
-        confirmButtonColor : 'green',
-      })
+        title: "메일을 발송 했습니다",
+        confirmButtonColor: "green",
+      });
     },
     onError: () => {
       alert("메일 발송에 실패했습니다. 다시 시도해주세요.");
-    }
+    },
   });
 
   const verifyCode = useMutation({
     mutationFn: (data) =>
-      axios.post("http://nature-gangwon.shop/auth/certification-check", data),
+      axios.post(
+        "http://nature-gangwon.shop:8000/auth/certification-check",
+        data
+      ),
     onSuccess: () => {
       onVerificationSuccess(verificationCode); // 인증코드 확인
     },
     onError: () => {
       Swal.fire({
-        title : '인증코드가 유효하지 않습니다.',
-        confirmButtonColor : 'red',
-      })
+        title: "인증코드가 유효하지 않습니다.",
+        confirmButtonColor: "red",
+      });
     },
   });
 
@@ -41,7 +47,10 @@ export default function Authenticate({ email, onVerificationSuccess }) {
 
   const handleVerifyCode = (e) => {
     e.preventDefault();
-    verifyCode.mutate({ userEmail: email, certificationCode: verificationCode });
+    verifyCode.mutate({
+      userEmail: email,
+      certificationCode: verificationCode,
+    });
   };
 
   return (

@@ -9,7 +9,7 @@ import { userState } from "../state/userState";
 import Swal from "sweetalert2";
 import naverLoginImg from "../img/btnG_축약형.png";
 import kokooLoginImg from "../img/kakao_login_small.png";
-import gogleLoginImg from "../img/web_neutral_rd_SU@2x.png"
+import gogleLoginImg from "../img/web_neutral_rd_SU@2x.png";
 
 export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -20,7 +20,7 @@ export default function Login() {
   const setUser = useSetRecoilState(userState); // Recoil 상태 업데이트 함수
 
   const fetchUserData = async (token) => {
-    const response = await axios.get("http://nature-gangwon.shop/user", {
+    const response = await axios.get("http://nature-gangwon.shop:8000/user", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -30,10 +30,13 @@ export default function Login() {
 
   const mutation = useMutation({
     mutationFn: async (data) => {
-      const response = await axios.post("http://nature-gangwon.shop/auth/sign-in", {
-        userEmail: data.email,
-        userPassword: data.password,
-      });
+      const response = await axios.post(
+        "http://nature-gangwon.shop:8000/auth/sign-in",
+        {
+          userEmail: data.email,
+          userPassword: data.password,
+        }
+      );
       return response.data;
     },
     onSuccess: async (data) => {
@@ -138,7 +141,7 @@ export default function Login() {
           </button>
         </form>
         <div className="mt-4">
-          <Link to = "/FindPassword">비밀번호를 잊으셨나요?</Link>
+          <Link to="/FindPassword">비밀번호를 잊으셨나요?</Link>
           <p className="text-gray-400 mt-4">
             계정이 없으신가요?{" "}
             <Link to="/SignUp" className="text-black border-b border-black">
@@ -146,28 +149,28 @@ export default function Login() {
             </Link>
           </p>
         </div>
-        <div className = "flex flex-row mt-2">
-        <Link to="http://nature-gangwon.shop/auth/oauth2/kakao">
-          <img
-            className = " h-8 bg-cover mr-2"
-            src = {naverLoginImg}
-            alt = "로그인이미지"
-          />
-        </Link>
-        <Link to="http://nature-gangwon.shop/auth/oauth2/naver">
-          <img
-            className = " h-8 bg-cover mr-2"
-            src = {kokooLoginImg}
-            alt = "로그인이미지"
-          />
-        </Link>
-        <Link to="http://nature-gangwon.shop/auth/oauth2/google">
-          <img
-            className = " h-8 bg-cover"
-            src = {gogleLoginImg}
-            alt = "로그인이미지"
-          />
-        </Link>
+        <div className="flex flex-row mt-2">
+          <Link to="http://nature-gangwon.shop/auth/oauth2/kakao">
+            <img
+              className=" h-8 bg-cover mr-2"
+              src={naverLoginImg}
+              alt="로그인이미지"
+            />
+          </Link>
+          <Link to="http://nature-gangwon.shop/auth/oauth2/naver">
+            <img
+              className=" h-8 bg-cover mr-2"
+              src={kokooLoginImg}
+              alt="로그인이미지"
+            />
+          </Link>
+          <Link to="http://nature-gangwon.shop/auth/oauth2/google">
+            <img
+              className=" h-8 bg-cover"
+              src={gogleLoginImg}
+              alt="로그인이미지"
+            />
+          </Link>
         </div>
       </div>
     </div>

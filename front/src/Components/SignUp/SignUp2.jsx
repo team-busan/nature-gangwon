@@ -53,7 +53,8 @@ export default function Signup2({ email, certificationCode }) {
   };
 
   const mutation = useMutation({
-    mutationFn: (data) => axios.post("http://nature-gangwon.shop/auth/sign-up", data),
+    mutationFn: (data) =>
+      axios.post("http://nature-gangwon.shop:8000/auth/sign-up", data),
     onSuccess: () => {
       alert("회원가입이 완료되었습니다!");
       navigate("/login");
@@ -65,7 +66,7 @@ export default function Signup2({ email, certificationCode }) {
 
   const nicknameCheckMutation = useMutation({
     mutationFn: (nickname) =>
-      axios.post("http://nature-gangwon.shop/auth/nickname-check", {
+      axios.post("http://nature-gangwon.shop:8000/auth/nickname-check", {
         userNickname: nickname,
       }),
     onSuccess: (response) => {
@@ -98,9 +99,12 @@ export default function Signup2({ email, certificationCode }) {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className = "mb-2">
+      <form onSubmit={handleSubmit} className="mb-2">
         <div className="form-group mb-4">
-          <label htmlFor="email" className="block text-gray-700 font-semibold mb-2">
+          <label
+            htmlFor="email"
+            className="block text-gray-700 font-semibold mb-2"
+          >
             이메일
           </label>
           <input
@@ -134,14 +138,19 @@ export default function Signup2({ email, certificationCode }) {
           checkNickname={() => nicknameCheckMutation.mutate(formData.nickname)}
         />
 
-        <button type="submit" className="w-full bg-gray-400 text-white p-3 rounded-full font-semibold hover:bg-softGreen transition duration-300">
+        <button
+          type="submit"
+          className="w-full bg-gray-400 text-white p-3 rounded-full font-semibold hover:bg-softGreen transition duration-300"
+        >
           회원가입
         </button>
       </form>
-      <div classname = "">
-        <span className = "flex">
-          <p className = "text-gray-400 mr-2">이미 계정이 있으신가요?</p>
-          <p className = "border-b-2 border-black"><Link to="/Login">여기에서 로그인하기</Link></p>
+      <div classname="">
+        <span className="flex">
+          <p className="text-gray-400 mr-2">이미 계정이 있으신가요?</p>
+          <p className="border-b-2 border-black">
+            <Link to="/Login">여기에서 로그인하기</Link>
+          </p>
         </span>
       </div>
     </div>
