@@ -39,7 +39,7 @@ const PlanViewPhotos = () => {
       const formData = new FormData();
       formData.append("file", inputRef.current?.files[0]);
       await axios
-        .post("http://localhost:8000/file/upload", formData, {
+        .post("http://nature-gangwon.shop/file/upload", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
