@@ -676,9 +676,8 @@ export const GANGWON_TMI = [
   {
     title: "동굴 관광의 명소",
     text: "강원도 삼척시에는 다양한 동굴이 있어 관광 명소로 유명해요. 그 중 '환선굴'은 길이가 6.5km에 달하며, 석회암 동굴로서 독특한 형성과정을 볼 수 있어 많은 관광객들이 찾는 곳이에요.",
-    image:
-      "https://i.namu.wiki/i/uXjHO313gFmt4KGs8aHFvg3_REnRWfETmq3Da0ndof_4Vh8Vg5cMKR8k729r06tZWQ3PyJAxvpMH90Utd0i_4ffsqter0n_krOQYEMt7aUV7T1qa1X-omTxWje-7btGjR_-aZCEr1cxjSXwp1VmJsQ.webp",
-    image_source: "나무위키 제공",
+    image: "https://www.gangwon.to/upload/board/BDMAIN11/board_18029_3657.jpg",
+    image_source: "강원관광 제공",
   },
   {
     title: "커피의 메카, 강릉",
