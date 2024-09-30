@@ -77,7 +77,6 @@ const PlanChooseThumbnailEdit = ({ setPlanStage, dates }) => {
         navigate("/plan/list");
       })
       .catch((err) => {
-        console.log(err);
         Swal.fire({
           icon: "error",
           title: "계획 저장에 실패했습니다.",
