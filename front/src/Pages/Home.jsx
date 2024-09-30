@@ -25,13 +25,15 @@ const Home = () => {
   };
 
   const getTop3Plans = async () => {
-    const res = await axios.get("/api/plan/top3");
+    const res = await axios.get("http://nature-gangwon.shop:8000/plan/top3");
     setPlans(res.data.top3List);
     return res.data;
   };
 
   const getRandom3Location = async () => {
-    const res = await axios.get("/api/destination/random");
+    const res = await axios.get(
+      "http://nature-gangwon.shop:8000/destination/random"
+    );
     setLocations(res.data.getDetailRandom3ListItemDto);
     return res.data;
   };
