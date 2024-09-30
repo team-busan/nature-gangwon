@@ -17,7 +17,7 @@ export default function FindPassword() {
   const sendVerificationCode = useMutation({
     mutationFn: (data) =>
       axios.post(
-        "http://nature-gangwon.shop/auth/member/email-send-certification",
+        "http://nature-gangwon.shop:8000/auth/member/email-send-certification",
         data
       ),
     onSuccess: () => {
@@ -33,7 +33,10 @@ export default function FindPassword() {
 
   const verifyCode = useMutation({
     mutationFn: (data) =>
-      axios.post("http://nature-gangwon.shop/auth/certification-check", data),
+      axios.post(
+        "http://nature-gangwon.shop:8000/auth/certification-check",
+        data
+      ),
     onSuccess: () => {
       setCurrentStep(currentStep + 1);
     },
@@ -66,9 +69,8 @@ export default function FindPassword() {
     <div className="flex justify-center w-full h-screen mt-10">
       <div className="w-6/12 h-5/6 bg-white rounded-lg shadow-xl p-8">
         <h1 className="text-center">비밀번호 찾기</h1>
-        {
-          currentStep === 1 && (
-            <FindPasswordStep1
+        {currentStep === 1 && (
+          <FindPasswordStep1
             email={email}
             handleSendCode={handleSendCode}
             handleEmailChange={handleEmailChange}
@@ -76,13 +78,7 @@ export default function FindPassword() {
             setVerificationCode={setVerificationCode}
           />
         )}
-        {(
-          currentStep === 2 && (
-            <FindPasswordStep2
-              email = {email}
-            />
-          )
-        )}
+        {currentStep === 2 && <FindPasswordStep2 email={email} />}
       </div>
     </div>
   );

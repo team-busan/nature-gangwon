@@ -3,12 +3,17 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { FaCircle } from "react-icons/fa";
 
-export default function EmailInput({ email, setEmail, setEmailChecked, setEmailAvailable }) {
+export default function EmailInput({
+  email,
+  setEmail,
+  setEmailChecked,
+  setEmailAvailable,
+}) {
   const [emailValid, setEmailValid] = useState(false);
 
   const checkEmailAvailability = useMutation({
     mutationFn: (data) =>
-      axios.post("http://nature-gangwon.shop/auth/email-check", data),
+      axios.post("http://nature-gangwon.shop:8000/auth/email-check", data),
     onSuccess: (response) => {
       setEmailChecked(true);
       setEmailAvailable(response.data.code !== "DE");
@@ -59,8 +64,16 @@ export default function EmailInput({ email, setEmail, setEmailChecked, setEmailA
         </button>
       </div>
       <div className="flex items-center">
-        <FaCircle className={emailValid ? "text-green mr-1 text-xs" : "text-red-600 mr-1 text-xs"} />
-        <p>{emailValid ? "올바른 이메일 형식입니다." : "올바르지 않은 이메일 형식입니다."}</p>
+        <FaCircle
+          className={
+            emailValid ? "text-green mr-1 text-xs" : "text-red-600 mr-1 text-xs"
+          }
+        />
+        <p>
+          {emailValid
+            ? "올바른 이메일 형식입니다."
+            : "올바르지 않은 이메일 형식입니다."}
+        </p>
       </div>
     </div>
   );
