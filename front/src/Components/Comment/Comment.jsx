@@ -82,8 +82,6 @@ export default function Comment({ comment, Id, formRef, title }) {
         [`${title === 'destination' ? 'detail' : title}Id`]: Id,
         [`${title === 'destination' ? 'detail' : title}CommentId`]: commentId,
       };
-
-      console.log(data);
   
       return axiosInstance.post(
         url,

@@ -125,7 +125,7 @@ export default function DetailHeader({ header, Id, title, mark, refetch }) {
           <PiEyesDuotone className="mr-2 text-2xl transform rotate-180" />
           <p className="mr-4">{header.Views}</p>
           <FaRegComment className="mr-2 text-2xl" />
-          <p>{header.TotalComment}</p>
+          <p>{header.TotalComments}</p>
         </span>
       </div>
       <div className="flex justify-center w-full mt-3">
