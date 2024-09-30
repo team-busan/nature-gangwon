@@ -36,7 +36,8 @@ export default function FindPasswordStep2({ email }) {
   };
 
   const mutation = useMutation({
-    mutationFn: (data) => axios.patch("/api/user/password", data),
+    mutationFn: (data) =>
+      axios.patch("http://nature-gangwon.shop:8000/user/password", data),
     onSuccess: () => {
       Swal.fire({
         title: "비밀번호가 성공적으로 변경되었습니다!",

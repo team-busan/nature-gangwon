@@ -53,7 +53,8 @@ export default function Signup2({ email, certificationCode }) {
   };
 
   const mutation = useMutation({
-    mutationFn: (data) => axios.post("/api/auth/sign-up", data),
+    mutationFn: (data) =>
+      axios.post("http://nature-gangwon.shop:8000/auth/sign-up", data),
     onSuccess: () => {
       alert("회원가입이 완료되었습니다!");
       navigate("/login");
@@ -65,7 +66,7 @@ export default function Signup2({ email, certificationCode }) {
 
   const nicknameCheckMutation = useMutation({
     mutationFn: (nickname) =>
-      axios.post("/api/auth/nickname-check", {
+      axios.post("http://nature-gangwon.shop:8000/auth/nickname-check", {
         userNickname: nickname,
       }),
     onSuccess: (response) => {
