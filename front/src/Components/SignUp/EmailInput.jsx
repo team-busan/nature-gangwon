@@ -8,7 +8,7 @@ export default function EmailInput({ email, setEmail, setEmailChecked, setEmailA
 
   const checkEmailAvailability = useMutation({
     mutationFn: (data) =>
-      axios.post("http://localhost:8000/auth/email-check", data),
+      axios.post("http://nature-gangwon.shop/auth/email-check", data),
     onSuccess: (response) => {
       setEmailChecked(true);
       setEmailAvailable(response.data.code !== "DE");

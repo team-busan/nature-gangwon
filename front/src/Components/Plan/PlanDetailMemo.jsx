@@ -4,11 +4,11 @@ export default function PlanDetailMemo({ filteredPlaces, writer, markerColors })
   return (
     <div className="w-1420 p-2">
       <h3>일정을 위한 메모를 확인해보세요📒</h3>
-      <div className="flex flex-wrap mt-2 mb-5 justify-between">
+      <div className="flex flex-wrap mt-2 mb-5 gap-7">
         {filteredPlaces.map((place, index) => (
           <div
             key={place.placeId}
-            className="relative w-2/12 rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300 border-2"
+            className="relative w-64 rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300 border-2"
           >
             <div
               className="absolute top-2 left-2 flex items-center justify-center w-8 h-8 rounded-full"

@@ -48,7 +48,7 @@ export default function DetailComment({ apiEndPoint, Id, title, typeId, totalSco
   });
 
   const fetchComments = async () => {
-    const commentUrl = `http://localhost:8000/${title}/comment/${typeId}?sort=${commentSortOption}`;
+    const commentUrl = `http://nature-gangwon.shop/${title}/comment/${typeId}?sort=${commentSortOption}`;
     try {
       const response = await axiosInstance.get(commentUrl);
       if (response.data && response.data.message === "It Doesn't Exist.") {

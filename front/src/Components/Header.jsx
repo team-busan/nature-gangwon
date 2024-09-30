@@ -20,7 +20,7 @@ const Header = () => {
     const fetchUserData = async () => {
       if (cookies.token && !user) {
         try {
-          const response = await axios.get("http://localhost:8000/user", {
+          const response = await axios.get("http://nature-gangwon.shop/user", {
             headers: {
               Authorization: `Bearer ${cookies.token}`,
             },
@@ -89,7 +89,7 @@ const Header = () => {
             </li>
           </ul>
         </nav>
-        <div className="w-6/12 flex justify-end">
+        <div className="w-5/12 flex justify-end">
           <div className="relative">
             <input
               type="text"

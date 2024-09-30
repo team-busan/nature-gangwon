@@ -101,7 +101,7 @@ export default function PlanDetailHeader({
   };
 
   const handleOnEdit = (planId) => {
-    navigate(`/edit/${planId}`)
+    navigate(`/plan/edit/${planId}`)
   }
 
   const isMarkByUser =
@@ -175,7 +175,7 @@ export default function PlanDetailHeader({
             </span>
             <span className="flex items-center">
               <FaRegComment className="text-2xl" />
-              <p className="ml-1">0</p>
+              <p className="ml-1">{planHeader.commentCount}</p>
             </span>
           </div>
         </div>
