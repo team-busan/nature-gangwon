@@ -10,14 +10,11 @@ const MarkedPlans = () => {
   const [plans, setPlans] = useState([]);
 
   const getPlans = async () => {
-    const res = await axios.get(
-      "http://nature-gangwon.shop:8000/plan/mark-list",
-      {
-        headers: {
-          Authorization: `Bearer ${cookies.token}`,
-        },
-      }
-    );
+    const res = await axios.get("http://nature-gangwon.shop/plan/mark-list", {
+      headers: {
+        Authorization: `Bearer ${cookies.token}`,
+      },
+    });
     setPlans(res.data.myMarkList);
     return res.data;
   };

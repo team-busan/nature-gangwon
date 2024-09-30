@@ -10,14 +10,11 @@ const MyPlans = () => {
   const [cookies, setCookie] = useCookies(["token"]);
 
   const getPlans = async () => {
-    const res = await axios.get(
-      "http://nature-gangwon.shop:8000/plan/my-list",
-      {
-        headers: {
-          Authorization: `Bearer ${cookies.token}`,
-        },
-      }
-    );
+    const res = await axios.get("http://nature-gangwon.shop/plan/my-list", {
+      headers: {
+        Authorization: `Bearer ${cookies.token}`,
+      },
+    });
     setPlans(res.data.myList);
     return res.data;
   };
