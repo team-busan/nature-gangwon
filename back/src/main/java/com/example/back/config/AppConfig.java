@@ -22,7 +22,7 @@ public class AppConfig {
     public void init() {
         try {
             Dotenv dotenv = Dotenv.configure()
-                    .directory("back/.env")
+                    .directory(".")
                     .filename(".env")
                     .load();
             String apiKey = dotenv.get("TOURISM_API_KEY");
