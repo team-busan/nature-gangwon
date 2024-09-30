@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { CommentItem } from "./CommentItem";
 
-export function CommentList({ comments, onLike, formRef, title }) {
+export function CommentList({ comments, Id, onLike, formRef, title }) {
   const [visibleCount, setVisibleCount] = useState(5);
 
   const handleLoadMore = () => {
@@ -19,6 +19,7 @@ export function CommentList({ comments, onLike, formRef, title }) {
           <CommentItem
             key={comment.id}
             comment={comment}
+            Id = {Id}
             onLike={onLike}
             formRef={formRef}
             title={title}

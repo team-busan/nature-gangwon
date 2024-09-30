@@ -29,6 +29,8 @@ export default function FestivalDetail() {
   if (isError) return <p>Error loading details</p>;
 
   const festivalEntity = {
+    Id : festival.festivalEntity.festivalId,
+    TotalComments : festival.festivalEntity.festivalTotalComment,
     Title: festival.festivalEntity.festivalTitle,
     Address: festival.festivalEntity.festivalAddress,
     Tel: festival.festivalEntity.festivalTel,
@@ -62,12 +64,13 @@ export default function FestivalDetail() {
 
   return (
     <>
-      <DetailHeader header={festivalEntity} title = "festival" mark = {festival.markedUserEmails} refetch = {refetch} />
+      <DetailHeader header={festivalEntity} Id = {festivalEntity.Id} title = "festival" mark = {festival.markedUserEmails} refetch = {refetch} />
       <DetailSlider images={images} />
       <DetailDescription description = {description} type = "festival"/>
       <DetailInformation information = {information} type = "festival"/>
       <DetailComment
         title = "festival"
+        Id = {festivalEntity.Id}
         apiEndPoint = {url}
         typeId = {festivalId}
         totalScore = {festivalEntity.TotalScore}

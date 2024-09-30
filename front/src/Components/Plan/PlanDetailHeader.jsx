@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import profile from "../../img/house.avif";
+import profile from "../../img/profile.jpg";
 import ShareModal from "../Comment/ShareModal";
 import { LuShare2 } from "react-icons/lu";
 import { FaRegHeart, FaHeart } from "react-icons/fa6";
@@ -10,6 +10,8 @@ import { API_URL, axiosInstance } from "../../Stores/API";
 import { useCookies } from "react-cookie";
 import { userState } from "../../state/userState";
 import { useRecoilState } from "recoil";
+import { FaPen } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
 
 const getTravelStatus = (startDate, endDate) => {
   const today = new Date();
@@ -39,7 +41,9 @@ const getBackgroundColorClass = (status) => {
 };
 
 export default function PlanDetailHeader({
-  planHeader, planId, planMarkUserEmails
+  planHeader,
+  planId,
+  planMarkUserEmails,
 }) {
   const travelStatus = getTravelStatus(
     planHeader.startDate,
@@ -49,6 +53,7 @@ export default function PlanDetailHeader({
   const [cookies] = useCookies(["token"]);
   const [user] = useRecoilState(userState);
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const userEmail = user ? user.userEmail : "";
 
@@ -61,7 +66,6 @@ export default function PlanDetailHeader({
   const toggleShareModal = () => {
     setIsShareModalOpen((prev) => !prev);
   };
-  
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -69,34 +73,39 @@ export default function PlanDetailHeader({
   };
 
   const markMutation = useMutation({
-    mutationKey : ["planMark", planId],
-    mutationFn : (planId) => {
+    mutationKey: ["planMark", planId],
+    mutationFn: (planId) => {
       const url = `${API_URL.PlanMark}`;
       return axiosInstance.post(
         url,
         {
-          planId : planId,
+          planId: planId,
         },
         {
-          headers : {
+          headers: {
             Authorization: `Bearer ${cookies.token}`,
           },
         }
       );
     },
-    onSuccess : async () => {
+    onSuccess: async () => {
       await queryClient.invalidateQueries(["planDetail", planId]);
     },
-    onError : (error) => {
+    onError: (error) => {
       alert("실패");
-    }
-  })
+    },
+  });
 
   const handleOnMark = (planId) => {
     markMutation.mutate(planId);
+  };
+
+  const handleOnEdit = (planId) => {
+    navigate(`/plan/edit/${planId}`)
   }
 
-  const isMarkByUser = planMarkUserEmails && planMarkUserEmails.includes(userEmail);
+  const isMarkByUser =
+    planMarkUserEmails && planMarkUserEmails.includes(userEmail);
 
   return (
     <section className="w-1420">
@@ -113,7 +122,7 @@ export default function PlanDetailHeader({
             <p>{planHeader.userNickname}</p>
             <p className="text-gray-400">{planHeader.planUploadDate}</p>
             <div className="flex items-center">
-              <p className = "mr-2">
+              <p className="mr-2">
                 {formattedStartDate} ~ {formattedEndDate}
               </p>
               <div
@@ -126,19 +135,17 @@ export default function PlanDetailHeader({
         </div>
         <div className="flex flex-col items-end relative">
           <div className="flex items-center space-x-4 mb-2">
-            <button 
-              className="flex items-center"
-            >
+            <button className="flex items-center">
               {isMarkByUser ? (
                 <FaHeart
-                  className = "text-red-600 cursor-pointer"
-                  onClick = {() => handleOnMark(planId)}
+                  className="text-red-600 cursor-pointer"
+                  onClick={() => handleOnMark(planId)}
                 />
               ) : (
                 <FaRegHeart
-                className="text-red-600 cursor-pointer"
-                onClick={() => handleOnMark(planId)}
-              />
+                  className="text-red-600 cursor-pointer"
+                  onClick={() => handleOnMark(planId)}
+                />
               )}
               <p className="ml-1">({planHeader.markCount})</p>
             </button>
@@ -155,6 +162,11 @@ export default function PlanDetailHeader({
               onCopy={copyToClipboard}
               shareButtonRef={shareButtonRef}
             />
+            {planHeader.userEmail === userEmail && (
+              <button onClick = {() => handleOnEdit(planId)}>
+                <FaPen className="w-6 h-6 text-black" />
+              </button>
+            )}
           </div>
           <div className="flex items-center space-x-4 mt-5">
             <span className="flex items-center">
@@ -163,7 +175,7 @@ export default function PlanDetailHeader({
             </span>
             <span className="flex items-center">
               <FaRegComment className="text-2xl" />
-              <p className="ml-1">0</p>
+              <p className="ml-1">{planHeader.commentCount}</p>
             </span>
           </div>
         </div>

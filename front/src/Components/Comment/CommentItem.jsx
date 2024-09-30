@@ -3,7 +3,7 @@ import { FaStar } from "react-icons/fa";
 import Comment from "./Comment";
 import defaultImage from "../../img/profile.jpg"
 
-export function CommentItem({ comment, onLike, formRef, title }) {
+export function CommentItem({ comment, Id, onLike, formRef, title }) {
   if (!comment) {
     return null;
   }
@@ -86,7 +86,7 @@ export function CommentItem({ comment, onLike, formRef, title }) {
         </span>
         <p>{normalizedComment.uploadDate.substring(0, 16)}</p>
       </div>
-      <Comment comment={normalizedComment} onLike={onLike} formRef={formRef} title = {title} />
+      <Comment comment={normalizedComment} Id = {Id} onLike={onLike} formRef={formRef} title = {title} />
     </li>
   );
 }

@@ -61,7 +61,7 @@ const PlanChooseThumbnailEdit = ({ setPlanStage, dates }) => {
     };
 
     axios
-      .patch("http://localhost:8000/plan/patch", plan, {
+      .patch("http://nature-gangwon.shop/plan/patch", plan, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
@@ -77,7 +77,6 @@ const PlanChooseThumbnailEdit = ({ setPlanStage, dates }) => {
         navigate("/plan/list");
       })
       .catch((err) => {
-        console.log(err);
         Swal.fire({
           icon: "error",
           title: "계획 저장에 실패했습니다.",

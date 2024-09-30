@@ -7,7 +7,7 @@ export default function PlanInfoList({data, loading, error}) {
   const navigate = useNavigate();
 
   const handleItemClick = (id) => {
-    navigate(`/plan/${id}`); // 절대 경로로 변경
+    navigate(`/plan/${id}`);
   }
 
   return (

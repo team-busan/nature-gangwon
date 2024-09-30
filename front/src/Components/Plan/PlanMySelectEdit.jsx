@@ -1,5 +1,4 @@
 import { useRecoilState } from "recoil";
-import { mapDisplayPlansState } from "../../state/planState.js";
 import { alertState } from "../../state/alertState.js";
 
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
@@ -8,14 +7,19 @@ import { MdCheck, MdEdit } from "react-icons/md";
 import PlanDraggableItem from "./PlanDraggableItem.jsx";
 import PlanAlert from "./PlanAlert.jsx";
 import { useState, useEffect } from "react";
-import { prevPlanState, prevPlanTitleState } from "../../state/editState.js";
+import {
+  prevMapDisplayPlansState,
+  prevPlanState,
+  prevPlanTitleState,
+} from "../../state/editState.js";
 
 const PlanMySelectEdit = ({ setPlanStage }) => {
   const [plans, setPlans] = useRecoilState(prevPlanState);
   const [message, setMessage] = useRecoilState(alertState);
   const [planTitle, setPlanTitle] = useRecoilState(prevPlanTitleState);
-  const [mapDisplayPlans, setMapDisplayPlans] =
-    useRecoilState(mapDisplayPlansState);
+  const [mapDisplayPlans, setMapDisplayPlans] = useRecoilState(
+    prevMapDisplayPlansState
+  );
   const [text, setText] = useState("");
 
   const onDragEnd = ({ destination, source }) => {
@@ -56,25 +60,25 @@ const PlanMySelectEdit = ({ setPlanStage }) => {
       plansCopy.splice(destinationIdx, 1, destinationDayCopy);
     }
 
-    const mapDisplayArray = [];
-    plans.forEach((item) => {
-      item.forEach((item) => {
-        const displayObject = {
-          mapx: item.locationMapx,
-          mapy: item.locationMapy,
-          title: item.locationTitle,
-          photoUrls: [item.locationFirstimage],
-        };
-        mapDisplayArray.push(displayObject);
-      });
-    });
-    setMapDisplayPlans([...mapDisplayArray]);
+    let mapDisplayPlansCopy = [...mapDisplayPlans];
+    mapDisplayPlansCopy.splice(
+      sourceIdx * plans[sourceIdx].length + sourceItemIdx,
+      1
+    );
+    const tempItem = {
+      mapx: sourceItem.locationMapx,
+      mapy: sourceItem.locationMapy,
+      title: sourceItem.locationTitle,
+      photoUrls: [sourceItem.locationFirstimage],
+    };
+    mapDisplayPlansCopy.splice(
+      destinationIdx * plans[destinationIdx].length + destinationItemIdx,
+      0,
+      tempItem
+    );
+    setMapDisplayPlans(mapDisplayPlansCopy);
     setPlans(plansCopy);
   };
-
-  useEffect(() => {
-    console.log(mapDisplayPlans);
-  }, mapDisplayPlans);
 
   const [enabled, setEnabled] = useState(false);
 

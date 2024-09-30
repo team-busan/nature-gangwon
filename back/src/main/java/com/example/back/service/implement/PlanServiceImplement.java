@@ -146,6 +146,9 @@ public class PlanServiceImplement implements PlanService{
             planEntity.setUserProfile(userProfile);
             planEntity.setMarkCount(markCount);
 
+            int commentCount = planCommentRepository.countByPlanId(planId);
+            planEntity.setCommentCount(commentCount);
+
             List<PlanMarkEntity> planMarkEntities = planMarkRepository.findByPlanId(planId);
             List<String> markedUserEmails = planMarkEntities.stream()
                 .map(PlanMarkEntity::getUserEmail)
@@ -174,6 +177,8 @@ public class PlanServiceImplement implements PlanService{
                 );
                 placeList.add(placeDto);
             }
+
+            placeList.sort(Comparator.comparing(GetPlaceListItemDto::getDayNumber));
 
             planEntity.increasePlanCount();
             planRepository.save(planEntity);

@@ -9,7 +9,7 @@ import { userState } from "../state/userState";
 import Swal from "sweetalert2";
 import naverLoginImg from "../img/btnG_축약형.png";
 import kokooLoginImg from "../img/kakao_login_small.png";
-
+import gogleLoginImg from "../img/web_neutral_rd_SU@2x.png"
 
 export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -20,7 +20,7 @@ export default function Login() {
   const setUser = useSetRecoilState(userState); // Recoil 상태 업데이트 함수
 
   const fetchUserData = async (token) => {
-    const response = await axios.get("http://localhost:8000/user", {
+    const response = await axios.get("http://nature-gangwon.shop/user", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -30,7 +30,7 @@ export default function Login() {
 
   const mutation = useMutation({
     mutationFn: async (data) => {
-      const response = await axios.post("http://localhost:8000/auth/sign-in", {
+      const response = await axios.post("http://nature-gangwon.shop/auth/sign-in", {
         userEmail: data.email,
         userPassword: data.password,
       });
@@ -147,17 +147,24 @@ export default function Login() {
           </p>
         </div>
         <div className = "flex flex-row mt-2">
-        <Link to="http://localhost:8000/auth/oauth2/kakao">
+        <Link to="http://nature-gangwon.shop/auth/oauth2/kakao">
           <img
-            className = "w-20 h-8 bg-cover mr-2"
+            className = " h-8 bg-cover mr-2"
             src = {naverLoginImg}
             alt = "로그인이미지"
           />
         </Link>
-        <Link to="http://localhost:8000/auth/oauth2/naver">
+        <Link to="http://nature-gangwon.shop/auth/oauth2/naver">
           <img
-            className = "w-20 h-8 bg-cover"
+            className = " h-8 bg-cover mr-2"
             src = {kokooLoginImg}
+            alt = "로그인이미지"
+          />
+        </Link>
+        <Link to="http://nature-gangwon.shop/auth/oauth2/google">
+          <img
+            className = " h-8 bg-cover"
+            src = {gogleLoginImg}
             alt = "로그인이미지"
           />
         </Link>

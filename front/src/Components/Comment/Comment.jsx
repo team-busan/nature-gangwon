@@ -16,7 +16,7 @@ import {
 } from "../../state/comment";
 import Swal from "sweetalert2";
 
-export default function Comment({ comment, formRef, title }) {
+export default function Comment({ comment, Id, formRef, title }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const maxLength = 320;
   const [user] = useRecoilState(userState);
@@ -79,7 +79,7 @@ export default function Comment({ comment, formRef, title }) {
       }
   
       const data = {
-        [`${title === 'destination' ? 'detail' : title}Id`]: detailId,
+        [`${title === 'destination' ? 'detail' : title}Id`]: Id,
         [`${title === 'destination' ? 'detail' : title}CommentId`]: commentId,
       };
   

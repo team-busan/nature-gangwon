@@ -10,7 +10,7 @@ const MyPhotos = () => {
   const [photos, setPhotos] = useState([]);
 
   const getMyPhotos = async () => {
-    const res = await axios.get("http://localhost:8000/plan/photo-list", {
+    const res = await axios.get("http://nature-gangwon.shop/plan/photo-list", {
       headers: {
         Authorization: `Bearer ${cookies.token}`,
       },

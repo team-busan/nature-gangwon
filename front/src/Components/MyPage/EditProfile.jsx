@@ -26,7 +26,7 @@ const EditProfile = () => {
       const formData = new FormData();
       formData.append("file", profileImgRef.current?.files[0]);
       axios
-        .post("http://localhost:8000/file/upload", formData, {
+        .post("http://nature-gangwon.shop/file/upload", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -63,7 +63,7 @@ const EditProfile = () => {
 
   const nicknameCheckMutation = useMutation({
     mutationFn: (nickname) =>
-      axios.post("http://localhost:8000/auth/nickname-check", {
+      axios.post("http://nature-gangwon.shop/auth/nickname-check", {
         userNickname: nickname,
       }),
     onSuccess: (response) => {
@@ -104,7 +104,7 @@ const EditProfile = () => {
     if (user.userProfile !== patchProfile) {
       axios
         .patch(
-          "http://localhost:8000/user/profile",
+          "http://nature-gangwon.shop/user/profile",
           {
             userProfile: patchProfile,
           },
@@ -130,7 +130,7 @@ const EditProfile = () => {
     if (user.userNickname !== nickname) {
       axios
         .patch(
-          "http://localhost:8000/user/nickname",
+          "http://nature-gangwon.shop/user/nickname",
           {
             userNickname: nickname,
           },

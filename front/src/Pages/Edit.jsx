@@ -4,7 +4,7 @@ import { useAnimationControls } from "framer-motion";
 import PlanCalendar from "../Components/Plan/PlanCalendar";
 import PlanBuildEdit from "../Components/Plan/PlanBuildEdit";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useRecoilState } from "recoil";
 import {
@@ -12,12 +12,15 @@ import {
   prevPlanState,
   prevPlanTitleState,
 } from "../state/editState";
+import { userState } from "../state/userState";
 import PlanPhotosEdit from "../Components/Plan/PlanPhotosEdit";
 import PlanStatusBarEdit from "../Components/Plan/PlanStatusBarEdit";
 import PlanChooseThumbnailEdit from "../Components/Plan/PlanChooseThumbnailEdit";
 
 const Edit = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const [user, setUser] = useRecoilState(userState);
   const [prevPlan, setPrevPlan] = useState({});
   const [plan, setPlan] = useRecoilState(prevPlanState);
   const [title, setTitle] = useRecoilState(prevPlanTitleState);
@@ -26,7 +29,10 @@ const Edit = () => {
   );
 
   const getPlanData = async () => {
-    const res = await axios.get(`http://localhost:8000/plan/${id}`);
+    const res = await axios.get(`http://nature-gangwon.shop/plan/${id}`);
+    if (res.data.planEntity.userEmail !== user.userEmail) {
+      navigate("/");
+    }
     setPrevPlan(res.data);
     return res.data;
   };
@@ -41,7 +47,6 @@ const Edit = () => {
   const [foldStage, setFoldStage] = useState(1);
 
   useEffect(() => {
-    console.log(prevPlan);
     if (prevPlan) {
       if (prevPlan.planEntity) {
         setDates([prevPlan.planEntity.startDate, prevPlan.planEntity.endDate]);
@@ -90,10 +95,6 @@ const Edit = () => {
       }
     }
   }, [prevPlan]);
-
-  useEffect(() => {
-    console.log(plan);
-  }, [plan]);
 
   const control1 = useAnimationControls();
   const control2 = useAnimationControls();
