@@ -10,14 +10,11 @@ const MarkedFestivals = () => {
   const [festivals, setFestivals] = useState([]);
 
   const getFestivals = async () => {
-    const res = await axios.get(
-      "http://nature-gangwon.shop/festival/mark-list",
-      {
-        headers: {
-          Authorization: `Bearer ${cookie.token}`,
-        },
-      }
-    );
+    const res = await axios.get("/api/festival/mark-list", {
+      headers: {
+        Authorization: `Bearer ${cookie.token}`,
+      },
+    });
     setFestivals(res.data.markList);
     return res.data;
   };
