@@ -11,7 +11,7 @@ const PlanDistance = ({ nextItem, x1, y1, x2, y2 }) => {
   const getResult = async (x1, y1, x2, y2) => {
     // CORS 에러 처리 함, package.json에 "proxy" 추가
     const res = await axios.get(
-      `/driving?start=${x1.substring(0, 10)},${y1.substring(
+      `/naver/driving?start=${x1.substring(0, 10)},${y1.substring(
         0,
         9
       )}&goal=${x2.substring(0, 10)},${y2.substring(0, 9)}`,
