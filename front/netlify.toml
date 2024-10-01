@@ -1,5 +1,5 @@
 [[redirects]]
-  from = "/api/*"
+  from = "/proxy/*"
   to = "https://nature-gangwon.shop/:splat"
   status = 200
   force = true
