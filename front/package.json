@@ -13,6 +13,7 @@
     "axios": "^1.7.2",
     "date-fns": "^3.6.0",
     "framer-motion": "^11.3.2",
+    "http-proxy-middleware": "^3.0.2",
     "postcss": "^8.4.39",
     "react": "^18.3.1",
     "react-cookie": "^7.2.0",
@@ -53,6 +54,5 @@
   },
   "devDependencies": {
     "axios-mock-adapter": "^1.22.0"
-  },
-  "proxy": "https://naveropenapi.apigw.ntruss.com/map-direction/v1"
+  }
 }
