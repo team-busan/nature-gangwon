@@ -10,7 +10,7 @@ const MyPlans = () => {
   const [cookies, setCookie] = useCookies(["token"]);
 
   const getPlans = async () => {
-    const res = await axios.get("/api/plan/my-list", {
+    const res = await axios.get("https://nature-gangwon.shop/plan/my-list", {
       headers: {
         Authorization: `Bearer ${cookies.token}`,
       },
