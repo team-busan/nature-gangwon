@@ -63,7 +63,7 @@ const EditProfile = () => {
 
   const nicknameCheckMutation = useMutation({
     mutationFn: (nickname) =>
-      axios.post("http://nature-gangwon.shop/auth/nickname-check", {
+      axios.post("/api/auth/nickname-check", {
         userNickname: nickname,
       }),
     onSuccess: (response) => {
@@ -207,7 +207,7 @@ const EditProfile = () => {
       >
         저장
       </button>
-      <Link to="" className="underline mx-auto">
+      <Link to="/FindPassword" className="underline mx-auto">
         비밀번호를 잊으셨나요?
       </Link>
     </div>
