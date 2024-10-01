@@ -29,7 +29,7 @@ const Edit = () => {
   );
 
   const getPlanData = async () => {
-    const res = await axios.get(`/proxy/api/plan/${id}`);
+    const res = await axios.get(`/api/plan/${id}`);
     if (res.data.planEntity.userEmail !== user.userEmail) {
       navigate("/");
     }
