@@ -10,10 +10,12 @@ const Content = ({ content }) => {
   let color = "";
   let link = "";
 
+  console.log(content);
+
   if (content.locationContenttypeid === "12") {
     type = "관광지";
     color = "#C7F7C6";
-    link = `/destination/${content.locationBasedId}`;
+    link = `/destination/${content.locationContentid}`;
   } else if (content.locationContenttypeid === "32") {
     type = "숙박";
     color = "#F7C9C6";
@@ -25,7 +27,7 @@ const Content = ({ content }) => {
   } else if (content.locationContenttypeid === "15") {
     type = "축제";
     color = "#B1ECFF";
-    link = `/festival/${content.locationBasedId}`;
+    link = `/festival/${content.locationContentid}`;
   }
 
   const handleClick = () => {
