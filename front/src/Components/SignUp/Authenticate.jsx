@@ -8,7 +8,7 @@ export default function Authenticate({ email, onVerificationSuccess }) {
 
   const sendVerificationCode = useMutation({
     mutationFn: (data) =>
-      axios.post("/proxy/api/auth/email-send-certification", data),
+      axios.post("/api/auth/email-send-certification", data),
     onSuccess: () => {
       Swal.fire({
         title: "메일을 발송 했습니다",
@@ -21,8 +21,7 @@ export default function Authenticate({ email, onVerificationSuccess }) {
   });
 
   const verifyCode = useMutation({
-    mutationFn: (data) =>
-      axios.post("/proxy/api/auth/certification-check", data),
+    mutationFn: (data) => axios.post("/api/auth/certification-check", data),
     onSuccess: () => {
       onVerificationSuccess(verificationCode); // 인증코드 확인
     },

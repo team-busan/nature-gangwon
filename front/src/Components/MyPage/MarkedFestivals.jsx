@@ -10,7 +10,7 @@ const MarkedFestivals = () => {
   const [festivals, setFestivals] = useState([]);
 
   const getFestivals = async () => {
-    const res = await axios.get("/proxy/api/festival/mark-list", {
+    const res = await axios.get("/api/festival/mark-list", {
       headers: {
         Authorization: `Bearer ${cookie.token}`,
       },
