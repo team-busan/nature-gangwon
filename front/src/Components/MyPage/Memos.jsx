@@ -10,7 +10,7 @@ const Memos = () => {
   const [cookies, setCookie] = useCookies(["token"]);
 
   const getMemos = async () => {
-    const res = await axios.get("http://nature-gangwon.shop/plan/note-list", {
+    const res = await axios.get("/api/plan/note-list", {
       headers: {
         Authorization: `Bearer ${cookies.token}`,
       },

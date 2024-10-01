@@ -20,7 +20,7 @@ const Header = () => {
     const fetchUserData = async () => {
       if (cookies.token && !user) {
         try {
-          const response = await axios.get("http://nature-gangwon.shop/user", {
+          const response = await axios.get("/api/user", {
             headers: {
               Authorization: `Bearer ${cookies.token}`,
             },

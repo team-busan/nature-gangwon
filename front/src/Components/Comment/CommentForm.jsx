@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "../../Stores/API";
 import { useRecoilState } from "recoil";
 import { commentContents, commentEdit, score } from "../../state/comment";
-import { getRequestData } from './CommentFunction';
+import { getRequestData } from "./CommentFunction";
 import Swal from "sweetalert2";
 
 export default function CommentForm({ onSubmit, Id, title, apiEndPoint }) {
@@ -23,13 +23,19 @@ export default function CommentForm({ onSubmit, Id, title, apiEndPoint }) {
   const mutation = useMutation({
     mutationKey: ["commentSend", title],
     mutationFn: async () => {
-      const { url, data } = getRequestData(edit, Id, commentContent, rating, title, apiEndPoint);
+      const { url, data } = getRequestData(
+        edit,
+        Id,
+        commentContent,
+        rating,
+        title,
+        apiEndPoint
+      );
 
       if (!cookies.token) {
         alert("로그인이 필요합니다.");
         return;
       }
-      console.log(data);
 
       const response = await (edit ? axiosInstance.patch : axiosInstance.post)(
         url,
@@ -51,7 +57,11 @@ export default function CommentForm({ onSubmit, Id, title, apiEndPoint }) {
       setEdit(false); // 수정 모드 해제
     },
     onError: () => {
-      Swal.fire(`댓글 ${edit ? "수정" : "생성"} 중 오류가 발생했습니다. 다시 시도해주세요.`);
+      Swal.fire(
+        `댓글 ${
+          edit ? "수정" : "생성"
+        } 중 오류가 발생했습니다. 다시 시도해주세요.`
+      );
     },
   });
 
@@ -85,7 +95,9 @@ export default function CommentForm({ onSubmit, Id, title, apiEndPoint }) {
               {[1, 2, 3, 4, 5].map((star) => (
                 <FaStar
                   key={star}
-                  className={`cursor-pointer ${star <= rating ? "text-yellow-400" : "text-gray-300"}`}
+                  className={`cursor-pointer ${
+                    star <= rating ? "text-yellow-400" : "text-gray-300"
+                  }`}
                   onClick={() => setRating(star)}
                 />
               ))}
@@ -96,7 +108,10 @@ export default function CommentForm({ onSubmit, Id, title, apiEndPoint }) {
           </div>
         </div>
       )}
-      <button className="bg-green text-white p-2 rounded-lg w-full text-center" onClick={handleSubmit}>
+      <button
+        className="bg-green text-white p-2 rounded-lg w-full text-center"
+        onClick={handleSubmit}
+      >
         {edit ? "수정 완료" : "작성 완료"}
       </button>
     </div>
