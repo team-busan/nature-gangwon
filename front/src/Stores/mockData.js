@@ -751,24 +751,24 @@ export const WORLDCUP_RESULT_LIST = [
     [
       {
         img: "http://tong.visitkorea.or.kr/cms/resource/70/1172070_image2_1.jpg",
-        id: 89,
+        id: 125612,
         title: "계방산(평창)",
       },
       {
         img: "http://tong.visitkorea.or.kr/cms/resource/00/2733300_image2_1.jpg",
-        id: 651,
+        id: 125805,
         title: "설악산 울산바위",
       },
     ],
     [
       {
         img: "http://tong.visitkorea.or.kr/cms/resource/19/2671419_image2_1.jpg",
-        id: 26,
+        id: 128758,
         title: "강릉 경포해수욕장",
       },
       {
         img: "http://tong.visitkorea.or.kr/cms/resource/07/3041707_image2_1.jpg",
-        id: 11,
+        id: 3041720,
         title: "간이해변",
       },
     ],
@@ -777,24 +777,24 @@ export const WORLDCUP_RESULT_LIST = [
     [
       {
         img: "http://tong.visitkorea.or.kr/cms/resource/97/3082597_image2_1.jpg",
-        id: 56,
+        id: 2705409,
         title: "강아지숲",
       },
       {
         img: "http://tong.visitkorea.or.kr/cms/resource/69/2687969_image2_1.jpg",
-        id: 83,
+        id: 2687981,
         title: "경포 아쿠아리움",
       },
     ],
     [
       {
         img: "http://tong.visitkorea.or.kr/cms/resource/27/3007927_image2_1.jpg",
-        id: 125,
+        id: 126787,
         title: "공현진1리해변",
       },
       {
         img: "http://tong.visitkorea.or.kr/cms/resource/53/2739753_image2_1.jpg",
-        id: 124,
+        id: 2710586,
         title: "공지천유원지",
       },
     ],
@@ -803,24 +803,24 @@ export const WORLDCUP_RESULT_LIST = [
     [
       {
         img: "http://tong.visitkorea.or.kr/cms/resource/71/2554071_image2_1.jpg",
-        id: 168,
+        id: 2554069,
         title: "국립대관령치유의숲",
       },
       {
         img: "http://tong.visitkorea.or.kr/cms/resource/08/2739708_image2_1.jpg",
-        id: 60,
+        id: 2610850,
         title: "강원숲체험장",
       },
     ],
     [
       {
         img: "http://tong.visitkorea.or.kr/cms/resource/65/2900665_image2_1.JPG",
-        id: 24,
+        id: 2900682,
         title: "강릉 3.1운동 기념공원",
       },
       {
         img: "http://tong.visitkorea.or.kr/cms/resource/56/2391456_image2_1.jpg",
-        id: 145,
+        id: 125761,
         title: "구룡사",
       },
     ],
