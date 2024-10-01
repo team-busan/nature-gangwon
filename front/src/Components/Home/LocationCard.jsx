@@ -9,7 +9,7 @@ const LocationCard = ({ location }) => {
     <MotionLink
       initial={{ translateY: 0 }}
       whileHover={{ translateY: -10 }}
-      to={`/destination/${location.detailId}`}
+      to={`/destination/${location.detailImageDto.detailContentid}`}
       className="w-[430px] h-[430px] rounded-lg shadow-xl bg-white flex flex-col justify-end p-4 relative"
     >
       {location.detailImageDto.detailImage3 ? (

@@ -61,7 +61,7 @@ const PlanChooseThumbnailEdit = ({ setPlanStage, dates }) => {
     };
 
     axios
-      .patch("http://nature-gangwon.shop/plan/patch", plan, {
+      .patch("https://nature-gangwon.shop/plan/patch", plan, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
