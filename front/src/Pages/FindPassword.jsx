@@ -16,7 +16,10 @@ export default function FindPassword() {
 
   const sendVerificationCode = useMutation({
     mutationFn: (data) =>
-      axios.post("/api/auth/member/email-send-certification", data),
+      axios.post(
+        "https://nature-gangwon.shop/auth/member/email-send-certification",
+        data
+      ),
     onSuccess: () => {
       Swal.fire({
         title: "메일을 발송 했습니다",
@@ -29,7 +32,8 @@ export default function FindPassword() {
   });
 
   const verifyCode = useMutation({
-    mutationFn: (data) => axios.post("/api/auth/certification-check", data),
+    mutationFn: (data) =>
+      axios.post("https://nature-gangwon.shop/auth/certification-check", data),
     onSuccess: () => {
       setCurrentStep(currentStep + 1);
     },

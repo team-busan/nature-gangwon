@@ -209,7 +209,7 @@ const PlanSearch = ({ foldStage, setFoldStage, dates }) => {
 
   const getLocationsInfo = async () => {
     const res = await axios.get(
-      `/api/location/list?&locationContenttypeid=${contentType}&locationSigungucode=${sigunguCode}&keyword=${searchQuery}&page=${page}&size=50`
+      `https://nature-gangwon.shop/location/list?&locationContenttypeid=${contentType}&locationSigungucode=${sigunguCode}&keyword=${searchQuery}&page=${page}&size=50`
     );
     setData(res.data.locationList);
     return res.data.locationList;

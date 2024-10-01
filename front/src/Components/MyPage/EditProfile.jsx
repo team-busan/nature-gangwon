@@ -63,7 +63,7 @@ const EditProfile = () => {
 
   const nicknameCheckMutation = useMutation({
     mutationFn: (nickname) =>
-      axios.post("/api/auth/nickname-check", {
+      axios.post("https://nature-gangwon.shop/auth/nickname-check", {
         userNickname: nickname,
       }),
     onSuccess: (response) => {
