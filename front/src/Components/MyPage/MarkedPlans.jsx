@@ -10,7 +10,7 @@ const MarkedPlans = () => {
   const [plans, setPlans] = useState([]);
 
   const getPlans = async () => {
-    const res = await axios.get("/proxy/api/plan/mark-list", {
+    const res = await axios.get("/api/plan/mark-list", {
       headers: {
         Authorization: `Bearer ${cookies.token}`,
       },
