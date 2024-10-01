@@ -10,8 +10,6 @@ const Content = ({ content }) => {
   let color = "";
   let link = "";
 
-  console.log(content);
-
   if (content.locationContenttypeid === "12") {
     type = "관광지";
     color = "#C7F7C6";
