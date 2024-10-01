@@ -10,7 +10,7 @@ const MarkedLocations = () => {
   const [locations, setLocations] = useState([]);
 
   const getLocations = async () => {
-    const res = await axios.get("/api/destination/mark-list", {
+    const res = await axios.get("/proxy/api/destination/mark-list", {
       headers: {
         Authorization: `Bearer ${cookie.token}`,
       },

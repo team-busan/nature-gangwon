@@ -63,7 +63,7 @@ const EditProfile = () => {
 
   const nicknameCheckMutation = useMutation({
     mutationFn: (nickname) =>
-      axios.post("/api/auth/nickname-check", {
+      axios.post("/proxy/api/auth/nickname-check", {
         userNickname: nickname,
       }),
     onSuccess: (response) => {

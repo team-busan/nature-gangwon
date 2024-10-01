@@ -30,7 +30,7 @@ const SearchResult = () => {
 
   const getLocationsInfo = async () => {
     const response = await axios.get(
-      `/api/location/list?locationContenttypeid=${type}&locationSigungucode=${sigungu}&keyword=${queryParam}&page=${page}&size=${displayNum}`
+      `/proxy/api/location/list?locationContenttypeid=${type}&locationSigungucode=${sigungu}&keyword=${queryParam}&page=${page}&size=${displayNum}`
     );
     return response.data;
   };
