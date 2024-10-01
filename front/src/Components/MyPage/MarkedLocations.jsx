@@ -10,11 +10,14 @@ const MarkedLocations = () => {
   const [locations, setLocations] = useState([]);
 
   const getLocations = async () => {
-    const res = await axios.get("/api/destination/mark-list", {
-      headers: {
-        Authorization: `Bearer ${cookie.token}`,
-      },
-    });
+    const res = await axios.get(
+      "https://nature-gangwon.shop/destination/mark-list",
+      {
+        headers: {
+          Authorization: `Bearer ${cookie.token}`,
+        },
+      }
+    );
     setLocations(res.data.markList);
     return res.data;
   };
