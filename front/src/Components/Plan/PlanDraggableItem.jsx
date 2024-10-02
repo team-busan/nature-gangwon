@@ -158,7 +158,7 @@ const PlanDraggableItem = ({ day, item, idx, idx2, handleDelete }) => {
               </motion.div>
             )}
           </div>
-          {/* {day[idx2 + 1] ? (
+          {day[idx2 + 1] ? (
             <PlanDistance
               nextItem={day[idx2 + 1]}
               x1={item.locationMapx}
@@ -166,7 +166,7 @@ const PlanDraggableItem = ({ day, item, idx, idx2, handleDelete }) => {
               x2={day[idx2 + 1].locationMapx}
               y2={day[idx2 + 1].locationMapy}
             />
-          ) : null} */}
+          ) : null}
           {provided.placeholder}
         </motion.li>
       )}

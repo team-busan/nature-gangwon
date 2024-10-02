@@ -43,10 +43,7 @@ const PlanDistance = ({ nextItem, x1, y1, x2, y2 }) => {
   }, [nextItem]);
 
   return (
-    <Link
-      to={`https://map.naver.com/p/directions/${x1},${y1}/${x2},${y2}`}
-      className="flex items-center self-center gap-2"
-    >
+    <div className="flex items-center self-center gap-2">
       <FaArrowDownLong />
       <span>
         {distance === -1 ? "0Km" : (distance / 1000).toFixed(1) + "Km"}
@@ -59,7 +56,7 @@ const PlanDistance = ({ nextItem, x1, y1, x2, y2 }) => {
           <span>{(millisecondsToMinutes(minute) % 60) + "분"}</span>
         </div>
       )}
-    </Link>
+    </div>
   );
 };
 
