@@ -177,7 +177,7 @@ const EditProfile = () => {
           src={profileImg === "/image/profile.jpg" ? DefaultImage : profileImg}
           alt="사용자 프로필 이미지"
           onClick={() => profileImgRef.current?.click()}
-          className="rounded-full bg-random bg-cover w-[150px] h-[150px] mx-auto cursor-pointer shadow-content"
+          className="rounded-full bg-cover w-[150px] h-[150px] mx-auto cursor-pointer shadow-content"
         />
         <input
           ref={profileImgRef}
