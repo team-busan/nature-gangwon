@@ -1,4 +1,10 @@
 [[redirects]]
+  from = "/naver/*"
+  to = "https://naveropenapi.apigw.ntruss.com/map-direction/v1/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
