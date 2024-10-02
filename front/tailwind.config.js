@@ -36,7 +36,6 @@ export default {
         160: "40rem",
       },
       backgroundImage: {
-        random: "url('https://picsum.photos/350/500')",
         paper: "url(./img/paper.jpg)",
       },
       boxShadow: {
