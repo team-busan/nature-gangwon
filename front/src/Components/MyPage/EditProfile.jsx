@@ -155,8 +155,12 @@ const EditProfile = () => {
 
     // redux 유저 상태 업데이트
     const userCopy = { ...user };
-    userCopy.userProfile = patchProfile;
-    userCopy.userNickname = nickname;
+    if (patchProfile !== "") {
+      userCopy.userProfile = patchProfile;
+    }
+    if (userCopy.userNickname !== nickname) {
+      userCopy.userNickname = nickname;
+    }
     setUser(userCopy);
 
     Swal.fire({
