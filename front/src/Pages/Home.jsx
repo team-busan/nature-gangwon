@@ -60,21 +60,22 @@ const Home = () => {
 
   return (
     <div className="w-[1420px] flex flex-col gap-10">
-      <div className="w-full h-[600px] relative">
+      <div className="w-full h-[500px] relative">
         <img
           src={mainImage}
           title="강원 관광 제공"
           alt="강원도 풍경 이미지"
-          className="w-full h-full absolute object-cover rounded-b-lg"
+          className="w-full h-full absolute object-cover"
         />
-        <div className="flex justify-between w-full absolute bottom-0 p-4 backdrop-blur-[2px]">
+        <div className="w-full h-full absolute bg-gradient-to-t from-white via-transparent to-transparent"></div>
+        <div className="flex justify-between w-full absolute -bottom-24 px-4">
           {plans.map((plan, idx) => (
             <PlanCard key={idx} plan={plan} />
           ))}
         </div>
       </div>
 
-      <div className="w-full mt-12">
+      <div className="w-full mt-36">
         <h2 className="mb-6">강원도, 얼마나 알고 계세요?</h2>
         <div className="w-full h-[300px] rounded-lg relative">
           <img
