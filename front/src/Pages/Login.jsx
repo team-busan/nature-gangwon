@@ -149,14 +149,14 @@ export default function Login() {
           </p>
         </div>
         <div className="flex flex-row mt-2">
-          <Link to="http://nature-gangwon.shop/auth/oauth2/kakao">
+          <Link to="http://nature-gangwon.shop/auth/oauth2/naver">
             <img
               className=" h-8 bg-cover mr-2"
               src={naverLoginImg}
               alt="로그인이미지"
             />
           </Link>
-          <Link to="http://nature-gangwon.shop/auth/oauth2/naver">
+          <Link to="http://nature-gangwon.shop/auth/oauth2/kakao">
             <img
               className=" h-8 bg-cover mr-2"
               src={kokooLoginImg}
