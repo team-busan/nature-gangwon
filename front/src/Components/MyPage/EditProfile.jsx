@@ -101,7 +101,7 @@ const EditProfile = () => {
     }
 
     // 프로필 변경
-    if (user.userProfile !== patchProfile) {
+    if (patchProfile !== "" && user.userProfile !== patchProfile) {
       axios
         .patch(
           "https://nature-gangwon.shop/user/profile",
