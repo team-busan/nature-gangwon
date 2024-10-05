@@ -26,7 +26,7 @@ const EditProfile = () => {
       const formData = new FormData();
       formData.append("file", profileImgRef.current?.files[0]);
       axios
-        .post("https://nature-gangwon.shop/file/upload", formData, {
+        .post("https://nature-gangwon.shop/upload", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -141,6 +141,7 @@ const EditProfile = () => {
           }
         )
         .catch((err) => {
+          console.error(err);
           Swal.fire({
             icon: "error",
             title: "수정 실패",
