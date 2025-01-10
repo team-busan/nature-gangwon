@@ -32,7 +32,7 @@
 ## 1. 개발 환경
 
 - Front : HTML, React, Tailwind CSS, Recoil, React-query, Axios, React-hook-form, Hello-pangea/dnd, Date-fns, Framer-motion, React-paginate, Sweetalert2, Axios-mock-adapter
-- Back-end : Java, MySQL, Spring-boot
+- Back-end : Java, MySQL, Spring-Boot
 - 버전 및 이슈관리 : Github
 - 협업 툴 : Discord, Gather town, Jira
 - 서비스 배포 환경 : Netlify, Cafe24
