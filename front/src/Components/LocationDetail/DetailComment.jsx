@@ -14,7 +14,13 @@ import {
 } from "../../state/comment";
 import { CommentList } from "../Comment/CommentList";
 
-export default function DetailComment({ apiEndPoint, Id, title, typeId, totalScore }) {
+export default function DetailComment({
+  apiEndPoint,
+  Id,
+  title,
+  typeId,
+  totalScore,
+}) {
   const [cookies] = useCookies(["token"]);
   const { id } = useParams();
   const detailId = Number(id);
@@ -48,7 +54,7 @@ export default function DetailComment({ apiEndPoint, Id, title, typeId, totalSco
   });
 
   const fetchComments = async () => {
-    const commentUrl = `http://nature-gangwon.shop/${title}/comment/${typeId}?sort=${commentSortOption}`;
+    const commentUrl = `https://nature-gangwon.shop/${title}/comment/${typeId}?sort=${commentSortOption}`;
     try {
       const response = await axiosInstance.get(commentUrl);
       if (response.data && response.data.message === "It Doesn't Exist.") {
@@ -71,7 +77,6 @@ export default function DetailComment({ apiEndPoint, Id, title, typeId, totalSco
     queryFn: fetchComments,
     enabled: !!typeId,
   });
-
 
   const handleAddComment = () => {
     refetchComments();
@@ -103,16 +108,16 @@ export default function DetailComment({ apiEndPoint, Id, title, typeId, totalSco
   let filteredComments = comments;
 
   switch (title) {
-    case "plan" :
+    case "plan":
       filteredComments = comments.planCommentList;
       break;
-    case "destination" :
+    case "destination":
       filteredComments = comments.detailCommentList;
       break;
-    case "festival" :
+    case "festival":
       filteredComments = comments.festivalCommentList;
       break;
-    default :
+    default:
       throw new Error("잘못된 값입니다");
   }
 
@@ -120,18 +125,23 @@ export default function DetailComment({ apiEndPoint, Id, title, typeId, totalSco
 
   switch (title) {
     case "plan":
-      commentsLength = comments.planCommentList ? comments.planCommentList.length : 0;
+      commentsLength = comments.planCommentList
+        ? comments.planCommentList.length
+        : 0;
       break;
     case "destination":
-      commentsLength = comments.detailCommentList ? comments.detailCommentList.length : 0;
+      commentsLength = comments.detailCommentList
+        ? comments.detailCommentList.length
+        : 0;
       break;
     case "festival":
-      commentsLength = comments.festivalCommentList ? comments.festivalCommentList.length : 0;
+      commentsLength = comments.festivalCommentList
+        ? comments.festivalCommentList.length
+        : 0;
       break;
     default:
       throw new Error("잘못된 값입니다");
   }
-  
 
   return (
     <section className="w-1420 p-3" ref={formRef}>
@@ -182,13 +192,18 @@ export default function DetailComment({ apiEndPoint, Id, title, typeId, totalSco
         {isWritingComment && (
           <CommentForm
             onSubmit={handleAddComment}
-            Id = {Id}
+            Id={Id}
             title={title}
             apiEndPoint={apiEndPoint}
           />
         )}
       </div>
-      <CommentList comments={filteredComments} Id = {Id} formRef={formRef} title={title} />
+      <CommentList
+        comments={filteredComments}
+        Id={Id}
+        formRef={formRef}
+        title={title}
+      />
     </section>
   );
 }

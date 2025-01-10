@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import profile from "../../img/profile.jpg";
+import defaultImage from "../../img/profile.jpg";
 import ShareModal from "../Comment/ShareModal";
 import { LuShare2 } from "react-icons/lu";
 import { FaRegHeart, FaHeart } from "react-icons/fa6";
@@ -113,7 +113,7 @@ export default function PlanDetailHeader({
         <div className="flex">
           <span className="w-20 h-20">
             <img
-              src={profile}
+              src={planHeader.userProfile === "/image/profile.jpg" ? defaultImage : planHeader.userProfile}
               alt="프로필 이미지"
               className="w-20 h-20 rounded-full"
             />

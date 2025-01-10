@@ -26,7 +26,7 @@ const EditProfile = () => {
       const formData = new FormData();
       formData.append("file", profileImgRef.current?.files[0]);
       axios
-        .post("https://nature-gangwon.shop/file/upload", formData, {
+        .post("https://nature-gangwon.shop/upload", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -101,7 +101,7 @@ const EditProfile = () => {
     }
 
     // 프로필 변경
-    if (user.userProfile !== patchProfile) {
+    if (patchProfile !== "" && user.userProfile !== patchProfile) {
       axios
         .patch(
           "https://nature-gangwon.shop/user/profile",
@@ -141,6 +141,7 @@ const EditProfile = () => {
           }
         )
         .catch((err) => {
+          console.error(err);
           Swal.fire({
             icon: "error",
             title: "수정 실패",
@@ -154,8 +155,12 @@ const EditProfile = () => {
 
     // redux 유저 상태 업데이트
     const userCopy = { ...user };
-    userCopy.userProfile = patchProfile;
-    userCopy.userNickname = nickname;
+    if (patchProfile !== "") {
+      userCopy.userProfile = patchProfile;
+    }
+    if (userCopy.userNickname !== nickname) {
+      userCopy.userNickname = nickname;
+    }
     setUser(userCopy);
 
     Swal.fire({

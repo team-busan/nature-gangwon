@@ -67,7 +67,8 @@ const Home = () => {
           alt="강원도 풍경 이미지"
           className="w-full h-full absolute object-cover"
         />
-        <div className="flex justify-between w-full absolute -bottom-24">
+        <div className="w-full h-full absolute bg-gradient-to-t from-white via-transparent to-transparent"></div>
+        <div className="flex justify-between w-full absolute -bottom-24 px-4">
           {plans.map((plan, idx) => (
             <PlanCard key={idx} plan={plan} />
           ))}
